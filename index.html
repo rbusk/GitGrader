@@ -12,6 +12,9 @@
 
 		<!-- Font Awesome -->
 		<script src="https://use.fontawesome.com/6973ef5c02.js"></script>
+
+		<!-- Scripts -->
+		<script src="scripts/main.js"></script>
 	</head>
 
 	<body>
@@ -39,30 +42,92 @@
 
 			<div class="row">
 
-				<!-- Left Side Menu (Assignments, Resources, Grades) -->
+				<!-- Left Side Menu (Repositories, Assignments, Resources, Grades) -->
 				<div class="col m3 l2 teal lighten-4">
-					<div class="collection">
-						<a href="#!" class="collection-item"><i class="material-icons left">assignment</i>Assignments</a>
-						<a href="#!" class="collection-item"><i class="material-icons left">library_books</i>Resources</a>
-						<a href="#!" class="collection-item"><i class="material-icons left">assessment</i>Grades</a>
+					<div class="collection" id="leftMenu">
+						<a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a>
+						<a href="#!" class="collection-item" id="assignments"><i class="material-icons left">assignment</i>Assignments</a>
+						<a href="#!" class="collection-item" id="resources"><i class="material-icons left">library_books</i>Resources</a>
+						<a href="#!" class="collection-item" id="grades"><i class="material-icons left">assessment</i>Grades</a>
 					</div>
 				</div>
 
-				<!-- Medium Menu (list of assignments) -->
-				<div class="col m3 l2 cyan lighten-4">
-					<div class="collection">
-						<a href="#!" class="collection-item">Homework 1</a>
-						<a href="#!" class="collection-item">Homework 2</a>
-						<a href="#!" class="collection-item">Project 1</a>
+				<!-- Assignments Menu (list of assignments) -->
+				<div id="assignmentsDiv">
+					<div class="col m3 l2 cyan lighten-4">
+						<div class="collection">
+							<a href="#!" class="collection-item">Homework 1</a>
+							<a href="#!" class="collection-item">Homework 2</a>
+							<a href="#!" class="collection-item">Project 1</a>
+							<a href="#!" class="collection-item">Homework 3</a>
+							<a href="#!" class="collection-item">Homework 4</a>
+						</div>
+					</div>
+
+					<!-- Link to Repo -->
+					<div class="col m6 l8 container">
+						<div class="white">
+							<div class="container">
+								<a class="waves-effect waves-light btn">Link to Repo</a>
+								<h5>Due Date: 4-27-17</h5>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- Resources -->
+				<div id="resourcesDiv">
+					<div class="col m4 cyan lighten-4">
+						<div class="collection">
+							<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+							<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+							<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">Syllabus.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+							<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW3.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+							<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">sampleData.json<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+						</div>
 					</div>
 				</div>
 
-				<!-- Right Container (link repo, assignment date) -->
-				<div class="col m6 l8 container">
-					<div class="white">
-						<div class="container">
-							<a class="waves-effect waves-light btn">Link to Repo</a>
-							<h5>Due Date: 4-27-17</h5>
+
+				<!-- Gradebook Table -->
+				<div id="gradesDiv">
+					<div class="col s6 lighten-4">
+						<table class="highlight white">
+							<thead>
+								<tr>
+									<th>Assignment</th>
+									<th>Score</th>
+									<th>Out of</th>
+									<th>Weight</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr>
+									<td>Project 1</td>
+									<td>83</td>
+									<td>100</td>
+									<td>10</td>
+								</tr>
+								<tr>
+									<td>Project 1</td>
+									<td>83</td>
+									<td>100</td>
+									<td>10</td>
+								</tr>
+								<tr>
+									<td>Project 1</td>
+									<td>83</td>
+									<td>100</td>
+									<td>10</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col s3 lighten-4 cyan">
+						<div class="collection">
+							<a href="#!" class="collection-item">Class Grade: 87%</a>
 						</div>
 					</div>
 				</div>
