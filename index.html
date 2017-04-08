@@ -20,30 +20,38 @@
 	<body>
 
 		<!-- Dropdown Structure -->
-		<ul id="dropdown1" class="dropdown-content">
-			<li><a href="#!">CSE 20189</a></li>
-			<li><a href="#!">CSE 30412</a></li>
-			<li><a href="#!">CSE 20112</a></li>
+		<ul id="classDropdown" class="dropdown-content">
+			<li><a href="#!">Basic Unix</a></li>
+			<li><a href="#!">Fundamentals of Computing II</a></li>
+			<li><a href="#!">Advanced Databases</a></li>
 		</ul>
 		<!-- Navigation Bar -->
 		<nav>
 		<div class="nav-wrapper blue-grey darken-4">
 			<a href="#" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons left">view_list</i>Classes</a></li>
+				<li><a class="dropdown-button" href="#!" data-activates="classDropdown"><i class="material-icons left">view_list</i>Classes</a></li>
 				<li><a href=""><i class="material-icons left">settings</i>Settings</a></li>
 				<li><a href="">Logout</a></li>
 			</ul>
 		</div>
 		</nav>
 
+
+		<!-- Selected Class -->
+		<div class="row teal">
+			<div class="col s12 white-text">
+				<h5 id="selectedClass">no class selected</h5>
+			</div>
+		</div>
+
+
 		<!-- Main Content -->
 		<div class="section white">
-
 			<div class="row">
 
 				<!-- Left Side Menu (Repositories, Assignments, Resources, Grades) -->
-				<div class="col m3 l2 teal lighten-4">
+				<div class="col s12 m3 l2 teal lighten-4">
 					<div class="collection" id="leftMenu">
 						<a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a>
 						<a href="#!" class="collection-item" id="assignments"><i class="material-icons left">assignment</i>Assignments</a>
@@ -54,7 +62,7 @@
 
 				<!-- Assignments Menu (list of assignments) -->
 				<div id="assignmentsDiv">
-					<div class="col m3 l2 cyan lighten-4">
+					<div class="col s12 m3 l2 cyan lighten-4">
 						<div class="collection">
 							<a href="#!" class="collection-item">Homework 1</a>
 							<a href="#!" class="collection-item">Homework 2</a>
@@ -78,7 +86,7 @@
 
 				<!-- Resources -->
 				<div id="resourcesDiv">
-					<div class="col m4 cyan lighten-4">
+					<div class="col s12 m4 cyan lighten-4">
 						<div class="collection">
 							<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
 							<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
@@ -92,7 +100,7 @@
 
 				<!-- Gradebook Table -->
 				<div id="gradesDiv">
-					<div class="col s6 lighten-4">
+					<div class="col s12 m6 lighten-4">
 						<table class="highlight white">
 							<thead>
 								<tr>
@@ -125,7 +133,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="col s3 lighten-4 cyan">
+					<div class="col s12 m3 lighten-4 cyan">
 						<div class="collection">
 							<a href="#!" class="collection-item">Class Grade: 87%</a>
 						</div>
