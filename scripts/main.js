@@ -22,6 +22,8 @@ var classes = [
 ];
 
 $( document ).ready(function() {
+	// materialize
+	$('.modal').modal();
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
