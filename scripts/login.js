@@ -15,7 +15,7 @@ $( document ).ready(function() {
 		$("#login").show();
 		$('#signUp').hide();
 	});
-	$("#logoutNav").click(function(){
+	$(".logoutNav").click(function(){
 		console.log('pressed logout in nav bar');
 		logoutUser();
 	});
@@ -36,6 +36,13 @@ function init() {
 	$('#login').hide();
 	$('#signUp').show();
 
+	// handle main content
+	$('#loginContent').show();
+	$('#loggedInMainContent').hide();
+
+	// put login stuff in nav bar
+	$('#loginNav').show();
+	$('#normalNav').hide();
 }
 
 
@@ -62,7 +69,6 @@ function createUser() {
 	var email = $("#signup_email").val();
 	var password = $("#signup_password").val();
 
-	console.log('user email:', email);
 	
 	// check if this username exists already
 	/*
@@ -107,7 +113,16 @@ function loginUser() {
 
 	// TODO if Firebase successful, get user info from PHP
 	
-	window.open("index.html");
+	//window.open("index.html");
+	
+	// handle main content
+	$('#loginContent').hide();
+	$('#loggedInMainContent').show();
+	
+	// handle nav bar content
+	$('#loginNav').hide();
+	$('#normalNav').show();
+
 };
 
 
@@ -151,4 +166,18 @@ function logoutUser() {
 	}, function(error) {
 		alert('error, could not log out');
 	});
+	
+	// handle main content
+	$('#loginContent').show();
+	$('#loggedInMainContent').hide();
+	
+	// handle nav bar content
+	$('#loginNav').show();
+	$('#normalNav').hide();
+
+	clearAllUserData();
+}
+
+function clearAllUserData() {
+	// TODO
 }
