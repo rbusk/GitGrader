@@ -5,12 +5,12 @@ $( document ).ready(function() {
 	init();
 
 	// handle nav bar stuff
-	$("#signUpNav").click(function(){
+	$(".signUpNav").click(function(){
 		console.log('pressed sign up in nav bar');
 		$("#signUp").show();
 		$('#login').hide();
 	});
-	$("#loginNav").click(function(){
+	$(".loginNav").click(function(){
 		console.log('pressed login in nav bar');
 		$("#login").show();
 		$('#signUp').hide();
