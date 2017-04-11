@@ -3,6 +3,24 @@
 	<head>
 		<title>Git Grader | Login</title>
 
+		<!-- Firebase for Login -->
+		<script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-app.js"></script>
+			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-auth.js"></script>
+			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
+			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
+		<script>
+			// Initialize Firebase
+			var config = {
+				apiKey: "AIzaSyDqSMbN6b8W3CtvolBljLVM-oUq1NgN_MQ",
+				authDomain: "gitgrader.firebaseapp.com",
+				databaseURL: "https://gitgrader.firebaseio.com",
+				projectId: "gitgrader",
+				storageBucket: "gitgrader.appspot.com",
+				messagingSenderId: "549265073830"
+				};
+				firebase.initializeApp(config);
+			</script>
 		<!-- Materialize CDNs -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
