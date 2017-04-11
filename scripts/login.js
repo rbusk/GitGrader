@@ -15,6 +15,10 @@ $( document ).ready(function() {
 		$("#login").show();
 		$('#signUp').hide();
 	});
+	$("#logoutNav").click(function(){
+		console.log('pressed logout in nav bar');
+		logoutUser();
+	});
 
 	//button click handlers
 	$("#signUpButton").click(function(){
@@ -52,11 +56,13 @@ function createUser() {
 		return;
 	}
 
-	var first = $("#signup_first").text();
-	var last = $("#signup_last").text();
-	var username = $("#signup_username").text();
-	var email = $("#signup_email").text();
-	var password = $("#signup_password").text();
+	var first = $("#signup_first").val();
+	var last = $("#signup_last").val();
+	var username = $("#signup_username").val();
+	var email = $("#signup_email").val();
+	var password = $("#signup_password").val();
+
+	console.log('user email:', email);
 	
 	// check if this username exists already
 	/*
@@ -67,28 +73,25 @@ function createUser() {
 	*/
 
 	// attempt Firebase sign up
-	createUserInFB(email, password);
+	var didCreateUser = false;
+	didCreateUser = createUserInFB(email, password);
 
-	// attempt to log into this new account
-	loginUserInFB(email, password);
-
-	// check if Firebase sign up worked
-	if (!isUserLoggedIntoFB) {
-		alert('account creation failed!');
-		return;
+	// if worked, show login div
+	if (didCreateUser) {
+		alert('successfully created user!');
+		$("#login").show();
+		$('#signUp').hide();
+		// TODO if Firebase successful, create user with PHP
 	}
 	else {
-		alert('successfully logged in!');
+		alert('did not successfully create user');
 	}
 
-	// if Firebase successful, create user with PHP
 };
 
 function loginUser() {
-	var username = $("#login_username").text();
-	var password = $("#login_password").text();
-	// TODO get email from username in PHP
-	var email = 'mnelso12@nd.edu';
+	var email = $("#login_email").val();
+	var password = $("#login_password").val();
 
 	// attempt Firebase login 
 	loginUserInFB(email, password);
@@ -102,7 +105,9 @@ function loginUser() {
 		alert('successfully logged in!');
 	}
 
-	// if Firebase successful, get user info from PHP
+	// TODO if Firebase successful, get user info from PHP
+	
+	window.open("index.html");
 };
 
 
@@ -129,10 +134,21 @@ function loginUserInFB(email, password) {
 }
 
 function createUserInFB(email, password) {
+	var success = true;
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
 		// Handle Errors here.
 		var errorCode = error.code;
 		var errorMessage = error.message;
 		console.log("Error in creating user:", error.code, error.message);
+		success = false;
+	});
+	return success;
+}
+
+function logoutUser() {
+	firebase.auth().signOut().then(function() {
+		alert('logged out');
+	}, function(error) {
+		alert('error, could not log out');
 	});
 }
