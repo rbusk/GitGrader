@@ -37,6 +37,9 @@
 		<script src="scripts/login.js"></script>
 	</head>
 
+
+
+
 	<body>
 
 		<!-- Dropdown Structure -->
@@ -56,6 +59,7 @@
 					<li><a href="#" class="logoutNav">Logout</a></li>
 				</div>
 				<div id="normalNav">
+					<li><a id="reposNavButton" class="waves-effect waves-light btn" href="#">All Repos</a></li>
 					<li><a class="dropdown-button" href="#!" data-activates="classDropdown"><i class="material-icons left">view_list</i>Classes</a></li>
 					<li><a href="#"><i class="material-icons left">settings</i>Settings</a></li>
 					<li><a href="#" class="logoutNav">Logout</a></li>
@@ -178,6 +182,92 @@
 						</div>
 					</div>
 
+					<!-- All Repos - shown when click Nav Bar Repos Button -->
+					<div id="allRepos">
+						<div class="col s12 m6 lighten-4">
+							<table class="highlight white">
+								<thead>
+									<tr>
+										<th>Linked Repos</th>
+										<th>Class</th>
+										<th>Assignment</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr>
+										<td>Git Grader</td>
+										<td>CSE 40157.01</td>
+										<td>Final Project</td>
+									</tr>
+									<tr>
+										<td>Sudoku Solver</td>
+										<td>CSE 20121.01</td>
+										<td>Lab 5</td>
+									</tr>
+									<tr>
+										<td>Connect Four</td>
+										<td>CSE 20121.01</td>
+										<td>Lab 6</td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<br>
+							<table class="highlight white">
+								<thead>
+									<tr>
+										<th>Unlinked Repos</th>
+										<th>Link</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr>
+										<td>Game of Life</td>
+										<td>
+											<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link to Assignment</a>	
+										</td>
+									</tr>
+									<tr>
+										<td>Fractal Lab</td>
+										<td>
+											<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link to Assignment</a>	
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+					<!-- This Class's Repos - shown when click on side menu -->
+					<div id="classRepos">
+						<div class="col s12 m6 lighten-4">
+							<table class="highlight white">
+								<thead>
+									<tr>
+										<th>Repo Name</th>
+										<th>Assignment</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr>
+										<td>Sudoku Solver</td>
+										<td>Lab 5</td>
+									</tr>
+									<tr>
+										<td>Connect Four</td>
+										<td>Lab 6</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
 					<!-- Assignments Menu (list of assignments) -->
 					<div id="assignmentsDiv">
 						<div class="col s12 m3 l2 cyan lighten-4">
@@ -264,6 +354,16 @@
 		</div>
 
 
+		<!-- Link Repo To Assignment Modal -->
+		<div id="modal2" class="modal bottom-sheet">
+			<div class="modal-content">
+				<h4>Link "Game of Life" to Assignment</h4>
+				<p>A bunch of text</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">KK</a>
+			</div>
+		</div>
 
 		<!-- Contact Us Form -->
 		<div id="modal1" class="modal">
@@ -320,7 +420,7 @@
 		</div>
 		<div class="footer-copyright">
 			<div class="container">
-				© 2017 Git Grader 
+				&copy; 2017 Git Grader 
 				<a class="grey-text text-lighten-4 right" href="https://cse.nd.edu/">Department of Computer Science and Engineering | University of Notre Dame</a>
 			</div>
 		</div>

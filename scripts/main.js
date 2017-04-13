@@ -38,6 +38,11 @@ $( document ).ready(function() {
 		$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
 	});
 
+	// handle repos button in nav bar
+	$("#reposNavButton").click(function() {
+		openReposDiv();
+	});
+
 	// handle left menu switches
 	$("#leftMenu .collection-item").click(function(){
 		leftMenuSwitch(this.id);
@@ -70,6 +75,17 @@ function getNameFromCRN(crn) {
 	return returnVal;
 }
 
+
+// Repos Button in Nav Bar //////////////////////////////////
+function openReposDiv() {
+	console.log("pressed repos button");
+	hideAll();
+	$("#allRepos").show();
+	selectedClassCRN = ""; // no class selected
+	$("#selectedClass").text("no class selected - all repos");
+}
+
+
 // methods for menu switches ////////////////////////////////
 function leftMenuSwitch(selectedItem) {
 	if (selectedItem === "grades") {
@@ -85,6 +101,7 @@ function leftMenuSwitch(selectedItem) {
 	else if (selectedItem === "repositories") {
 		hideAll();
 		console.log("repos");
+		$("#classRepos").show();
 	}
 	else if (selectedItem === "resources") {
 		hideAll();
@@ -94,6 +111,8 @@ function leftMenuSwitch(selectedItem) {
 }
 
 function hideAll() {
+	$("#allRepos").hide();
+	$("#classRepos").hide();
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();

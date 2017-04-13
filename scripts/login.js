@@ -1,4 +1,7 @@
-$( document ).ready(function() {
+$( document ).ready(ready);
+
+function ready() {
+	console.log("ready!");
 	// materialize
 	$('.modal').modal();
 
@@ -29,9 +32,11 @@ $( document ).ready(function() {
 		console.log('pressed login button');
 		loginUser();	
 	});
-});
+}
 
 function init() {
+	console.log("initializing");
+
 	// start with sign up div
 	$('#login').hide();
 	$('#signUp').show();
@@ -96,6 +101,8 @@ function createUser() {
 };
 
 function loginUser() {
+	console.log("logging in user");
+
 	var email = $("#login_email").val();
 	var password = $("#login_password").val();
 
@@ -161,6 +168,8 @@ function createUserInFB(email, password) {
 }
 
 function logoutUser() {
+	console.log("logging out user");
+
 	firebase.auth().signOut().then(function() {
 		alert('logged out');
 	}, function(error) {
