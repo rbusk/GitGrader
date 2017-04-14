@@ -50,10 +50,22 @@ function init() {
 	$('#normalNav').hide();
 }
 
+function isPasswordLongEnough() {
+	var p1 = $("#signup_password").val();
+	if (p1.length < 6) {
+		return false;
+	}
+	return true;
+}
 
 function doPasswordsMatch() {
-	// TODO
-	return true;
+	var p1 = $("#signup_password").val();
+	var p2 = $("#signup_password_2").val();
+
+	if (p1 === p2) {
+		return true;
+	}
+	return false;
 }
 
 function usernameTaken(username) {
@@ -61,10 +73,25 @@ function usernameTaken(username) {
 	return false;
 }
 
+function notRealEmail(email) {
+	var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+
+	if(!pattern.test(email)) {
+		return true; // bad email
+	}
+	return false; // good email
+}
+
 function createUser() {
 	// check if passwords match
-	if (!doPasswordsMatch) {
+	if (!doPasswordsMatch()) {
 		alert("Passwords do not match!");
+		return;
+	}
+
+	// are passwords long enough
+	if (!isPasswordLongEnough()) {
+		alert('password must be at least 6 characters long');
 		return;
 	}
 
@@ -74,6 +101,11 @@ function createUser() {
 	var email = $("#signup_email").val();
 	var password = $("#signup_password").val();
 
+	// make sure email is good
+	if (notRealEmail(email)) {
+		alert("bad email");
+		return
+	}
 	
 	// check if this username exists already
 	/*

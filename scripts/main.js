@@ -33,7 +33,7 @@ var classes = [
 	},
 	{
 		department: "CSE",
-		courseName: "Fundamentals of Computing II",
+		courseName: "Fund Comp II",
 		crn: "10239",
 		courseNumber: "20101-02",
 		assignments: [
@@ -121,7 +121,6 @@ function ready() {
 
 	// selected assignment 
 	$(document).on('click', "#assignmentsListDiv a", function() {
-		console.log(this.id);
 		selectedAssignmentID = this.id;
 		assignmentSelected();
 	});
@@ -149,7 +148,6 @@ function initialize() {
 
 // fill dropdown with class names
 function fillInClasses() {
-	console.log("filling in class info");
 	for (var i in classes) {
 		var className = classes[i].courseName;
 		var html = "<li><a href='#!'>" + className + "</a></li>"; 
@@ -169,7 +167,7 @@ function classSelected(crn) {
 	var assignments = thisClass.assignments;
 	for (var i in assignments) {
 		// fill in assignments div
-		var html = "<a href='#!' class='assignment collection-item' + id=" + assignments[i].AID + ">" + assignments[i].name + "</a>"; 
+		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + assignments[i].AID + ">" + assignments[i].name + "</a>"; 
 		$("#assignmentsListDiv").append(html);
 	}
 }
@@ -182,12 +180,8 @@ function assignmentSelected() {
 	$("#linkAssignToRepo").show();
 	
 	var thisClass = getClassFromCRN(selectedClassCRN);
-	console.log(thisClass);
-	console.log(thisClass.assignments);
 	var assignments = thisClass.assignments;
 	for (var i in assignments) {
-		console.log("assignments[i].AID", assignments[i].AID);
-		console.log("selected AID", selectedAssignmentID);
 		if (assignments[i].AID == selectedAssignmentID){
 			var dueDate = assignments[i].dueDate;
 			var name = assignments[i].name;
