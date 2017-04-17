@@ -1,7 +1,13 @@
-<form action="add_assignment.php" method='post'>
+<form action="add_assignment.php" method='post' enctype='multipart/form-data'>
 	Assignment name: <input type="text" name="assignment_name"/>
+	<br/>
 	CRN: <input type='text' name='crn'/>
+	<br/>
 	Out of: <input type='text' name='outof'/>
+	<br/>
 	Weight: <input type='text' name='weight'/>
+	<br/>
+	File: <input type='file' name='file'/>
+	<br/>
 	<input type="submit" value="Add assignment"/>
 </form>
