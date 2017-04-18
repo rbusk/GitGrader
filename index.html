@@ -44,9 +44,11 @@
 
 		<!-- Dropdown Structure -->
 		<ul id="classDropdown" class="dropdown-content">
+			<!--
 			<li><a href="#!">Basic Unix</a></li>
 			<li><a href="#!">Fundamentals of Computing II</a></li>
 			<li><a href="#!">Advanced Databases</a></li>
+			-->
 		</ul>
 		<!-- Navigation Bar -->
 		<nav>
@@ -54,8 +56,8 @@
 			<a href="#" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
 				<div id="loginNav">
-					<li><a href="#" class="signUpNav">Sign Up</a></li>
-					<li><a href="#" class="loginNav">Login</a></li>
+					<li><a href="#" class="signUpNav"><i class="material-icons left">library_add</i>Sign Up</a></li>
+					<li><a href="#" class="loginNav"><i class="material-icons left">account_circle</i>Login</a></li>
 					<li><a href="#" class="logoutNav">Logout</a></li>
 				</div>
 				<div id="normalNav">
@@ -94,7 +96,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-										<i class="waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4" style=""><input type="submit" value="Login" id="loginButton"></i>
+										<input type="submit" value="Login" id="loginButton" class=" waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4">
 									</div>
 								</form>
 							</div>
@@ -271,12 +273,14 @@
 					<!-- Assignments Menu (list of assignments) -->
 					<div id="assignmentsDiv">
 						<div class="col s12 m3 l2 cyan lighten-4">
-							<div class="collection">
+							<div id="assignmentsListDiv" class="collection">
+								<!--
 								<a href="#!" class="collection-item">Homework 1</a>
 								<a href="#!" class="collection-item">Homework 2</a>
 								<a href="#!" class="collection-item">Project 1</a>
 								<a href="#!" class="collection-item">Homework 3</a>
 								<a href="#!" class="collection-item">Homework 4</a>
+								-->
 							</div>
 						</div>
 
@@ -284,8 +288,9 @@
 						<div class="col m6 l8 container">
 							<div class="white">
 								<div class="container">
-									<a class="waves-effect waves-light btn">Link to Repo</a>
-									<h5>Due Date: 4-27-17</h5>
+									<h4 id="assignmentName"></h4>
+									<p id="dueDate"></p>
+									<a id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
 								</div>
 							</div>
 						</div>
@@ -357,11 +362,45 @@
 		<!-- Link Repo To Assignment Modal -->
 		<div id="modal2" class="modal bottom-sheet">
 			<div class="modal-content">
-				<h4>Link "Game of Life" to Assignment</h4>
-				<p>A bunch of text</p>
+				<div class="row">
+					<h4>Link "Game of Life" to an Assignment</h4>
+					<table class="col s12 m8 highlight white">
+						<thead>
+							<tr>
+								<th>Class</th>
+								<th>Assignment</th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>CSE 40157.01 : Advanced Databases</td>
+								<td>Final Project</td>
+								<td>
+									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+								</td>
+							</tr>
+							<tr>
+								<td>CSE 20121.01 : Fundamentals of Computing II</td>
+								<td>Lab 5</td>
+								<td>
+									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+								</td>
+							</tr>
+							<tr>
+								<td>CSE 20121.01 : Fundamentals of Computing II</td>
+								<td>Lab 6</td>
+								<td>
+									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div class="modal-footer">
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">KK</a>
+				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
 			</div>
 		</div>
 
