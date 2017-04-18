@@ -10,23 +10,23 @@
 		echo(json_encode('crn variable is not set'));
 		$ok = false;
 	}
-	if (!isset($_POST['assignment_name'])) {
-		echo(json_encode('assignment_name variable is not set'));
+	if (!isset($_POST['resource_name'])) {
+		echo(json_encode('resource_name variable is not set'));
 		$ok = false;
 	}
 
-	$target_dir = "uploads/";
+	$target_dir = "resources/";
 
-	//file name will be [CRN]-[ASSIGNMENT-NAME]
-	$target_file = $target_dir . $_POST['crn'] . '-' . $_POST['assignment_name'];
+	//file name will be [CRN]-[RESOURCE-NAME]
+	$target_file = $target_dir . $_POST['crn'] . '-' . $_POST['resource_name'];
 
 	if ($ok) {
 		$message = upload_file($_FILES['file'], $target_file);
 	}
 
 	if ($message == "success")  {
-		$due_date = null;
-		$query = "begin grader_pack.add_assignment(:crn, :assignment_name, :due_date, :outof, :weight); end;";
+
+		$query = "insert into resources values()";
 
 		$stmt = oci_parse($conn, $query);
 
