@@ -10,21 +10,24 @@ var classes = [
 		assignments: [
 			{
 				name: "HW1",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-12-17"
 			},
 			{
 				name: "HW2",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-11-17"
 			},
 			{
 				name: "HW3",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "3-10-17"
@@ -39,21 +42,24 @@ var classes = [
 		assignments: [
 			{
 				name: "Lab 1",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-30-17"
 			},
 			{
 				name: "Lab 2",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-03-17"
 			},
 			{
 				name: "Lab 3",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "2-10-17"
@@ -69,21 +75,24 @@ var classes = [
 		assignments: [
 			{
 				name: "Project 1",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-28-17"
 			},
 			{
 				name: "Project 2",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-3-17"
 			},
 			{
 				name: "Project 3",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "2-8-17"
@@ -159,17 +168,28 @@ function fillInClasses() {
 function classSelected(crn) {
 	// clear old class data
 	$("#assignmentsListDiv").html("");
+	$("#gradesTableBody").html("");
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
 	$("#linkAssignToRepo").hide();
 
 	var thisClass = getClassFromCRN(crn);
+
+	// fill in this class's assignments
 	var assignments = thisClass.assignments;
 	for (var i in assignments) {
+
 		// fill in assignments div
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + assignments[i].AID + ">" + assignments[i].name + "</a>"; 
 		$("#assignmentsListDiv").append(html);
+
+		// fill in grades div
+		var gradesHTML = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].userScore + "</td><td>" + assignments[i].outOf + "</td><td>" + assignments[i].weight + "</td></tr>";
+		$("#gradesTableBody").append(gradesHTML);
+
 	}
+
+
 }
 
 // change right div specific to each different assignment
