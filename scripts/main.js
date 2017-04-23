@@ -1,6 +1,12 @@
 // global variables
 var selectedClassCRN = "";
 var selectedAssignmentID = "";
+
+$.post("GitGrader/php_scripts/get_courses.php", {},
+	function(data, status){
+		console.log(data);
+});
+
 var classes = [
 	{
 		department: "CSE",
