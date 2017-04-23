@@ -21,6 +21,8 @@
 
 	$bindings = array(':username' => $_SESSION['username']);
 
+	echo($_SESSION['username']);
+
 	$courses = get_info($query, $bindings);
 
 	header('Content-Type: application/json;charset=utf-8');

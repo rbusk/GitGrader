@@ -151,6 +151,13 @@ function loginUser() {
 	}
 
 	// TODO if Firebase successful, get user info from PHP
+	$.post("GitGrader/php_scripts/site_login.php",
+		{
+			email: $('#login_email').val()
+		},
+		function(data, status) {
+		}
+	);
 	
 	//window.open("index.html");
 	
