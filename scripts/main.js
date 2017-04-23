@@ -16,21 +16,24 @@ var classes = [
 		assignments: [
 			{
 				name: "HW1",
-				weight: 10,
+				weight: 10, 
+				userScore: 76,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-12-17"
 			},
 			{
 				name: "HW2",
-				weight: 10,
+				weight: 10, 
+				userScore: 85,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-11-17"
 			},
 			{
 				name: "HW3",
-				weight: 10,
+				weight: 10, 
+				userScore: 97,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "3-10-17"
@@ -45,21 +48,24 @@ var classes = [
 		assignments: [
 			{
 				name: "Lab 1",
-				weight: 10,
+				weight: 10, 
+				userScore: 82,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-30-17"
 			},
 			{
 				name: "Lab 2",
-				weight: 10,
+				weight: 10, 
+				userScore: 82,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-03-17"
 			},
 			{
 				name: "Lab 3",
-				weight: 10,
+				weight: 10, 
+				userScore: 83,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "2-10-17"
@@ -75,21 +81,24 @@ var classes = [
 		assignments: [
 			{
 				name: "Project 1",
-				weight: 10,
+				weight: 10, 
+				userScore: 95,
 				outOf: 100,
 				AID: "129038",
 				dueDate: "1-28-17"
 			},
 			{
 				name: "Project 2",
-				weight: 10,
+				weight: 10, 
+				userScore: 67,
 				outOf: 100,
 				AID: "112318",
 				dueDate: "2-3-17"
 			},
 			{
 				name: "Project 3",
-				weight: 10,
+				weight: 10, 
+				userScore: 78,
 				outOf: 100,
 				AID: "12123038",
 				dueDate: "2-8-17"
@@ -163,19 +172,51 @@ function fillInClasses() {
 
 // fill in class info for given class
 function classSelected(crn) {
+
+	console.log("SELECTED THIS CRN", crn);
+
 	// clear old class data
 	$("#assignmentsListDiv").html("");
+	$("#gradesTableBody").html("");
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
 	$("#linkAssignToRepo").hide();
 
 	var thisClass = getClassFromCRN(crn);
+
+	// fill in this class's assignments
 	var assignments = thisClass.assignments;
+	var sumOfWeights = 0;
+	var sumOfWeightedScores = 0;
+
 	for (var i in assignments) {
+
 		// fill in assignments div
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + assignments[i].AID + ">" + assignments[i].name + "</a>"; 
 		$("#assignmentsListDiv").append(html);
+
+		// fill in grades div
+		var gradesHTML = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].userScore + "</td><td>" + assignments[i].outOf + "</td><td>" + assignments[i].weight + "</td></tr>";
+		$("#gradesTableBody").append(gradesHTML);
+
+		// calculate class grade
+		sumOfWeights = sumOfWeights + assignments[i].weight;
+		var weightedScore = ((assignments[i].userScore)/(assignments[i].outOf)) * assignments[i].weight;
+		sumOfWeightedScores = sumOfWeightedScores + weightedScore;
 	}
+
+	// update class grade on page
+	var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
+	var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
+	var letterGrade = "BLAH";
+	for (var letter in gradeCutOffs) {
+		if (classGrade >= gradeCutOffs[letter]) {
+			letterGrade = letter;
+			break;
+		}
+	}
+	$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
+
 }
 
 // change right div specific to each different assignment
