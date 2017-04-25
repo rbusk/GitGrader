@@ -8,7 +8,7 @@ var classes = [
 		COURSE_NAME: "Advanced Databases",
 		CRN: "12983",
 		COURSE_NO: "40157-01",
-		assignments: [
+		ASSIGNMENTS: [
 			{
 				name: "HW1",
 				weight: 10, 
@@ -40,7 +40,7 @@ var classes = [
 		COURSE_NAME: "Fund Comp II",
 		CRN: "10239",
 		COURSE_NO: "20101-02",
-		assignments: [
+		ASSIGNMENTS: [
 			{
 				name: "Lab 1",
 				weight: 10, 
@@ -73,7 +73,7 @@ var classes = [
 		COURSE_NAME: "Basic Unix",
 		CRN: "12387",
 		COURSE_NO: "20189-01",
-		assignments: [
+		ASSIGNMENTS: [
 			{
 				name: "Project 1",
 				weight: 10, 
@@ -114,9 +114,11 @@ function ready() {
 			console.log(data);
 			classes = [data['payload']];
 
-
 	// fill class dropdown with class names
 	fillInClasses();
+	
+	// fill in grades for each of these classes
+	fillInGradesForClasses();
 
 	// add event handlers to classes dropdown in nav bar
 	$("#classDropdown li a").click(function(){
@@ -182,6 +184,37 @@ function fillInClasses() {
 	}
 }
 
+// get grades from crn 
+function getGradesForClass(thisCrn) {
+	var ans = {};
+	$.post("GitGrader/php_scripts/get_grades.php", {crn: thisCrn},
+			function(data, status){
+			console.log("returned these grades data for crn", data);
+			ans = data["payload"];
+	});
+	return ans;
+}
+
+function fillInGradesForClasses() {
+	for (var i=0; i<classes[0].length; i++) {
+		var thisClass = classes[0][i];
+		var classCRN = thisClass.CRN;
+		getGradesHelper(classCRN, i);
+	}
+}
+
+// helper get grades function
+function getGradesHelper(crn, i) {
+	$.post("GitGrader/php_scripts/get_grades.php", {crn: crn},
+			function(data, status){
+			var gradesForClass = data["payload"];
+			var thisClass = classes[0][i];
+			var classCRN = thisClass.CRN;
+			thisClass.ASSIGNMENTS = gradesForClass;
+	});
+}
+
+
 // fill in class info for given class
 function classSelected(CRN) {
 
@@ -196,38 +229,78 @@ function classSelected(CRN) {
 
 	var thisClass = getClassFromCRN(CRN);
 
-	// fill in this class's assignments
-	var assignments = thisClass.assignments;
+	// fill in this class's ASSIGNMENTS
+	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
 	var sumOfWeights = 0;
 	var sumOfWeightedScores = 0;
 
-	for (var i in assignments) {
+	for (var i in ASSIGNMENTS) {
 
-		// fill in assignments div
-		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + assignments[i].AID + ">" + assignments[i].name + "</a>"; 
+		// fill in ASSIGNMENTS div
+		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + ASSIGNMENTS[i].AID + ">" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
 		$("#assignmentsListDiv").append(html);
 
 		// fill in grades div
-		var gradesHTML = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].userScore + "</td><td>" + assignments[i].outOf + "</td><td>" + assignments[i].weight + "</td></tr>";
+		var tempScore = "";
+		var tempWeight = "";
+		var tempOutOf = "";
+		var weightForClassGrade = 0;
+
+		if (!ASSIGNMENTS[i].WEIGHT) {
+			console.log("no weight for this assignment yet");	
+			tempWeight = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempWeight = ASSIGNMENTS[i].WEIGHT;
+			weightForClassGrade = parseInt(ASSIGNMENTS[i].WEIGHT);
+		}
+
+		if (!ASSIGNMENTS[i].GRADE) {
+			console.log("no grade for this assignment yet");	
+			tempScore = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempScore = ASSIGNMENTS[i].GRADE;
+		}
+
+		if (!ASSIGNMENTS[i].OUTOF) {
+			console.log("no outof for this assignment yet");	
+			tempOutOf = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempOutOf = ASSIGNMENTS[i].OUTOF;
+		}
+
+		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td></tr>";
 		$("#gradesTableBody").append(gradesHTML);
 
 		// calculate class grade
-		sumOfWeights = sumOfWeights + assignments[i].weight;
-		var weightedScore = ((assignments[i].userScore)/(assignments[i].outOf)) * assignments[i].weight;
-		sumOfWeightedScores = sumOfWeightedScores + weightedScore;
+		sumOfWeights = sumOfWeights + weightForClassGrade;
+		console.log("sum of weights:", sumOfWeights);
+		var weightedScore = ((ASSIGNMENTS[i].GRADE)/(ASSIGNMENTS[i].OUTOF)) * weightForClassGrade;
+		console.log("weighted score:", weightedScore);
+		if (weightedScore) {
+			sumOfWeightedScores = sumOfWeightedScores + weightedScore;
+		}
+		console.log("sum of weighted scores:", sumOfWeightedScores);
 	}
 
 	// update class grade on page
-	var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
-	var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
-	var letterGrade = "BLAH";
-	for (var letter in gradeCutOffs) {
-		if (classGrade >= gradeCutOffs[letter]) {
-			letterGrade = letter;
-			break;
+	if (sumOfWeightedScores != 0) {
+		var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
+		var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
+		var letterGrade = "BLAH";
+		for (var letter in gradeCutOffs) {
+			if (classGrade >= gradeCutOffs[letter]) {
+				letterGrade = letter;
+				break;
+			}
 		}
+		$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
 	}
-	$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
+	else {
+		$("#classGrade").text("Class Grade: N/A");	
+	}
 
 }
 
@@ -239,11 +312,11 @@ function assignmentSelected() {
 	$("#linkAssignToRepo").show();
 	
 	var thisClass = getClassFromCRN(selectedClassCRN);
-	var assignments = thisClass.assignments;
-	for (var i in assignments) {
-		if (assignments[i].AID == selectedAssignmentID){
-			var dueDate = assignments[i].dueDate;
-			var name = assignments[i].name;
+	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
+	for (var i in ASSIGNMENTS) {
+		if (ASSIGNMENTS[i].AID == selectedAssignmentID){
+			var dueDate = ASSIGNMENTS[i].dueDate;
+			var name = ASSIGNMENTS[i].name;
 			$("#dueDate").append("Due Date: " + dueDate);
 			$("#assignmentName").append(name);
 			return;
