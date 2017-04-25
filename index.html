@@ -33,8 +33,8 @@
 		<script src="https://use.fontawesome.com/6973ef5c02.js"></script>
 
 		<!-- Scripts -->
-		<script src="scripts/main.js"></script>
-		<script src="scripts/login.js"></script>
+		<script src="GitGrader/scripts/main.js"></script>
+		<script src="GitGrader/scripts/login.js"></script>
 	</head>
 
 
@@ -184,6 +184,31 @@
 						</div>
 					</div>
 
+					<!-- Repo Viewer -->
+					<div id="repoViewer">
+						<h4 id="repoName">Sudoku</h4>
+						<p id="repoClassName">Fund Comp I : Assignment 3</p>
+
+						<div class="col s12 m3 l2 indigo lighten-4">
+							<div class="collection" id="fileTree">
+								<a href="#!" class="collection-item black-text">README.txt</a>
+								<a href="#!" class="collection-item black-text">board.h</a>
+								<a href="#!" class="collection-item black-text">board.cpp</a>
+								<a href="#!" class="collection-item black-text">sudoku.h</a>
+								<a href="#!" class="collection-item black-text">sudoku.cpp</a>
+								<a href="#!" class="collection-item indigo-text">testBoards</a>
+								<a href="#!" class="collection-item black-text">Makefile</a>
+							</div>
+						</div>
+						<div class="col s8 indigo lighten-4">
+							<div class="collection" id="fileTree">
+									<a href="#!" class="collection-item black-text">
+									a;slkdfja;sldkfja;slkdjf;aslkdjf aecmrhpaowerhaoie,urapsdkf ;laskjdf ;alskdfj ;aslkdfja ;slkdfamsl;dkfjad;lfkmajs;dlfkjam;sdlkjsa;dkfasdlfkjasd\nasdfas\nasdf\asas\dfnasdf\nasdf
+									</a>
+							</div>
+						</div>
+					</div>
+
 					<!-- All Repos - shown when click Nav Bar Repos Button -->
 					<div id="allRepos">
 						<div class="col s12 m6 lighten-4">
@@ -321,36 +346,17 @@
 										<th>Score</th>
 										<th>Out of</th>
 										<th>Weight</th>
+										<th>Comments</th>
 									</tr>
 								</thead>
 
 								<tbody id="gradesTableBody">
-									<!--
-									<tr>
-										<td>Project 1</td>
-										<td>83</td>
-										<td>100</td>
-										<td>10</td>
-									</tr>
-									<tr>
-										<td>Project 1</td>
-										<td>83</td>
-										<td>100</td>
-										<td>10</td>
-									</tr>
-									<tr>
-										<td>Project 1</td>
-										<td>83</td>
-										<td>100</td>
-										<td>10</td>
-									</tr>
-									-->
 								</tbody>
 							</table>
 						</div>
 						<div class="col s12 m3 lighten-4 cyan">
 							<div class="collection">
-								<a href="#!" id="classGrade" class="collection-item">Class Grade: 87%</a>
+								<a href="#!" id="classGrade" class="collection-item"></a>
 							</div>
 						</div>
 					</div>
