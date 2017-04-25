@@ -112,7 +112,6 @@ function ready() {
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 			function(data, status){
 			console.log(data);
-			console.log(data['payload']);
 			classes = [data['payload']];
 
 
@@ -177,7 +176,6 @@ function initialize() {
 // fill dropdown with class names
 function fillInClasses() {
 	for (var i=0; i<classes[0].length; i++) {
-		console.log("IN FOR", classes[0][i]);
 		var className = classes[0][i].COURSE_NAME;
 		var html = "<li><a href='#!'>" + className + "</a></li>"; 
 		$("#classDropdown").append(html);
@@ -257,7 +255,7 @@ function assignmentSelected() {
 function getClassFromName(className) {
 	var returnVal = "";
 
-	classes.forEach(function(currentValue, index, arr){
+	classes[0].forEach(function(currentValue, index, arr){
 		if (className == currentValue.COURSE_NAME) {
 			returnVal = currentValue;
 		}
@@ -269,7 +267,7 @@ function getClassFromName(className) {
 function getClassFromCRN(CRN) {
 	var returnVal = "";
 
-	classes.forEach(function(currentValue, index, arr){
+	classes[0].forEach(function(currentValue, index, arr){
 		if (CRN == currentValue.CRN) {
 			returnVal = currentValue;
 		}
@@ -281,7 +279,7 @@ function getClassFromCRN(CRN) {
 function getNameFromCRN(CRN) {
 	var returnVal = "";
 
-	classes.forEach(function(currentValue, index, arr){
+	classes[0].forEach(function(currentValue, index, arr){
 		if (CRN == currentValue.CRN) {
 			returnVal = currentValue.COURSE_NAME;
 		}
