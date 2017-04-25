@@ -2,6 +2,8 @@
 var selectedClassCRN = "";
 var selectedAssignmentID = "";
 
+var repos = [];
+
 var classes = [
 	{
 		DEPT: "CSE",
@@ -114,6 +116,12 @@ function ready() {
 			console.log(data);
 			classes = [data['payload']];
 
+
+	// TODO
+	get_repos_obj("Repo1");
+	clickedOnFile('GitGrader/test.py');
+	
+
 	// fill class dropdown with class names
 	fillInClasses();
 	
@@ -189,7 +197,6 @@ function getGradesForClass(thisCrn) {
 	var ans = {};
 	$.post("GitGrader/php_scripts/get_grades.php", {crn: thisCrn},
 			function(data, status){
-			console.log("returned these grades data for crn", data);
 			ans = data["payload"];
 	});
 	return ans;
@@ -212,6 +219,18 @@ function getGradesHelper(crn, i) {
 			var classCRN = thisClass.CRN;
 			thisClass.ASSIGNMENTS = gradesForClass;
 	});
+}
+
+// fill in code viewer
+function fillCodeViewer(ext, content) {
+	console.log("content:", content, "ext:", ext);
+	$("#codeView").html(content);
+	$("#codeView").addClass(ext);
+	
+	// highlight the code
+	$('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
 }
 
 
@@ -244,10 +263,10 @@ function classSelected(CRN) {
 		var tempScore = "";
 		var tempWeight = "";
 		var tempOutOf = "";
+		var tempComment = "";
 		var weightForClassGrade = 0;
 
 		if (!ASSIGNMENTS[i].WEIGHT) {
-			console.log("no weight for this assignment yet");	
 			tempWeight = "--";
 			weightForClassGrade = 0;
 		} else {
@@ -256,7 +275,6 @@ function classSelected(CRN) {
 		}
 
 		if (!ASSIGNMENTS[i].GRADE) {
-			console.log("no grade for this assignment yet");	
 			tempScore = "--";
 			weightForClassGrade = 0;
 		} else {
@@ -264,25 +282,29 @@ function classSelected(CRN) {
 		}
 
 		if (!ASSIGNMENTS[i].OUTOF) {
-			console.log("no outof for this assignment yet");	
 			tempOutOf = "--";
 			weightForClassGrade = 0;
 		} else {
 			tempOutOf = ASSIGNMENTS[i].OUTOF;
 		}
 
-		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td></tr>";
+		if (!ASSIGNMENTS[i].GRADE_COMMENT) {
+			tempComment = "";
+			console.log("NO COMMENT");
+		} else {
+			tempComment = ASSIGNMENTS[i].GRADE_COMMENT;
+			console.log("COMMENT", tempComment);
+		}
+
+		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 		$("#gradesTableBody").append(gradesHTML);
 
 		// calculate class grade
 		sumOfWeights = sumOfWeights + weightForClassGrade;
-		console.log("sum of weights:", sumOfWeights);
 		var weightedScore = ((ASSIGNMENTS[i].GRADE)/(ASSIGNMENTS[i].OUTOF)) * weightForClassGrade;
-		console.log("weighted score:", weightedScore);
 		if (weightedScore) {
 			sumOfWeightedScores = sumOfWeightedScores + weightedScore;
 		}
-		console.log("sum of weighted scores:", sumOfWeightedScores);
 	}
 
 	// update class grade on page
@@ -322,6 +344,98 @@ function assignmentSelected() {
 			return;
 		}
 	}
+}
+
+////////////////// methods for file viewer ///////////////////////
+
+
+// get file tree and stuff for repo
+function get_repos_obj(repo) {
+	$.post("GitGrader/php_scripts/get_repos.php", {repo_name: repo},
+			function(data, status){
+			repos = [data['payload']];
+			console.log("repos obj:", repos);
+			didChooseRepo("Repo1");
+	});
+}
+
+// did choose a repo
+function didChooseRepo(repoName) {
+	
+	// update repo name
+	$("#repoName").html(repoName);
+
+	// update class / assignment name
+	var classCRN = "";
+	var assignmentName = "";
+	var description = "";
+
+	console.log("repos", repos);
+
+	repos[0].forEach(function(currentValue, index, arr){
+		if (repoName == currentValue.REPO_NAME) {
+			console.log("FOUND REPO!", currentValue);
+			description = currentValue.DESCRIPTION;
+			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
+				classCRN = currentValue.CRN;
+				assignmentName = currentValue.ASSIGNMENT_NAME;
+				$("#repoClassName").html(classCRN + " : " + assignmentName);
+			} else {
+					$("#repoClassName").html("unlinked");
+			}
+		}
+	});
+	$("#repoName").html(repoName);
+	$("#repoDescription").html(description);
+
+	// fill in collection view of files in this repo
+	// TODO
+
+	// TODO add click handlers to each file in collection view so the file content can be loaded into the code viewer
+
+}
+
+
+// fill in code viewer
+function clickedOnFile(filePath) {
+	//var filePath = "GitGrader/test.py";
+	var fileName = getFileNameFromPath(filePath);
+	$("#selectedClass").text(fileName);
+	var contents = getContentsFromFilePath(filePath); 
+	let ext = getExt(fileName);
+	fillCodeViewer(ext, contents);
+}
+
+// get contents of file from path
+function getContentsFromFilePath(path) {
+	var content = "";
+	var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", path, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+								content = allText;
+            }
+        }
+    }
+    rawFile.send(null);
+		return content;
+} 
+
+// get file extension from string
+function getExt(fileName) {
+	var ext =  fileName.split('.').pop();
+	return ext;
+}
+
+// get file name from path
+function getFileNameFromPath(path) {
+	var fileName = path.replace(/^.*[\\\/]/, '');
+	return fileName;
 }
 
 // methods for class object ////////////////////////////////

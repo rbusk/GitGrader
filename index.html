@@ -182,7 +182,7 @@
 				<div class="row">
 
 					<!-- Left Side Menu (Repositories, Assignments, Resources, Grades) -->
-					<div class="col s12 m3 l2 teal lighten-4">
+					<div class="col s12 m3 l2">
 						<div class="collection" id="leftMenu">
 							<a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a>
 							<a href="#!" class="collection-item" id="assignments"><i class="material-icons left">assignment</i>Assignments</a>
@@ -192,11 +192,14 @@
 					</div>
 
 					<!-- Repo Viewer -->
-					<div id="repoViewer">
-						<h4 id="repoName">Sudoku</h4>
-						<p id="repoClassName">Fund Comp I : Assignment 3</p>
 
-						<div class="col s12 m3 l2 indigo lighten-4">
+					<div id="repoViewer" class="container">
+				
+							<h4 id="repoName">Sudoku Lab</h4>
+							<p id="repoClassName">Fund Comp I : Assignment 3</p>
+							<p id="repoDescription" class="black-text">Description here</p>
+
+						<div class="col s12 m4 l3 indigo lighten-4">
 							<div class="collection" id="fileTree">
 								<a href="#!" class="collection-item black-text">README.txt</a>
 								<a href="#!" class="collection-item black-text">board.h</a>
@@ -208,7 +211,7 @@
 							</div>
 						</div>
 						<div class="col s8">
-								<pre><code class="javascript">
+								<pre><code class="javascript" id="codeView">
 									function hello() {
 										console.log("hey!");
 									}
@@ -465,8 +468,9 @@
 				<div class="col l4 offset-l2 s12">
 					<h5 class="white-text">Built with</h5>
 					<ul>
-						<li><a class="grey-text text-lighten-3" href="https://jquery.com/">jQuery</a></li>
 						<li><a class="grey-text text-lighten-3" href="http://fontawesome.io/">Font Awesome</a></li>
+						<li><a class="grey-text text-lighten-3" href="https://highlightjs.org/">Highlight.js</a></li>
+						<li><a class="grey-text text-lighten-3" href="https://jquery.com/">jQuery</a></li>
 						<li><a class="grey-text text-lighten-3" href="http://materializecss.com/">Materialize</a></li>
 					</ul>
 				</div>
