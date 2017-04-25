@@ -2,17 +2,12 @@
 var selectedClassCRN = "";
 var selectedAssignmentID = "";
 
-$.post("GitGrader/php_scripts/get_courses.php", {},
-	function(data, status){
-		console.log(data);
-});
-
 var classes = [
 	{
-		department: "CSE",
-		courseName: "Advanced Databases",
-		crn: "12983",
-		courseNumber: "40157-01",
+		DEPT: "CSE",
+		COURSE_NAME: "Advanced Databases",
+		CRN: "12983",
+		COURSE_NO: "40157-01",
 		assignments: [
 			{
 				name: "HW1",
@@ -41,10 +36,10 @@ var classes = [
 		]
 	},
 	{
-		department: "CSE",
-		courseName: "Fund Comp II",
-		crn: "10239",
-		courseNumber: "20101-02",
+		DEPT: "CSE",
+		COURSE_NAME: "Fund Comp II",
+		CRN: "10239",
+		COURSE_NO: "20101-02",
 		assignments: [
 			{
 				name: "Lab 1",
@@ -74,10 +69,10 @@ var classes = [
 
 	},
 	{
-		department: "CSE",
-		courseName: "Basic Unix",
-		crn: "12387",
-		courseNumber: "20189-01",
+		DEPT: "CSE",
+		COURSE_NAME: "Basic Unix",
+		CRN: "12387",
+		COURSE_NO: "20189-01",
 		assignments: [
 			{
 				name: "Project 1",
@@ -113,6 +108,32 @@ $( document ).ready(ready);
 // doc ready
 function ready() {
 	console.log("doc ready from main.js");
+
+	$.post("GitGrader/php_scripts/get_courses.php", {},
+			function(data, status){
+			console.log(data);
+			console.log(data['payload']);
+			classes = [data['payload']];
+
+
+	// fill class dropdown with class names
+	fillInClasses();
+
+	// add event handlers to classes dropdown in nav bar
+	$("#classDropdown li a").click(function(){
+			var selectedCourseName = this.text;
+			var thisClass = getClassFromName(selectedCourseName);
+			var selectedCourseCRN = thisClass.CRN;
+			var selectedCourseDepartment = thisClass.DEPT;
+			var selectedCourseNumber = thisClass.COURSE_NO;
+			$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
+			classSelected(selectedCourseCRN); // fill out rest of class info in divs
+			selectedClassCRN = selectedCourseCRN;
+			});
+	});
+
+
+
 	// init
 	initialize();
 
@@ -122,17 +143,11 @@ function ready() {
 	// no menu items selected initially, so hide right side content
 	hideAll();
 
+	// create nav bar class name options
+
 	// handle class switches from nav bar
-	$("#classDropdown li a").click(function(){
-		var selectedCourseName = this.text;
-		var thisClass = getClassFromName(selectedCourseName);
-		var selectedCourseCRN = thisClass.crn;
-		var selectedCourseDepartment = thisClass.department;
-		var selectedCourseNumber = thisClass.courseNumber;
-		$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
-		classSelected(selectedCourseCRN); // fill out rest of class info in divs
-		selectedClassCRN = selectedCourseCRN;
-	});
+	/*
+*/
 
 	// selected assignment 
 	$(document).on('click', "#assignmentsListDiv a", function() {
@@ -154,8 +169,6 @@ function ready() {
 // initialize
 function initialize() {
 	console.log("initializing from main.js");
-	// fill class dropdown with class names
-	fillInClasses();
 
 	// only appear when assignment is selected
 	$("#linkAssignToRepo").hide();
@@ -163,17 +176,18 @@ function initialize() {
 
 // fill dropdown with class names
 function fillInClasses() {
-	for (var i in classes) {
-		var className = classes[i].courseName;
+	for (var i=0; i<classes[0].length; i++) {
+		console.log("IN FOR", classes[0][i]);
+		var className = classes[0][i].COURSE_NAME;
 		var html = "<li><a href='#!'>" + className + "</a></li>"; 
 		$("#classDropdown").append(html);
 	}
 }
 
 // fill in class info for given class
-function classSelected(crn) {
+function classSelected(CRN) {
 
-	console.log("SELECTED THIS CRN", crn);
+	console.log("SELECTED THIS CRN", CRN);
 
 	// clear old class data
 	$("#assignmentsListDiv").html("");
@@ -182,7 +196,7 @@ function classSelected(crn) {
 	$("#dueDate").html("");
 	$("#linkAssignToRepo").hide();
 
-	var thisClass = getClassFromCRN(crn);
+	var thisClass = getClassFromCRN(CRN);
 
 	// fill in this class's assignments
 	var assignments = thisClass.assignments;
@@ -244,7 +258,7 @@ function getClassFromName(className) {
 	var returnVal = "";
 
 	classes.forEach(function(currentValue, index, arr){
-		if (className == currentValue.courseName) {
+		if (className == currentValue.COURSE_NAME) {
 			returnVal = currentValue;
 		}
 	});
@@ -252,11 +266,11 @@ function getClassFromName(className) {
 	return returnVal;
 }
 
-function getClassFromCRN(crn) {
+function getClassFromCRN(CRN) {
 	var returnVal = "";
 
 	classes.forEach(function(currentValue, index, arr){
-		if (crn == currentValue.crn) {
+		if (CRN == currentValue.CRN) {
 			returnVal = currentValue;
 		}
 	});
@@ -264,12 +278,12 @@ function getClassFromCRN(crn) {
 	return returnVal;
 }
 
-function getNameFromCRN(crn) {
+function getNameFromCRN(CRN) {
 	var returnVal = "";
 
 	classes.forEach(function(currentValue, index, arr){
-		if (crn == currentValue.crn) {
-			returnVal = currentValue.courseName;
+		if (CRN == currentValue.CRN) {
+			returnVal = currentValue.COURSE_NAME;
 		}
 	});
 
