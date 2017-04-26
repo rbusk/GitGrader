@@ -1,6 +1,26 @@
-$( document ).ready(ready);
+$.post("GitGrader/php_scripts/is_logged_in.php",
+	{
+		email: $('#login_email').val()
+	},
+	function(data, status) {
+		console.log(data);
+		if (data['payload']['logged_in'] == false) {
+			$( document ).ready(ready);
+		} else {
+			// handle main content
+			$('#loginContent').hide();
+			$('#loggedInMainContent').show();
+			
+			// handle nav bar content
+			$('#loginNav').hide();
+			$('#normalNav').show();
+		}
+	}
+);
+
 
 function ready() {
+	
 	console.log("ready!");
 	// materialize
 	$('.modal').modal();
@@ -142,33 +162,35 @@ function loginUser() {
 	loginUserInFB(email, password);
 	
 	// check if Firebase sign up worked
-	if (!isUserLoggedIntoFB) {
+	/*if (!isUserLoggedIntoFB()) {
 		alert('account login failed!');
-		return;
+		//return;
 	}
 	else {
 		alert('successfully logged in!');
-	}
+	}*/
+
+	//isUserLoggedIntoFB();
 
 	// TODO if Firebase successful, get user info from PHP
-	$.post("GitGrader/php_scripts/site_login.php",
+/*	$.post("GitGrader/php_scripts/site_login.php",
 		{
 			email: $('#login_email').val()
 		},
 		function(data, status) {
 		}
 	);
-	
+	*/
 	//window.open("index.html");
 	
 	// handle main content
-	$('#loginContent').hide();
+	/*$('#loginContent').hide();
 	$('#loggedInMainContent').show();
 	
 	// handle nav bar content
 	$('#loginNav').hide();
 	$('#normalNav').show();
-
+	*/
 };
 
 
@@ -176,21 +198,50 @@ function loginUser() {
 
 
 // Firebase Auth //////////////////////////////////////
-function isUserLoggedIntoFB() {
+/*function isUserLoggedIntoFB() {
 	firebase.auth().onAuthStateChanged(function(user) {
 		if (user) {
+			alert('logged in');
+			// handle main content
+			$('#loginContent').hide();
+			$('#loggedInMainContent').show();
+			
+			// handle nav bar content
+			$('#loginNav').hide();
+			$('#normalNav').show();
 			return true;
 		} else {
+			alert('account login failed');
 			return false;
 		}
 	});
-}
+}*/
 
 function loginUserInFB(email, password) {
-	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+	firebase.auth().signInWithEmailAndPassword(email, password)
+	.then(function(firebaseUser) {
+		// handle main content
+		$('#loginContent').hide();
+		$('#loggedInMainContent').show();
+		
+		// handle nav bar content
+		$('#loginNav').hide();
+		$('#normalNav').show();
+
+		$.post("GitGrader/php_scripts/site_login.php",
+			{
+				email: $('#login_email').val()
+			},
+			function(data, status) {
+			}
+		);
+
+		alert('logged in!');
+	})
+	.catch(function(error) {
 		var errorCode = error.code;
 		var errorMessage = error.message;
-		console.log("Error in logging user in:", error.code, error.message);
+		alert('error logging in');
 	});
 }
 

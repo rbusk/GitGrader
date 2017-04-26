@@ -369,6 +369,8 @@ function didChooseRepo(repoName) {
 	var classCRN = "";
 	var assignmentName = "";
 	var description = "";
+	var repoID = "";
+	var currentFileTree = [];
 
 	console.log("repos", repos);
 
@@ -376,12 +378,13 @@ function didChooseRepo(repoName) {
 		if (repoName == currentValue.REPO_NAME) {
 			console.log("FOUND REPO!", currentValue);
 			description = currentValue.DESCRIPTION;
+			repoID = currentValue.REPO_ID;
 			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
 				classCRN = currentValue.CRN;
 				assignmentName = currentValue.ASSIGNMENT_NAME;
 				$("#repoClassName").html(classCRN + " : " + assignmentName);
 			} else {
-					$("#repoClassName").html("unlinked");
+					$("#repoClassName").html("(unlinked)");
 			}
 		}
 	});
@@ -389,10 +392,46 @@ function didChooseRepo(repoName) {
 	$("#repoDescription").html(description);
 
 	// fill in collection view of files in this repo
-	// TODO
+	$.post("GitGrader/php_scripts/get_directory_tree.php", {repo_id: repoID},
+			function(data, status){
+			currentFileTree = [data['payload']];
+		  fillFileList(currentFileTree);	
+	});
 
 	// TODO add click handlers to each file in collection view so the file content can be loaded into the code viewer
 
+}
+
+function isNormalInteger(str) {
+    var n = Math.floor(Number(str));
+    return String(n) === str && n >= 0;
+}
+
+// fill in file list of current directory in repo
+function fillFileList(fileTree) {
+	fileTree.forEach(function(currentValue, index, arr){
+	  for (var obj in currentValue) {	
+			
+			if (isNormalInteger(obj) == false) {
+				continue;
+			}
+
+			var path = "/idk/";
+			var fileName = currentValue[obj];
+			var isDir = false;
+			var fileHTML = "<a href='" + path + "' class='collection-item ";
+	
+			if (isDir == false) { // TODO colors don't work?
+					fileHTML = fileHTML + "black-text";	
+			} else {
+					fileHTML = fileHTML + "indigo-text";	
+			}	
+	
+			fileHTML = fileHTML + "'>" + fileName + "</a>";
+	 
+			$("#fileTree").append(fileHTML);
+		}
+	});
 }
 
 
@@ -516,4 +555,5 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
+	$("#repoViewer").hide();
 }

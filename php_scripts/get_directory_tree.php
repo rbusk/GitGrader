@@ -2,8 +2,8 @@
 	include 'check_logged_in.php';
 	include 'json_functions.php';
 
-	//Thanks to http://php.net/manual/en/function.scandir.php for dirToArray function
-	function dirToArray($dir) { 
+	//Thanks to http://php.net/manual/en/function.scandir.php for dirToArrayRec function
+	function dirToArrayRec($dir) { 
 
 		$result = array(); 
 
@@ -14,7 +14,7 @@
 			{ 
 				if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) 
 				{ 
-					$result[$value] = dirToArray($dir . DIRECTORY_SEPARATOR . $value); 
+					$result[$value] = dirToArrayRec($dir . DIRECTORY_SEPARATOR . $value); 
 				} 
 				else 
 				{ 
@@ -41,7 +41,7 @@
 
 	if ($repo_path != null) {
 		header('Content-Type: application/json;charset=utf-8');
-		echo json_success(dirToArray($repo_path));
+		echo json_success(dirToArrayRec($repo_path));
 	} else {
 		header('Content-Type: application/json;charset=utf-8');
 		echo json_error('Repo not found.');
