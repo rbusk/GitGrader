@@ -10,8 +10,6 @@
 
 	oci_execute($stmt);
 
-	echo($username);
-
 	oci_close($conn);
 
 	if ($username != null) {

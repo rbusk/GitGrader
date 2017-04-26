@@ -15,26 +15,22 @@
 		$ok = false;
 	}
 
-	$target_dir = "resources/";
+	$target_dir = "../classes/" . $_POST['crn'] . "/resources/";
 
-	//file name will be [CRN]-[RESOURCE-NAME]
-	$target_file = $target_dir . $_POST['crn'] . '-' . $_POST['resource_name'];
+	$target_file = $target_dir . $_POST['resource_name'];
 
 	if ($ok) {
 		$message = upload_file($_FILES['file'], $target_file);
 	}
 
 	if ($message == "success")  {
-
-		$query = "insert into resources values()";
+		$due_date = null;
+		$query = "begin grader_pack.add_resource(:crn, :resource_name); end;";
 
 		$stmt = oci_parse($conn, $query);
 
 		oci_bind_by_name($stmt, ':crn', $_POST['crn']);
-		oci_bind_by_name($stmt, ':assignment_name', $_POST['assignment_name']);
-		oci_bind_by_name($stmt, ':due_date', $due_date);
-		oci_bind_by_name($stmt, ':outof', $_POST['outof']);
-		oci_bind_by_name($stmt, ':weight', $_POST['weight']);
+		oci_bind_by_name($stmt, ':resource_name', $_POST['resource_name']);
 
 		oci_execute($stmt);
 

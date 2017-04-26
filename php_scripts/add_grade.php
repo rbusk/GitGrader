@@ -113,14 +113,7 @@
 			die();
 		}
 
-		//now grade assignment
-		/*$query4 = "update submission
-			set grade=:grade, teacher_username=:teacher_username
-			where student_username=:student_username
-			and crn=:crn
-			and assignment_name=:assignment_name";*/
-
-		$query4 = "begin grader_pack.add_grade(:crn, :assignment_name, :student_username, :teacher_username, :grade); end;";
+		$query4 = "begin grader_pack.add_grade(:crn, :assignment_name, :student_username, :teacher_username, :grade, :grade_comment); end;";
 
 		include 'db_login.php';
 		$stmt = oci_parse($conn, $query4);
@@ -130,6 +123,7 @@
 		oci_bind_by_name($stmt, ':assignment_name', $_POST['assignment_name']);
 		oci_bind_by_name($stmt, ':student_username', $_POST['student_username']);
 		oci_bind_by_name($stmt, ':grade', $_POST['grade']);
+		oci_bind_by_name($stmt, ':grade_comment', $_POST['grade_comment']);
 
 		oci_execute($stmt);
 

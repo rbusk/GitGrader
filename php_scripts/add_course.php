@@ -3,6 +3,10 @@
 	include 'db_login.php';
 
 	$query = "begin grader_pack.add_course(:crn, :course_no, :dept, :course_name, :username); end;";
+	$path = "../classes/" . $_POST['crn'];
+	mkdir($path,0755);
+	mkdir($path . "/resources",0755);
+	mkdir($path . "/assignments",0755);
 
 	$stmt = oci_parse($conn, $query);
 

@@ -51,23 +51,18 @@
 		} else {
 			$bindings2 = array(':crn' => $_POST['crn']);
 			$query2 =
-				"select *
-				from assignment
+				"select resource_name
+				from resources
 				where crn = :crn";
-				$assignments = get_info($query2, $bindings2);
+				$resources = get_info($query2, $bindings2);
 
-				//loop through assignments and add path
-				for($i=0; $i<count($assignments); $i++) {
-					$path = 
-					$path = '../classes/' . $_POST['crn'] . '/assignments/';
-					$path .= $assignments[$i]['ASSIGNMENT_NAME'];
-					if (file_exists($path)) {
-						$assignments[$i]['PATH'] = $path;
-					}
+				//loop through resources and add the paths to the resources to resoure_paths
+				for ($i = 0; $i < count($resources); $i++) {
+					$resources[$i]['PATH'] = 'classes/' . $_POST['crn'] . '/' . $resources[$i]['RESOURCE_NAME'];
 				}
 
 				header('Content-Type: application/json;charset=utf-8');
-				echo json_success($assignments);
+				echo json_success($resources);
 		}
 	}
 ?>

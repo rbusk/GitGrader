@@ -9,26 +9,15 @@
 		echo json_error('CRN variable is not set');
 	} else {
 
-		//First need to make sure the signed-in user is a teacher or student of this class
+		//First need to make sure the signed-in user is a teacher of this class
 		//if not then return failure message
 
 		$query1 = 
-			"select * from
-			(
-				select t.username, t.crn
+				"select t.username, t.crn
 				from teaches_course t
 				where t.username = :username
-				and t.crn = :crn
-			)
-			union
-			(
-				select t.username, t.crn
-				from takes_course t
-				where t.username = :username
-				and t.crn = :crn
-			)";
+				and t.crn = :crn";
 
-		//could not get this to work with get_info for some reason :(
 		include 'db_login.php';
 		$stmt = oci_parse($conn, $query1);
 
@@ -47,27 +36,17 @@
 
 		if (count($courses) < 1) {
 			header('Content-Type: application/json;charset=utf-8');
-			echo json_error('User does not teach or take this course.');
+			echo json_error('User does not teach this course.');
 		} else {
 			$bindings2 = array(':crn' => $_POST['crn']);
 			$query2 =
-				"select *
-				from assignment
+				"select username
+				from takes_course
 				where crn = :crn";
-				$assignments = get_info($query2, $bindings2);
-
-				//loop through assignments and add path
-				for($i=0; $i<count($assignments); $i++) {
-					$path = 
-					$path = '../classes/' . $_POST['crn'] . '/assignments/';
-					$path .= $assignments[$i]['ASSIGNMENT_NAME'];
-					if (file_exists($path)) {
-						$assignments[$i]['PATH'] = $path;
-					}
-				}
+				$resources = get_info($query2, $bindings2);
 
 				header('Content-Type: application/json;charset=utf-8');
-				echo json_success($assignments);
+				echo json_success($resources);
 		}
 	}
 ?>

@@ -15,10 +15,9 @@
 		$ok = false;
 	}
 
-	$target_dir = "uploads/";
+	$target_dir = "../classes/" . $_POST['crn'] . "/assignments/";
 
-	//file name will be [CRN]-[ASSIGNMENT-NAME]
-	$target_file = $target_dir . $_POST['crn'] . '-' . $_POST['assignment_name'];
+	$target_file = $target_dir . $_POST['assignment_name'];
 
 	if ($ok) {
 		$message = upload_file($_FILES['file'], $target_file);

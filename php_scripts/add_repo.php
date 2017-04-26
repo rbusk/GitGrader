@@ -8,16 +8,14 @@
 	$git->initRepository(true);
 
 	
-	$query = 'begin grader_pack.add_repo(:username, :repo, :path); end;';
+	$query = 'begin grader_pack.add_repo(:username, :repo, :path, :description); end;';
 
 	$stmt = oci_parse($conn, $query);
-	$stmt = oci_parse($conn, $query);
-	oci_bind_by_name($stmt, ':username', $_POST['username']);
+	oci_bind_by_name($stmt, ':username', $_SESSION['username']);
 	oci_bind_by_name($stmt, ':repo', $_POST['repo']);
 	oci_bind_by_name($stmt, ':path', $repo_path);
+	oci_bind_by_name($stmt, ':description', $_POST['description']);
 	oci_execute($stmt);
 
 	oci_close($conn);
-
-	echo("added repo.");
 ?>

@@ -41,7 +41,7 @@
 		} else {
 
 			$query2 =
-					"select a.assignment_name, s.teacher_username, s.grade, s.repo_name,
+					"select a.assignment_name, s.teacher_username, s.grade, s.repo_id, s.grade_comment,
 						a.outof, a.weight
 					from assignment a left join submission s
 					on a.crn = s.crn and a.assignment_name = s.assignment_name
