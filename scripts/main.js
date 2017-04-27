@@ -188,6 +188,8 @@ function ready() {
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
+	$("#addResourceForm").hide();
+	$("#addAssignmentForm").hide();
 
 	// create nav bar class name options
 
@@ -676,6 +678,4 @@ function hideAll() {
 	$("#resourcesDiv").hide();
 	$("#repoViewer").hide();
 	$("#modalBtnDiv").hide();
-	$("#addResourceForm").hide();
-	$("#addAssignmentForm").hide();
 }
