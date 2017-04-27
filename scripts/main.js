@@ -604,4 +604,6 @@ function hideAll() {
 	$("#resourcesDiv").hide();
 	$("#repoViewer").hide();
 	$("#modalBtnDiv").hide();
+	$("#addResourceForm").hide();
+	$("#addAssignmentForm").hide();
 }
