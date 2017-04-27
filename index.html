@@ -170,12 +170,17 @@
 		<div id="loggedInMainContent">
 
 			<!-- Selected Class -->
-			<div class="row teal">
-				<div class="col s12 white-text">
-					<h5 id="selectedClass">no class selected</h5>
-				</div>
+			<nav>
+			<div class="row teal nav-wrapper">
+				<h5 href="#" id="selectedClass" class="col s12 white-text">no class selected</h5>
+				<ul id="repo-mobile">
+					<div id="addNav">
+						<li><a id="sshNavButton" class="waves-effect waves-light btn" href="#">Add SSH</a></li>
+						<li><a id="repoNavButton" class="waves-effect waves-light btn" href="#">Add Repo</a></li>
+					</div>
+				</ul>
 			</div>
-
+			</nav>
 
 			<!-- Main Content -->
 			<div class="section white">
@@ -202,7 +207,6 @@
 						<div class="col s12 m4 l3 indigo lighten-4">
 							<div class="collection" id="fileTree">
 								<a href="#!" class="collection-item black-text">README.txt</a>
-								<a href="#!" class="collection-item black-text">board.h</a>
 								<a href="#!" class="collection-item black-text">board.cpp</a>
 								<a href="#!" class="collection-item black-text">sudoku.h</a>
 								<a href="#!" class="collection-item black-text">sudoku.cpp</a>
