@@ -58,7 +58,7 @@
 
 				//loop through resources and add the paths to the resources to resoure_paths
 				for ($i = 0; $i < count($resources); $i++) {
-					$resources[$i]['PATH'] = 'classes/' . $_POST['crn'] . '/' . $resources[$i]['RESOURCE_NAME'];
+					$resources[$i]['PATH'] = 'GitGrader/classes/' . $_POST['crn'] . '/resources/' . $resources[$i]['RESOURCE_NAME'];
 				}
 
 				header('Content-Type: application/json;charset=utf-8');

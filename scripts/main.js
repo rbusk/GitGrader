@@ -128,6 +128,8 @@ function ready() {
 	// fill in grades for each of these classes
 	fillInGradesForClasses();
 
+	fillInResourcesForClasses();
+
 	// add event handlers to classes dropdown in nav bar
 	$("#classDropdown li a").click(function(){
 			var selectedCourseName = this.text;
@@ -210,14 +212,33 @@ function fillInGradesForClasses() {
 	}
 }
 
+function fillInResourcesForClasses() {
+	for (var i=0; i<classes[0].length; i++) {
+		var thisClass = classes[0][i];
+		var classCRN = thisClass.CRN;
+		getResourcesHelper(classCRN, i);
+	}
+}
+
 // helper get grades function
 function getGradesHelper(crn, i) {
-	$.post("GitGrader/php_scripts/get_grades.php", {crn: crn},
+	$.post("GitGrader/php_scripts/get_assignments.php", {crn: crn},
 			function(data, status){
 			var gradesForClass = data["payload"];
 			var thisClass = classes[0][i];
 			var classCRN = thisClass.CRN;
 			thisClass.ASSIGNMENTS = gradesForClass;
+	});
+}
+
+// helper get grades function
+function getResourcesHelper(crn, i) {
+	$.post("GitGrader/php_scripts/get_resources.php", {crn: crn},
+			function(data, status){
+			var resourcesForClass = data["payload"];
+			var thisClass = classes[0][i];
+			var classCRN = thisClass.CRN;
+			thisClass.RESOURCES = resourcesForClass;
 	});
 }
 
@@ -244,9 +265,19 @@ function classSelected(CRN) {
 	$("#gradesTableBody").html("");
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
+	$("#resourcesListDiv").html("");
 	$("#linkAssignToRepo").hide();
 
 	var thisClass = getClassFromCRN(CRN);
+
+	//fill in this class's REOSURCES
+	var RESOURCES = thisClass.RESOURCES;
+
+	for (var i in RESOURCES) {
+		var html = "<a href='" + RESOURCES[i].PATH+ "' download class='cyan-text text-darken-2 assignment collection-item'>" + RESOURCES[i].RESOURCE_NAME; 
+		var html = html + "<i class='fa fa-download fa-2x right' aria-hidden='true'></i></a>";
+		$("#resourcesListDiv").append(html);
+	}
 
 	// fill in this class's ASSIGNMENTS
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
@@ -256,7 +287,7 @@ function classSelected(CRN) {
 	for (var i in ASSIGNMENTS) {
 
 		// fill in ASSIGNMENTS div
-		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id=" + ASSIGNMENTS[i].AID + ">" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
+		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
 		$("#assignmentsListDiv").append(html);
 
 		// fill in grades div
@@ -331,15 +362,23 @@ function assignmentSelected() {
 	// clear old assignemnt name and due date
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
+	$("#assignmentLink").html("");
 	$("#linkAssignToRepo").show();
 	
 	var thisClass = getClassFromCRN(selectedClassCRN);
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
 	for (var i in ASSIGNMENTS) {
-		if (ASSIGNMENTS[i].AID == selectedAssignmentID){
-			var dueDate = ASSIGNMENTS[i].dueDate;
-			var name = ASSIGNMENTS[i].name;
-			$("#dueDate").append("Due Date: " + dueDate);
+		if (ASSIGNMENTS[i].ASSIGNMENT_NAME == selectedAssignmentID){
+			var dueDate = ASSIGNMENTS[i].DUE_DATE;
+			var name = ASSIGNMENTS[i].ASSIGNMENT_NAME;
+			var path = ASSIGNMENTS[i].PATH;
+			if (dueDate != undefined) {
+				$("#dueDate").append("Due Date: " + dueDate);
+			}
+			if (path != undefined) {
+				$("#assignmentInstructions").html("View instructions");
+				$("#assignmentInstructions").attr("href", path);
+			}
 			$("#assignmentName").append(name);
 			return;
 		}

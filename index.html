@@ -327,6 +327,7 @@
 								<div class="container">
 									<h4 id="assignmentName"></h4>
 									<p id="dueDate"></p>
+									<a id="assignmentInstructions"></a>
 									<a id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
 								</div>
 							</div>
@@ -337,12 +338,13 @@
 					<!-- Resources -->
 					<div id="resourcesDiv">
 						<div class="col s12 m4 cyan lighten-4">
-							<div class="collection">
-								<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+							<div id="resourcesListDiv" class="collection">
+								<!-- <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
 								<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
 								<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">Syllabus.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
 								<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW3.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
 								<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">sampleData.json<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+								-->
 							</div>
 						</div>
 					</div>
@@ -429,6 +431,35 @@
 				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
 			</div>
 		</div>
+
+
+		<!-- Add/Change Grade Modal -->
+
+		<!-- Modal Trigger -->
+	  <a class="waves-effect waves-light btn" href="#changeGrade">Change Grade</a>
+	
+	  <!-- Modal Structure -->
+	  <div id="changeGrade" class="modal">
+	    <div class="modal-content">
+	      <h4>Enter Score:</h4>
+
+			<div class="row">
+			    <form class="col s12">
+			      <div class="row">
+			        <div class="input-field col s6">
+			          <input placeholder="88" id="score" type="number" class="validate">
+			          <label for="score">Score</label>
+			        </div>
+			      </div>
+			    </form>
+			  </div>
+					
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
+	    </div>
+	  </div>
+
 
 		<!-- Contact Us Form -->
 		<div id="modal1" class="modal">

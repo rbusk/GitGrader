@@ -58,10 +58,9 @@
 
 				//loop through assignments and add path
 				for($i=0; $i<count($assignments); $i++) {
-					$path = 
-					$path = '../classes/' . $_POST['crn'] . '/assignments/';
+					$path = 'GitGrader/classes/' . $_POST['crn'] . '/assignments/';
 					$path .= $assignments[$i]['ASSIGNMENT_NAME'];
-					if (file_exists($path)) {
+					if (file_exists('../../' . $path)) {
 						$assignments[$i]['PATH'] = $path;
 					}
 				}
