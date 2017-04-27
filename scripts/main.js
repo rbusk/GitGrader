@@ -2,6 +2,11 @@
 var selectedClassCRN = "";
 var selectedAssignmentID = "";
 
+// global variables for grades table, for when TA clicks on assignment
+var selectedGradeTableAssignmentName = "";
+var selectedGradeTableOldScore = "";
+var selectedGradeTableRowIndex = -1;
+
 var repos = [];
 
 var classes = [
@@ -140,7 +145,37 @@ function ready() {
 			$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
 			classSelected(selectedCourseCRN); // fill out rest of class info in divs
 			selectedClassCRN = selectedCourseCRN;
-			});
+			if (thisClass.ROLE === "instructor") {
+				$("#addAssignmentForm").show();
+				$("#addResourceForm").show();
+			} else {
+				$("#addAssignmentForm").hide();
+				$("#addResourceForm").hide();
+			}
+		});
+	});
+
+
+	// add event handlers to grades table 
+	$(document).on("click", "#gradesTableBody tr", function(e) {
+		// get info of the row that was clicked
+		var children = this.children;
+		selectedGradeTableAssignmentName = children[0].innerHTML;
+		selectedGradeTableOldScore = children[1].innerHTML;
+		selectedGradeTableOldComment = children[4].innerHTML;
+		var row_index = $(this).index();
+		selectedGradeTableRowIndex = row_index;
+		console.log("selected!",row_index);
+
+
+		// udpate info in change grade modal to match the selected row
+		$("#gradeChangeAssignment").text(selectedGradeTableAssignmentName);
+		$("#scoreInput").attr("placeholder", selectedGradeTableOldScore);
+		$("#commentInput").attr("placeholder", selectedGradeTableOldComment);
+
+		
+		// open change grade modal
+		$('#changeGrade').modal('open');
 	});
 
 
@@ -153,6 +188,8 @@ function ready() {
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
+	$("#addResourceForm").hide();
+	$("#addAssignmentForm").hide();
 
 	// create nav bar class name options
 
@@ -164,6 +201,42 @@ function ready() {
 	$(document).on('click', "#assignmentsListDiv a", function() {
 		selectedAssignmentID = this.id;
 		assignmentSelected();
+	});
+
+	// save newly changed grade 
+	$(document).on('click', "#changeGradeEnter", function() {
+		console.log("save new grade");
+
+		// get info from modal
+		var newScore = $("#scoreInput").val();
+		var newComment = $("#commentInput").val();
+		var username = "mnelso12@nd.edu";
+
+		// send new score to database via PHP
+		var ans = "";
+		/*
+		$.post("GitGrader/php_scripts/get_username.php", {},
+			function(data, status){
+				ans = data["payload"];
+				alert("USERNAME", ans);
+			});
+			*/
+
+		//$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, comment: newComment},
+		$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore},
+			function(data, status){
+				ans = data["payload"];
+				console.log(ans, status);
+				alert("response from changed grade", data, status);
+			});
+
+		// update global classes object to reflect new grade?
+
+		// update grades table to reflect new grade
+		selectedGradeTableRowIndex = -1;
+		selectedGradeTableAssignmentName = "";
+		selectedGradeTableOldScore = "";
+
 	});
 
 	// handle repos button in nav bar

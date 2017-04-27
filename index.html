@@ -17,16 +17,16 @@
 		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
 		<script>
-		// Initialize Firebase
-		var config = {
-			apiKey: "AIzaSyDqSMbN6b8W3CtvolBljLVM-oUq1NgN_MQ",
-			authDomain: "gitgrader.firebaseapp.com",
-			databaseURL: "https://gitgrader.firebaseio.com",
-			projectId: "gitgrader",
-			storageBucket: "gitgrader.appspot.com",
-			messagingSenderId: "549265073830"
-		};
-		firebase.initializeApp(config);
+// Initialize Firebase
+var config = {
+	apiKey: "AIzaSyDqSMbN6b8W3CtvolBljLVM-oUq1NgN_MQ",
+	authDomain: "gitgrader.firebaseapp.com",
+	databaseURL: "https://gitgrader.firebaseio.com",
+	projectId: "gitgrader",
+	storageBucket: "gitgrader.appspot.com",
+	messagingSenderId: "549265073830"
+};
+firebase.initializeApp(config);
 		</script>
 
 		<!-- Materialize CDNs -->
@@ -369,13 +369,27 @@
 									</div>
 								</div>
 							</div>
-							<div class="row" id="addAssignmentForm">
-								<form action="php_scripts/add_assignment.php" method="post">
-									<div class="input-field">
+						</div>
+						<div class="row" id="addAssignmentForm">
+							<form action="php_scripts/add_assignment.php" method="post">
+								<div class="row">
+									<div class="input-field col s12 m6">
 										<input id="assignment_name" type="text">
 										<label for="assignment_name">Name of Assignment</label>
 									</div>
-									<div class="file-field input-field">
+								</div>
+								<div class="row">
+									<div class="input-field col s12 m3">
+										<input id="outof" type="text">
+										<label for="outof">Point value</label>
+									</div>
+									<div class="input-field col s12 m3">
+										<input id="weight" type="text">
+										<label for="weight">Weight</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="file-field input-field col s12 m6">
 										<div class="btn">
 											<span>File</span>
 											<input type="file">
@@ -384,69 +398,95 @@
 											<input class="file-path validate" type="text">
 										</div>
 									</div>
+								</div>
+								<div class="col s6 m3">
 									<button class="btn waves-effect waves-light" type="submit" name="action">Add Assignment</button>
-								</form>
-							</div>
-
+								</div>
+							</form>
 						</div>
 
-						<!-- Resources -->
-						<div id="resourcesDiv">
+					</div>
+
+					<!-- Resources -->
+					<div id="resourcesDiv">
+						<div class="row">
+							<div class="col s12 m4 cyan lighten-4">
+								<div id="resourcesListDiv" class="collection">
+									<!-- <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+			 <a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+			 <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">Syllabus.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+			 <a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW3.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+			 <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">sampleData.json<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
+									-->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="addResourceForm">
+						<form action="php_scripts/add_resource.php" method="post">
 							<div class="row">
-								<div class="col s12 m4 cyan lighten-4">
-									<div id="resourcesListDiv" class="collection">
-										<!-- <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-			  <a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-			  <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">Syllabus.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-			  <a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW3.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-			  <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">sampleData.json<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-										-->
+								<div class="input-field col s12 m6">
+									<input id="resource_name" type="text">
+									<label for="resource_name">Name of Resource</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="file-field input-field col s12 m6">
+									<div class="btn">
+										<span>File</span>
+										<input type="file">
+									</div>
+									<div class="file-path-wrapper">
+										<input class="file-path validate" type="text">
 									</div>
 								</div>
 							</div>
-							<div class="row" id="addResourceForm">
-								<form action="php_scripts/add_resource.php" method="post">
-									<div class="input-field">
-										<input id="resource_name" type="text">
-										<label for="resource_name">Name of Resource</label>
-									</div>
-									<div class="file-field input-field">
-										<div class="btn">
-											<span>File</span>
-											<input type="file">
-										</div>
-										<div class="file-path-wrapper">
-											<input class="file-path validate" type="text">
-										</div>
-									</div>
+							<div class="row">
+								<div class="col s6 m3">
 									<button class="btn waves-effect waves-light" type="submit" name="action">Add Resource</button>
-								</form>
+								</div>
+							</div>
+						</form>
+					</div>
+
+
+					<!-- Gradebook -->
+					<div id="gradesDiv">
+
+						<!-- List of Students in Class (TA only)-->
+						<div id="studentsListDiv">
+							<div class="col s12 m3 l2 cyan lighten-4">
+								<div id="studentsList" class="collection">
+									<a href="#!" class="collection-item">Madelyn Nelson</a>
+									<a href="#!" class="collection-item">Nicole Schneider</a>
+									<a href="#!" class="collection-item">Ryan Busk</a>
+									<a href="#!" class="collection-item">David Mattia</a>
+								</div>
 							</div>
 						</div>
 
+						<!-- Grades Table -->
+						<div class="col s12 m6 lighten-4">
+							<table class="highlight white" id="gradesTable">
+								<thead>
+									<tr>
+										<th>Assignment</th>
+										<th>Score</th>
+										<th>Out of</th>
+										<th>Weight</th>
+										<th>Comments</th>
+									</tr>
+								</thead>
 
-						<!-- Gradebook Table -->
-						<div id="gradesDiv">
-							<div class="col s12 m6 lighten-4">
-								<table class="highlight white" id="gradesTable">
-									<thead>
-										<tr>
-											<th>Assignment</th>
-											<th>Score</th>
-											<th>Out of</th>
-											<th>Weight</th>
-											<th>Comments</th>
-										</tr>
-									</thead>
+								<tbody id="gradesTableBody">
+								</tbody>
+							</table>
+						</div>
 
-									<tbody id="gradesTableBody">
-									</tbody>
-								</table>
-							</div>
-							<div class="col s12 m3 lighten-4 cyan">
-								<div class="collection">
-									<a href="#!" id="classGrade" class="collection-item"></a>
-								</div>
+						<!-- Class Grade -->
+						<div class="col s12 m2 lighten-4 cyan">
+							<div class="collection">
+								<a href="#!" id="classGrade" class="collection-item"></a>
 							</div>
 						</div>
 					</div>
@@ -511,20 +551,21 @@
 
 		<!-- Add/Change Grade Modal -->
 
-		<!-- Modal Trigger -->
-		<a class="waves-effect waves-light btn" href="#changeGrade">Change Grade</a>
-
 		<!-- Modal Structure -->
 		<div id="changeGrade" class="modal">
 			<div class="modal-content">
-				<h4>Enter Score:</h4>
+				<h4 id="gradeChangeAssignment">Assignment 3</h4>
 
 				<div class="row">
 					<form class="col s12">
 						<div class="row">
-							<div class="input-field col s6">
-								<input placeholder="88" id="score" type="number" class="validate">
+							<div class="input-field col s12">
+								<input placeholder="88" id="scoreInput" type="number" class="validate">
 								<label for="score">Score</label>
+							</div>
+							<div class="input-field col s12">
+								<input placeholder="Good work!" id="commentInput" type="text" class="validate">
+								<label for="commentInput">Comments</label>
 							</div>
 						</div>
 					</form>
@@ -532,8 +573,24 @@
 
 			</div>
 			<div class="modal-footer">
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
+				<a href="#!" id="changeGradeEnter" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
 			</div>
+		</div>
+		<div class="row">
+			<form class="col s12">
+				<div class="row">
+					<div class="input-field col s6">
+						<input placeholder="88" id="score" type="number" class="validate">
+						<label for="score">Score</label>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
+		</div>
 		</div>
 		<!-- Contact Us Form -->
 		<div id="modal1" class="modal">

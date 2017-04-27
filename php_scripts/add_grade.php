@@ -128,6 +128,8 @@
 		oci_execute($stmt);
 
 		oci_close($conn);
-			
+
+		header('Content-Type: application/json;charset=utf-8');
+		echo json_success('Grade added successfully.');
 	}
 ?>
