@@ -208,7 +208,7 @@ function ready() {
 		// get info from modal
 		var newScore = $("#scoreInput").val();
 		var newComment = $("#commentInput").val();
-		var username = "mnelso12@nd.edu";
+		var username = "mnelso12";
 
 		// send new score to database via PHP
 		var ans = "";
@@ -221,11 +221,19 @@ function ready() {
 			*/
 
 		//$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, comment: newComment},
-		$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore},
+		$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, comment: newComment},
 			function(data, status){
-				ans = data["payload"];
-				console.log(ans, status);
-				alert("response from changed grade", data, status);
+				console.log(data, status);
+				console.log("data['success']", data.success);
+
+
+				if (data["success"] == true) {
+					console.log("grade update successful!");		
+					alert("Grade update successful!");
+				}
+				else {
+					console.log("grade update failed, error:", data["error"]["message"]);
+				}
 			});
 
 		// update global classes object to reflect new grade?
