@@ -219,6 +219,8 @@ function ready() {
 	hideAll();
 	$("#addResourceForm").hide();
 	$("#addAssignmentForm").hide();
+	$("#classesDiv").show();
+	$("#classesNavButton").hide();
 
 	// create nav bar class name options
 
@@ -277,6 +279,10 @@ function ready() {
 	// handle repos button in nav bar
 	$("#reposNavButton").click(function() {
 		openReposDiv();
+	});
+
+	$("#classesNavButton").click(function() {
+		openClassesDiv();
 	});
 
 	// handle left menu switches
@@ -707,10 +713,24 @@ function getRoleFromCRN(CRN) {
 // Repos Button in Nav Bar //////////////////////////////////
 function openReposDiv() {
 	hideAll();
+	//hideClasses();
 	$("#allRepos").show();
+	$("#repoViewer").hide();
+	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
-	$("#selectedClass").text("no class selected - all repos");
+	$("#selectedClass").text("");
+	$("#classesButton").hide();
+	$("#reposNavButton").hide();
+	$("#classesNavButton").show();
+}
+
+function openClassesDiv() {
+	hideAll();
+	$("#classesDiv").show();
+	$("#classesButton").show();
+	$("#reposNavButton").show();
+	$("#classesNavButton").hide();
 }
 
 
@@ -720,21 +740,25 @@ function leftMenuSwitch(selectedItem) {
 		console.log("grades");
 		hideAll();
 		$("#gradesDiv").show();
+		$("#classesDiv").show();
 	}
 	else if (selectedItem === "assignments") {
 		console.log("assignments");
 		hideAll();
 		$("#assignmentsDiv").show();
+		$("#classesDiv").show();
 	}
 	else if (selectedItem === "repositories") {
 		hideAll();
 		console.log("repos");
 		$("#classRepos").show();
+		$("#classesDiv").show();
 	}
 	else if (selectedItem === "resources") {
 		hideAll();
 		console.log("resources");
 		$("#resourcesDiv").show();
+		$("#classesDiv").show();
 	}
 }
 
@@ -744,6 +768,12 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	$("#repoViewer").hide();
+	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
+	$("#classesDiv").hide();
+}
+
+function hideClasses() {
+	hideAll();
+	$("#classesDiv").hide();
 }
