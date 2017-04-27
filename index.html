@@ -449,8 +449,22 @@
 					</div>
 
 
-					<!-- Gradebook Table -->
+					<!-- Gradebook -->
 					<div id="gradesDiv">
+
+						<!-- List of Students in Class (TA only)-->
+						<div id="studentsListDiv">
+							<div class="col s12 m3 l2 cyan lighten-4">
+								<div id="studentsList" class="collection">
+									<a href="#!" class="collection-item">Madelyn Nelson</a>
+									<a href="#!" class="collection-item">Nicole Schneider</a>
+									<a href="#!" class="collection-item">Ryan Busk</a>
+									<a href="#!" class="collection-item">David Mattia</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- Grades Table -->
 						<div class="col s12 m6 lighten-4">
 							<table class="highlight white" id="gradesTable">
 								<thead>
@@ -467,7 +481,9 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="col s12 m3 lighten-4 cyan">
+
+						<!-- Class Grade -->
+						<div class="col s12 m2 lighten-4 cyan">
 							<div class="collection">
 								<a href="#!" id="classGrade" class="collection-item"></a>
 							</div>
@@ -535,28 +551,29 @@
 
 		<!-- Add/Change Grade Modal -->
 
-		<!-- Modal Trigger -->
-	  <a class="waves-effect waves-light btn" href="#changeGrade">Change Grade</a>
-	
 	  <!-- Modal Structure -->
 	  <div id="changeGrade" class="modal">
 	    <div class="modal-content">
-	      <h4>Enter Score:</h4>
+	      <h4 id="gradeChangeAssignment">Assignment 3</h4>
 
-			<div class="row">
-			    <form class="col s12">
-			      <div class="row">
-			        <div class="input-field col s6">
-			          <input placeholder="88" id="score" type="number" class="validate">
-			          <label for="score">Score</label>
-			        </div>
-			      </div>
-			    </form>
-			  </div>
+				<div class="row">
+				    <form class="col s12">
+				      <div class="row">
+				        <div class="input-field col s12">
+				          <input placeholder="88" id="scoreInput" type="number" class="validate">
+				          <label for="score">Score</label>
+				        </div>
+				        <div class="input-field col s12">
+				          <input placeholder="Good work!" id="commentInput" type="text" class="validate">
+				          <label for="commentInput">Comments</label>
+				        </div>
+				      </div>
+				    </form>
+				  </div>
 					
 	    </div>
 	    <div class="modal-footer">
-	      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
+	      <a href="#!" id="changeGradeEnter" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
 	    </div>
 	  </div>
 
