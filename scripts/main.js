@@ -1,11 +1,15 @@
 // global variables
 var selectedClassCRN = "";
 var selectedAssignmentID = "";
+var role = "student";
 
 // global variables for grades table, for when TA clicks on assignment
 var selectedGradeTableAssignmentName = "";
 var selectedGradeTableOldScore = "";
 var selectedGradeTableRowIndex = -1;
+
+// global variables for gradebook, lists of students in course
+var studentsInCourse = [];
 
 var repos = [];
 
@@ -116,9 +120,18 @@ $( document ).ready(ready);
 function ready() {
 	console.log("doc ready from main.js");
 
+		
+	/*
+	 // TODO doesn't actually return a username? only says if user is logged in or not
+		$.post("GitGrader/php_scripts/get_username.php", {},
+			function(data, status){
+				ans = data["payload"];
+				alert("USERNAME", data);
+			});
+*/
+
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 			function(data, status){
-			console.log(data);
 			classes = [data['payload']];
 
 
@@ -131,7 +144,7 @@ function ready() {
 	fillInClasses();
 	
 	// fill in grades for each of these classes
-	fillInGradesForClasses();
+	fillInGradesForClasses("mnelso12");
 
 	fillInResourcesForClasses();
 
@@ -152,30 +165,46 @@ function ready() {
 				$("#addAssignmentForm").hide();
 				$("#addResourceForm").hide();
 			}
+
+			// check if is TA for this class
+			let classRole = getRoleFromCRN(selectedCourseCRN);
+			if (classRole == "instructor") {
+				role = "instructor";
+
+				// fill in students in this course for TA's gradebook
+				getStudentsInClass(selectedCourseCRN);
+				$("#studentsListDiv").show();
+			}
+			else {
+				role = "student";
+				$("#studentsListDiv").hide();
+			}
 		});
 	});
 
 
 	// add event handlers to grades table 
 	$(document).on("click", "#gradesTableBody tr", function(e) {
-		// get info of the row that was clicked
-		var children = this.children;
-		selectedGradeTableAssignmentName = children[0].innerHTML;
-		selectedGradeTableOldScore = children[1].innerHTML;
-		selectedGradeTableOldComment = children[4].innerHTML;
-		var row_index = $(this).index();
-		selectedGradeTableRowIndex = row_index;
-		console.log("selected!",row_index);
+		if (role == "instructor") {
+			// get info of the row that was clicked
+			var children = this.children;
+			selectedGradeTableAssignmentName = children[0].innerHTML;
+			selectedGradeTableOldScore = children[1].innerHTML;
+			selectedGradeTableOldComment = children[4].innerHTML;
+			var row_index = $(this).index();
+			selectedGradeTableRowIndex = row_index;
+			console.log("selected!",row_index);
 
 
-		// udpate info in change grade modal to match the selected row
-		$("#gradeChangeAssignment").text(selectedGradeTableAssignmentName);
-		$("#scoreInput").attr("placeholder", selectedGradeTableOldScore);
-		$("#commentInput").attr("placeholder", selectedGradeTableOldComment);
+			// udpate info in change grade modal to match the selected row
+			$("#gradeChangeAssignment").text(selectedGradeTableAssignmentName);
+			$("#scoreInput").attr("placeholder", selectedGradeTableOldScore);
+			$("#commentInput").attr("placeholder", selectedGradeTableOldComment);
 
-		
-		// open change grade modal
-		$('#changeGrade').modal('open');
+
+			// open change grade modal
+			$('#changeGrade').modal('open');
+		}
 	});
 
 
@@ -211,20 +240,12 @@ function ready() {
 		var newScore = $("#scoreInput").val();
 		var newComment = $("#commentInput").val();
 		var studentUsername = "mnelso12";
-		var teacherUsername = "rbusk";
+		var teacherUsername = "mconnol6";
 
 		// send new score to database via PHP
 		var ans = "";
-		/*
-		$.post("GitGrader/php_scripts/get_username.php", {},
-			function(data, status){
-				ans = data["payload"];
-				alert("USERNAME", ans);
-			});
-			*/
 
 		$.post("GitGrader/php_scripts/add_grade.php", {student_username: studentUsername, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, grade_comment: newComment},
-		//$.post("GitGrader/php_scripts/add_grade.php", {student_username: studentUsername, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore},
 			function(data, status){
 				console.log(data, status);
 
@@ -242,7 +263,7 @@ function ready() {
 				}
 			});
 
-		// update global classes object to reflect new grade?
+		// TODO update global classes object to reflect new grade?
 
 	});
 
@@ -282,6 +303,7 @@ function fillInClasses() {
 }
 
 // get grades from crn 
+/*
 function getGradesForClass(thisCrn) {
 	var ans = {};
 	$.post("GitGrader/php_scripts/get_grades.php", {crn: thisCrn},
@@ -290,12 +312,32 @@ function getGradesForClass(thisCrn) {
 	});
 	return ans;
 }
+*/
 
-function fillInGradesForClasses() {
+
+function getStudentsInClass(crn) {
+	var ans = [];
+	$.post("GitGrader/php_scripts/get_students_in_course.php", {crn: crn},
+			function(data, status){
+			ans = data["payload"];
+			updateStudentsList(ans);
+	});
+}
+
+function updateStudentsList(list) {
+	for (var i=0; i<list.length; i++) {
+		let username = list[i]["USERNAME"];
+
+		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item'>" + username + "</a>";
+		$("#studentsList").append(html);
+	}
+}
+
+function fillInGradesForClasses(student_username) {
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
-		getGradesHelper(classCRN, i);
+		getGradesHelper(classCRN, i, student_username);
 	}
 }
 
@@ -308,8 +350,8 @@ function fillInResourcesForClasses() {
 }
 
 // helper get grades function
-function getGradesHelper(crn, i) {
-	$.post("GitGrader/php_scripts/get_assignments.php", {crn: crn},
+function getGradesHelper(crn, i, student_username) {
+	$.post("GitGrader/php_scripts/get_grades.php", {crn: crn},
 			function(data, status){
 			var gradesForClass = data["payload"];
 			var thisClass = classes[0][i];
@@ -353,6 +395,7 @@ function classSelected(CRN) {
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
 	$("#resourcesListDiv").html("");
+	$("#studentsList").html("");
 	$("#linkAssignToRepo").hide();
 
 	var thisClass = getClassFromCRN(CRN);
@@ -372,6 +415,7 @@ function classSelected(CRN) {
 	var sumOfWeightedScores = 0;
 
 	for (var i in ASSIGNMENTS) {
+		console.log("assignments", ASSIGNMENTS[i]);
 
 		// fill in ASSIGNMENTS div
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
@@ -640,10 +684,21 @@ function getNameFromCRN(CRN) {
 	return returnVal;
 }
 
+function getRoleFromCRN(CRN) {
+	var returnVal = "";
+
+	classes[0].forEach(function(currentValue, index, arr){
+		if (CRN == currentValue.CRN) {
+			returnVal = currentValue.ROLE;
+		}
+	});
+
+	return returnVal;
+}
+
 
 // Repos Button in Nav Bar //////////////////////////////////
 function openReposDiv() {
-	console.log("pressed repos button");
 	hideAll();
 	$("#allRepos").show();
 	$("#modalBtnDiv").show();
