@@ -210,7 +210,7 @@ function ready() {
 		// get info from modal
 		var newScore = $("#scoreInput").val();
 		var newComment = $("#commentInput").val();
-		var username = "mnelso12@nd.edu";
+		var username = "mnelso12";
 
 		// send new score to database via PHP
 		var ans = "";
@@ -225,17 +225,26 @@ function ready() {
 		//$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, comment: newComment},
 		$.post("GitGrader/php_scripts/add_grade.php", {student_username: username, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore},
 			function(data, status){
-				ans = data["payload"];
-				console.log(ans, status);
-				alert("response from changed grade", data, status);
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("grade update successful!");		
+					alert("Grade update successful!");
+				}
+				else {
+					alert("Grade update failed with error:!", data["error"]["message"]);
+					console.log("grade update failed, error:", data["error"]["message"]);
+				}
 			});
 
 		// update global classes object to reflect new grade?
 
 		// update grades table to reflect new grade
-		selectedGradeTableRowIndex = -1;
-		selectedGradeTableAssignmentName = "";
-		selectedGradeTableOldScore = "";
+		var num = parseInt(selectedGradeTableRowIndex) + 1;
+		var scoreStr = '#gradesTableBody tr:nth-child(' + num + ') td:nth-child(2)';
+		var commentStr = '#gradesTableBody tr:nth-child(' + num + ') td:nth-child(5)';
+		$(scoreStr).html(newScore);
+		$(commentStr).html(newComment);
 
 	});
 
