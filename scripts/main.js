@@ -559,6 +559,7 @@ function openReposDiv() {
 	console.log("pressed repos button");
 	hideAll();
 	$("#allRepos").show();
+	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
 	$("#selectedClass").text("no class selected - all repos");
 }
@@ -595,4 +596,5 @@ function hideAll() {
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
 	$("#repoViewer").hide();
+	$("#modalBtnDiv").hide();
 }

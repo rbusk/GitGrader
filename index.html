@@ -169,13 +169,48 @@
 		<!-- Main Logged In Content -->
 		<div id="loggedInMainContent">
 
-			<!-- Selected Class -->
-			<div class="row teal">
-				<div class="col s12 white-text">
-					<h5 id="selectedClass">no class selected</h5>
-				</div>
+			<!-- Selected Class Navigation-->
+			<nav>
+			<div class="row teal nav-wrapper">
+				<ul id="repo-mobile" class="hide-on-med-and-down">
+					<div id="addNav">
+						<div class="left">
+						<li><h5 href="#" id="selectedClass" class="col s12 white-text">no class selected</h5></li>
+						</div>
+						<div class="right" id="modalBtnDiv">
+						<li><a id="sshNavButton" class="waves-effect waves-light btn" href="#sshModal">Add SSH</a></li>
+						<li><a id="repoNavButton" class="waves-effect waves-light btn" href="#repoModal">Add Repo</a></li>
+						</div>
+					</div>
+				</ul>
 			</div>
+			</nav>
 
+			<!-- Modals -->
+	   		 <div id="sshModal" class="modal">
+			 	<div class="modal-content">
+					<h4>Add SSH Key</h4>
+					<p>SSH Key Name</p>
+					<input type="text" name="ssh_title">
+					<p>SSH Key Value</p>
+					<input type="text" name="ssh_key">
+				</div>
+				<div class="modal-footer">
+					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Key</a>
+				</div>
+			 </div>
+	   		 <div id="repoModal" class="modal">
+			 	<div class="modal-content">
+					<h4>Create Repos</h4>
+					<p>Repo Name</p>
+					<input type="text" name="repo">
+					<p>Repo Description</p>
+					<input type="text" name="description">
+				</div>
+				<div class="modal-footer">
+					<a href="#!" id="createRepoModBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Create Repo</a>
+				</div>
+			 </div>
 
 			<!-- Main Content -->
 			<div class="section white">
@@ -203,7 +238,6 @@
 							<div class="collection" id="fileTree">
 <!--
 								<a href="#!" class="collection-item black-text">README.txt</a>
-								<a href="#!" class="collection-item black-text">board.h</a>
 								<a href="#!" class="collection-item black-text">board.cpp</a>
 								<a href="#!" class="collection-item black-text">sudoku.h</a>
 								<a href="#!" class="collection-item black-text">sudoku.cpp</a>
