@@ -128,6 +128,7 @@
 		oci_execute($stmt);
 
 		oci_close($conn);
-			
+
+		echo json_success('Grade added successfully.');
 	}
 ?>
