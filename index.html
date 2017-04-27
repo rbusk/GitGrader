@@ -9,25 +9,25 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/9.11.0/styles/default.min.css">
 		<script src="https://cdn.jsdelivr.net/highlight.js/9.11.0/highlight.min.js"></script>
 		<script>hljs.initHighlightingOnLoad();</script>
-		
+
 		<!-- Firebase for Login -->
 		<script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
-			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-app.js"></script>
-			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-auth.js"></script>
-			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
-			<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
 		<script>
-			// Initialize Firebase
-			var config = {
-				apiKey: "AIzaSyDqSMbN6b8W3CtvolBljLVM-oUq1NgN_MQ",
-				authDomain: "gitgrader.firebaseapp.com",
-				databaseURL: "https://gitgrader.firebaseio.com",
-				projectId: "gitgrader",
-				storageBucket: "gitgrader.appspot.com",
-				messagingSenderId: "549265073830"
-				};
-				firebase.initializeApp(config);
-			</script>
+// Initialize Firebase
+var config = {
+	apiKey: "AIzaSyDqSMbN6b8W3CtvolBljLVM-oUq1NgN_MQ",
+	authDomain: "gitgrader.firebaseapp.com",
+	databaseURL: "https://gitgrader.firebaseio.com",
+	projectId: "gitgrader",
+	storageBucket: "gitgrader.appspot.com",
+	messagingSenderId: "549265073830"
+};
+firebase.initializeApp(config);
+		</script>
 
 		<!-- Materialize CDNs -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -52,29 +52,29 @@
 		<!-- Dropdown Structure -->
 		<ul id="classDropdown" class="dropdown-content">
 			<!--
-			<li><a href="#!">Basic Unix</a></li>
-			<li><a href="#!">Fundamentals of Computing II</a></li>
-			<li><a href="#!">Advanced Databases</a></li>
+	   <li><a href="#!">Basic Unix</a></li>
+	   <li><a href="#!">Fundamentals of Computing II</a></li>
+	   <li><a href="#!">Advanced Databases</a></li>
 			-->
 		</ul>
 		<!-- Navigation Bar -->
 		<nav>
-		<div class="nav-wrapper blue-grey darken-4">
-			<a href="#" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
-			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<div id="loginNav">
-					<li><a href="#" class="signUpNav"><i class="material-icons left">library_add</i>Sign Up</a></li>
-					<li><a href="#" class="loginNav"><i class="material-icons left">account_circle</i>Login</a></li>
-					<li><a href="GitGrader/php_scripts/logout.php" class="logoutNav">Logout</a></li>
-				</div>
-				<div id="normalNav">
-					<li><a id="reposNavButton" class="waves-effect waves-light btn" href="#">All Repos</a></li>
-					<li><a class="dropdown-button" href="#!" data-activates="classDropdown"><i class="material-icons left">view_list</i>Classes</a></li>
-					<li><a href="#"><i class="material-icons left">settings</i>Settings</a></li>
-					<li><a href="GitGrader/php_scripts/logout.php" class="logoutNav">Logout</a></li>
-				</div>
-			</ul>
-		</div>
+			<div class="nav-wrapper blue-grey darken-4">
+				<a href="#" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<div id="loginNav">
+						<li><a href="#" class="signUpNav"><i class="material-icons left">library_add</i>Sign Up</a></li>
+						<li><a href="#" class="loginNav"><i class="material-icons left">account_circle</i>Login</a></li>
+						<li><a href="GitGrader/php_scripts/logout.php" class="logoutNav">Logout</a></li>
+					</div>
+					<div id="normalNav">
+						<li><a id="reposNavButton" class="waves-effect waves-light btn" href="#">All Repos</a></li>
+						<li><a class="dropdown-button" href="#!" data-activates="classDropdown"><i class="material-icons left">view_list</i>Classes</a></li>
+						<li><a href="#"><i class="material-icons left">settings</i>Settings</a></li>
+						<li><a href="GitGrader/php_scripts/logout.php" class="logoutNav">Logout</a></li>
+					</div>
+				</ul>
+			</div>
 		</nav>
 
 		<!-- Main Login Content -->
@@ -171,24 +171,23 @@
 
 			<!-- Selected Class Navigation-->
 			<nav>
-			<div class="row teal nav-wrapper">
-				<ul id="repo-mobile" class="hide-on-med-and-down">
-					<div id="addNav">
-						<div class="left">
-						<li><h5 href="#" id="selectedClass" class="col s12 white-text">no class selected</h5></li>
+				<div class="row teal nav-wrapper">
+					<ul id="repo-mobile" class="hide-on-med-and-down">
+						<div id="addNav">
+							<div class="left">
+								<li><h5 href="#" id="selectedClass" class="col s12 white-text">no class selected</h5></li>
+							</div>
+							<div class="right" id="modalBtnDiv">
+								<li><a id="sshNavButton" class="waves-effect waves-light btn indigo" href="#sshModal">Add SSH</a></li>
+								<li><a id="repoNavButton" class="waves-effect waves-light btn indigo" href="#repoModal">Add Repo</a></li>
+							</div>
+					</ul>
 						</div>
-						<div class="right" id="modalBtnDiv">
-						<li><a id="sshNavButton" class="waves-effect waves-light btn indigo" href="#sshModal">Add SSH</a></li>
-						<li><a id="repoNavButton" class="waves-effect waves-light btn indigo" href="#repoModal">Add Repo</a></li>
-						</div>
-					</div>
-				</ul>
-			</div>
 			</nav>
 
 			<!-- Modals -->
-	   		 <div id="sshModal" class="modal">
-			 	<div class="modal-content">
+			<div id="sshModal" class="modal">
+				<div class="modal-content">
 					<h4>Add SSH Key</h4>
 					<p>SSH Key Name</p>
 					<input type="text" name="ssh_title">
@@ -198,9 +197,9 @@
 				<div class="modal-footer">
 					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Key</a>
 				</div>
-			 </div>
-	   		 <div id="repoModal" class="modal">
-			 	<div class="modal-content">
+			</div>
+			<div id="repoModal" class="modal">
+				<div class="modal-content">
 					<h4>Create Repos</h4>
 					<p>Repo Name</p>
 					<input type="text" name="repo">
@@ -210,7 +209,7 @@
 				<div class="modal-footer">
 					<a href="#!" id="createRepoModBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Create Repo</a>
 				</div>
-			 </div>
+			</div>
 
 			<!-- Main Content -->
 			<div class="section white">
@@ -229,36 +228,36 @@
 
 					<!-- Repo Viewer -->
 					<div id="repoViewer" class="container">
-				
-							<h4 id="repoName">Sudoku Lab</h4>
-							<p id="repoClassName">Fund Comp I : Assignment 3</p>
-							<p id="repoDescription" class="black-text">Description here</p>
+
+						<h4 id="repoName">Sudoku Lab</h4>
+						<p id="repoClassName">Fund Comp I : Assignment 3</p>
+						<p id="repoDescription" class="black-text">Description here</p>
 
 						<div class="col s12 m4 l3 indigo lighten-4">
 							<div class="collection" id="fileTree">
-<!--
-								<a href="#!" class="collection-item black-text">README.txt</a>
-								<a href="#!" class="collection-item black-text">board.cpp</a>
-								<a href="#!" class="collection-item black-text">sudoku.h</a>
-								<a href="#!" class="collection-item black-text">sudoku.cpp</a>
-								<a href="#!" class="collection-item indigo-text">testBoards</a>
-								<a href="#!" class="collection-item black-text">Makefile</a>
--->
+								<!--
+			<a href="#!" class="collection-item black-text">README.txt</a>
+			<a href="#!" class="collection-item black-text">board.cpp</a>
+			<a href="#!" class="collection-item black-text">sudoku.h</a>
+			<a href="#!" class="collection-item black-text">sudoku.cpp</a>
+			<a href="#!" class="collection-item indigo-text">testBoards</a>
+			<a href="#!" class="collection-item black-text">Makefile</a>
+								-->
 							</div>
 						</div>
 						<div class="col s8">
-								<pre><code class="javascript" id="codeView">
+							<pre><code class="javascript" id="codeView">
 									function hello() {
 										console.log("hey!");
 									}
-								</code></pre>
+							</code></pre>
 						</div>
 					</div>
 
 					<!-- All Repos - shown when click Nav Bar Repos Button -->
 					<div id="allRepos">
 						<div class="col s12 m6 lighten-4">
-							<table class="highlight white">
+							<table class="highlight white" id="repoTable">
 								<thead>
 									<tr>
 										<th>Linked Repos</th>
@@ -287,7 +286,7 @@
 							</table>
 							<br>
 							<br>
-							<table class="highlight white">
+							<table class="highlight white" id="unlinkedRepoTable">
 								<thead>
 									<tr>
 										<th>Unlinked Repos</th>
@@ -316,331 +315,304 @@
 
 
 					<div class="col m9">
-					<!-- This Class's Repos - shown when click on side menu -->
-					<div id="classRepos">
-						<div class="col s12 m6 lighten-4">
-							<table class="highlight white">
-								<thead>
-									<tr>
-										<th>Repo Name</th>
-										<th>Assignment</th>
-									</tr>
-								</thead>
+						<!-- This Class's Repos - shown when click on side menu -->
+						<div id="classRepos">
+							<div class="col s12 m6 lighten-4">
+								<table class="highlight white">
+									<thead>
+										<tr>
+											<th>Repo Name</th>
+											<th>Assignment</th>
+										</tr>
+									</thead>
 
-								<tbody>
-									<tr>
-										<td>Sudoku Solver</td>
-										<td>Lab 5</td>
-									</tr>
-									<tr>
-										<td>Connect Four</td>
-										<td>Lab 6</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-
-
-					<!-- Assignments Menu (list of assignments) -->
-					<div id="assignmentsDiv">
-						<div class="row">
-							<div class="col s12 m3 l2 cyan lighten-4">
-								<div id="assignmentsListDiv" class="collection">
-									<!--
-									<a href="#!" class="collection-item">Homework 1</a>
-									<a href="#!" class="collection-item">Homework 2</a>
-									<a href="#!" class="collection-item">Project 1</a>
-									<a href="#!" class="collection-item">Homework 3</a>
-									<a href="#!" class="collection-item">Homework 4</a>
-									-->
-								</div>
+									<tbody>
+										<tr>
+											<td>Sudoku Solver</td>
+											<td>Lab 5</td>
+										</tr>
+										<tr>
+											<td>Connect Four</td>
+											<td>Lab 6</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
+						</div>
 
-							<!-- Link to Repo -->
-							<div class="col m6 l8 container">
-								<div class="white">
-									<div class="container">
-										<h4 id="assignmentName"></h4>
-										<p id="dueDate"></p>
-										<a id="assignmentInstructions"></a>
-										<a id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
+
+						<!-- Assignments Menu (list of assignments) -->
+						<div id="assignmentsDiv">
+							<div class="row">
+								<div class="col s12 m3 l2 cyan lighten-4">
+									<div id="assignmentsListDiv" class="collection"></div>
+								</div>
+
+								<!-- Link to Repo -->
+								<div class="col m6 l8 container">
+									<div class="white">
+										<div class="container">
+											<h4 id="assignmentName"></h4>
+											<p id="dueDate"></p>
+											<a id="assignmentInstructions"></a>
+											<a id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row" id="addAssignmentForm">
-							<form action="php_scripts/add_assignment.php" method="post">
-								<div class="row">
-									<div class="input-field col s12 m6">
-										<input id="assignment_name" type="text">
-										<label for="assignment_name">Name of Assignment</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="input-field col s12 m3">
-										<input id="outof" type="text">
-										<label for="outof">Point value</label>
-									</div>
-									<div class="input-field col s12 m3">
-										<input id="weight" type="text">
-										<label for="weight">Weight</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="file-field input-field col s12 m6">
-										<div class="btn">
-											<span>File</span>
-											<input type="file">
-										</div>
-										<div class="file-path-wrapper">
-											<input class="file-path validate" type="text">
+							<div class="row" id="addAssignmentForm">
+								<form action="php_scripts/add_assignment.php" method="post">
+									<div class="row">
+										<div class="input-field col s12 m6">
+											<input id="assignment_name" type="text">
+											<label for="assignment_name">Name of Assignment</label>
 										</div>
 									</div>
-								</div>
-								<div class="col s6 m3">
-									<button class="btn waves-effect waves-light" type="submit" name="action">Add Assignment</button>
-								</div>
-							</form>
-						</div>
-
-					</div>
-
-					<!-- Resources -->
-					<div id="resourcesDiv">
-						<div class="row">
-							<div class="col s12 m4 cyan lighten-4">
-								<div id="resourcesListDiv" class="collection">
-									<!-- <a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">HW1.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-									<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW2.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-									<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">Syllabus.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-									<a href="uploads/hw2.txt" class="collection-item" download="hw2.txt">HW3.txt<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-									<a href="uploads/hw1.txt" class="collection-item" download="hw1.txt">sampleData.json<i class="fa fa-download fa-2x right" aria-hidden="true"></i></a>
-									-->
-								</div>
-							</div>
-						</div>
-						<div class="row" id="addResourceForm">
-							<form action="php_scripts/add_resource.php" method="post">
-								<div class="row">
-									<div class="input-field col s12 m6">
-										<input id="resource_name" type="text">
-										<label for="resource_name">Name of Resource</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="file-field input-field col s12 m6">
-										<div class="btn">
-											<span>File</span>
-											<input type="file">
+									<div class="row">
+										<div class="input-field col s12 m3">
+											<input id="outof" type="text">
+											<label for="outof">Point value</label>
 										</div>
-										<div class="file-path-wrapper">
-											<input class="file-path validate" type="text">
+										<div class="input-field col s12 m3">
+											<input id="weight" type="text">
+											<label for="weight">Weight</label>
 										</div>
 									</div>
-								</div>
-								<div class="row">
+									<div class="row">
+										<div class="file-field input-field col s12 m6">
+											<div class="btn">
+												<span>File</span>
+												<input type="file">
+											</div>
+											<div class="file-path-wrapper">
+												<input class="file-path validate" type="text">
+											</div>
+										</div>
+									</div>
 									<div class="col s6 m3">
-										<button class="btn waves-effect waves-light" type="submit" name="action">Add Resource</button>
+										<button class="btn waves-effect waves-light" type="submit" name="action">Add Assignment</button>
+									</div>
+								</form>
+							</div>
+						</div>
+
+
+						<!-- Resources -->
+						<div id="resourcesDiv">
+							<div class="row">
+								<div class="col s12 m4 cyan lighten-4">
+									<div id="resourcesListDiv" class="collection"></div>
+								</div>
+							</div>
+							<div class="row" id="addResourceForm">
+								<form action="php_scripts/add_resource.php" method="post">
+									<div class="row">
+										<div class="input-field col s12 m6">
+											<input id="resource_name" type="text">
+											<label for="resource_name">Name of Resource</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="file-field input-field col s12 m6">
+											<div class="btn">
+												<span>File</span>
+												<input type="file">
+											</div>
+											<div class="file-path-wrapper">
+												<input class="file-path validate" type="text">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s6 m3">
+											<button class="btn waves-effect waves-light" type="submit" name="action">Add Resource</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+
+						<!-- Gradebook -->
+						<div id="gradesDiv">
+
+							<!-- List of Students in Class (TA only)-->
+							<div id="studentsListDiv">
+								<div class="col s12 m3 l2 cyan lighten-4">
+									<div id="studentsList" class="collection">
+										<!--
+			  <a href="#!" class="collection-item">Madelyn Nelson</a>
+			  <a href="#!" class="collection-item">Nicole Schneider</a>
+			  <a href="#!" class="collection-item">Ryan Busk</a>
+			  <a href="#!" class="collection-item">David Mattia</a>
+										-->
 									</div>
 								</div>
-							</form>
-						</div>
-					</div>
+							</div>
 
+							<!-- Grades Table -->
+							<div class="col s12 m8 lighten-4">
+								<table class="highlight white" id="gradesTable">
+									<thead>
+										<tr>
+											<th>Assignment</th>
+											<th>Score</th>
+											<th>Out of</th>
+											<th>Weight</th>
+											<th>Comments</th>
+										</tr>
+									</thead>
 
-					<!-- Gradebook -->
-					<div id="gradesDiv">
+									<tbody id="gradesTableBody">
+									</tbody>
+								</table>
+							</div>
 
-						<!-- List of Students in Class (TA only)-->
-						<div id="studentsListDiv">
-							<div class="col s12 m3 l2 cyan lighten-4">
-								<div id="studentsList" class="collection">
-									<!--
-									<a href="#!" class="collection-item">Madelyn Nelson</a>
-									<a href="#!" class="collection-item">Nicole Schneider</a>
-									<a href="#!" class="collection-item">Ryan Busk</a>
-									<a href="#!" class="collection-item">David Mattia</a>
-									-->
+							<!-- Class Grade -->
+							<div class="col s12 m2 lighten-4 cyan">
+								<div class="collection">
+									<a href="#!" id="classGrade" class="collection-item"></a>
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
 
-						<!-- Grades Table -->
-						<div class="col s12 m8 lighten-4">
-							<table class="highlight white" id="gradesTable">
-								<thead>
-									<tr>
-										<th>Assignment</th>
-										<th>Score</th>
-										<th>Out of</th>
-										<th>Weight</th>
-										<th>Comments</th>
-									</tr>
-								</thead>
 
-								<tbody id="gradesTableBody">
-								</tbody>
-							</table>
-						</div>
+			<!-- Link Repo To Assignment Modal -->
+			<div id="modal2" class="modal bottom-sheet">
+				<div class="modal-content">
+					<div class="row">
+						<h4>Link "Game of Life" to an Assignment</h4>
+						<table class="col s12 m8 highlight white">
+							<thead>
+								<tr>
+									<th>Class</th>
+									<th>Assignment</th>
+									<th></th>
+								</tr>
+							</thead>
 
-						<!-- Class Grade -->
-						<div class="col s12 m2 lighten-4 cyan">
-							<div class="collection">
-								<a href="#!" id="classGrade" class="collection-item"></a>
+							<tbody>
+								<tr>
+									<td>CSE 40157.01 : Advanced Databases</td>
+									<td>Final Project</td>
+									<td>
+										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+									</td>
+								</tr>
+								<tr>
+									<td>CSE 20121.01 : Fundamentals of Computing II</td>
+									<td>Lab 5</td>
+									<td>
+										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+									</td>
+								</tr>
+								<tr>
+									<td>CSE 20121.01 : Fundamentals of Computing II</td>
+									<td>Lab 6</td>
+									<td>
+										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+				</div>
+			</div>
+
+
+			<!-- Add/Change Grade Modal -->
+
+			<!-- Modal Structure -->
+			<div id="changeGrade" class="modal">
+				<div class="modal-content">
+					<h4 id="gradeChangeAssignment">Assignment 3</h4>
+
+					<div class="row">
+						<form class="col s12">
+							<div class="row">
+								<div class="input-field col s12">
+									<input placeholder="88" id="scoreInput" type="number" class="validate">
+									<label for="score">Score</label>
+								</div>
+								<div class="input-field col s12">
+									<input placeholder="Good work!" id="commentInput" type="text" class="validate">
+									<label for="commentInput">Comments</label>
+								</div>
 							</div>
-						</div>
-					</div>
-					</div>
-
-					<div id="gradebookDiv">
-						<div class="col s12 m6 lighten-4">
-							
-						</div>
+						</form>
 					</div>
 
 				</div>
-
-			</div>
-		</div>
-
-
-		<!-- Link Repo To Assignment Modal -->
-		<div id="modal2" class="modal bottom-sheet">
-			<div class="modal-content">
-				<div class="row">
-					<h4>Link "Game of Life" to an Assignment</h4>
-					<table class="col s12 m8 highlight white">
-						<thead>
-							<tr>
-								<th>Class</th>
-								<th>Assignment</th>
-								<th></th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td>CSE 40157.01 : Advanced Databases</td>
-								<td>Final Project</td>
-								<td>
-									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-								</td>
-							</tr>
-							<tr>
-								<td>CSE 20121.01 : Fundamentals of Computing II</td>
-								<td>Lab 5</td>
-								<td>
-									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-								</td>
-							</tr>
-							<tr>
-								<td>CSE 20121.01 : Fundamentals of Computing II</td>
-								<td>Lab 6</td>
-								<td>
-									<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="modal-footer">
+					<a href="#!" id="changeGradeEnter" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+			<!-- Contact Us Form -->
+			<div id="modal1" class="modal">
+				<div class="modal-content">
+					<h4>Contact Us!</h4>
+					<p>We'll get back to you within two business days:)</p>
+
+					<div class="row">
+						<form class="col s12" action="https://formspree.io/mnelso12@nd.edu"
+							method="POST">
+							<div class="row">
+								<div class="input-field col s12 m6">
+									<i class="material-icons prefix">account_circle</i>
+									<input id="icon_prefix" type="text" class="validate" name="name">
+									<label for="icon_prefix">Name</label>
+								</div>
+								<div class="input-field col s12 m6">
+									<i class="material-icons prefix">email</i>
+									<input id="icon_email" type="email" class="validate" name="_replyto">
+									<label for="icon_email">Email</label>
+								</div>
+								<div class="input-field col s12">
+									<i class="material-icons prefix">comment</i>
+									<textarea id="textarea1" class="materialize-textarea" name="content"></textarea>
+									<label for="textarea1">Message</label>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<i class="waves-effect waves-green btn waves-input-wrapper" style=""><input type="submit" value="Send" id="submitButton"></i>
+							</div>
+						</form>
+					</div>
+
+				</div>
 			</div>
-		</div>
+				</div>
 
-
-		<!-- Add/Change Grade Modal -->
-
-	  <!-- Modal Structure -->
-	  <div id="changeGrade" class="modal">
-	    <div class="modal-content">
-	      <h4 id="gradeChangeAssignment">Assignment 3</h4>
-
-				<div class="row">
-				    <form class="col s12">
-				      <div class="row">
-				        <div class="input-field col s12">
-				          <input placeholder="88" id="scoreInput" type="number" class="validate">
-				          <label for="score">Score</label>
-				        </div>
-				        <div class="input-field col s12">
-				          <input placeholder="Good work!" id="commentInput" type="text" class="validate">
-				          <label for="commentInput">Comments</label>
-				        </div>
-				      </div>
-				    </form>
-				  </div>
-					
-	    </div>
-	    <div class="modal-footer">
-	      <a href="#!" id="changeGradeEnter" class="modal-action modal-close waves-effect waves-green btn-flat">Enter</a>
-	    </div>
-	  </div>
-
-
-		<!-- Contact Us Form -->
-		<div id="modal1" class="modal">
-			<div class="modal-content">
-				<h4>Contact Us!</h4>
-				<p>We'll get back to you within two business days:)</p>
-
-				<div class="row">
-					<form class="col s12" action="https://formspree.io/mnelso12@nd.edu"
-						      method="POST">
+				<!-- Footer -->
+				<footer class="page-footer blue-grey darken-4">
+					<div class="container">
 						<div class="row">
-							<div class="input-field col s12 m6">
-								<i class="material-icons prefix">account_circle</i>
-								<input id="icon_prefix" type="text" class="validate" name="name">
-								<label for="icon_prefix">Name</label>
+							<div class="col l6 s12">
+								<a class="waves-effect waves-light btn" href="#modal1">Contact Us</a>
 							</div>
-							<div class="input-field col s12 m6">
-								<i class="material-icons prefix">email</i>
-								<input id="icon_email" type="email" class="validate" name="_replyto">
-								<label for="icon_email">Email</label>
-							</div>
-							<div class="input-field col s12">
-								<i class="material-icons prefix">comment</i>
-								<textarea id="textarea1" class="materialize-textarea" name="content"></textarea>
-								<label for="textarea1">Message</label>
+							<div class="col l4 offset-l2 s12">
+								<h5 class="white-text">Built with</h5>
+								<ul>
+									<li><a class="grey-text text-lighten-3" href="http://fontawesome.io/">Font Awesome</a></li>
+									<li><a class="grey-text text-lighten-3" href="https://highlightjs.org/">Highlight.js</a></li>
+									<li><a class="grey-text text-lighten-3" href="https://jquery.com/">jQuery</a></li>
+									<li><a class="grey-text text-lighten-3" href="http://materializecss.com/">Materialize</a></li>
+								</ul>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<i class="waves-effect waves-green btn waves-input-wrapper" style=""><input type="submit" value="Send" id="submitButton"></i>
+					</div>
+					<div class="footer-copyright">
+						<div class="container">
+							&copy; 2017 Git Grader 
+							<a class="grey-text text-lighten-4 right" href="https://cse.nd.edu/">Department of Computer Science and Engineering | University of Notre Dame</a>
 						</div>
-					</form>
-				</div>
-
-			</div>
-		</div>
-
-
-		<!-- Footer -->
-		<footer class="page-footer blue-grey darken-4">
-		<div class="container">
-			<div class="row">
-				<div class="col l6 s12">
-					<a class="waves-effect waves-light btn" href="#modal1">Contact Us</a>
-				</div>
-				<div class="col l4 offset-l2 s12">
-					<h5 class="white-text">Built with</h5>
-					<ul>
-						<li><a class="grey-text text-lighten-3" href="http://fontawesome.io/">Font Awesome</a></li>
-						<li><a class="grey-text text-lighten-3" href="https://highlightjs.org/">Highlight.js</a></li>
-						<li><a class="grey-text text-lighten-3" href="https://jquery.com/">jQuery</a></li>
-						<li><a class="grey-text text-lighten-3" href="http://materializecss.com/">Materialize</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<div class="container">
-				&copy; 2017 Git Grader 
-				<a class="grey-text text-lighten-4 right" href="https://cse.nd.edu/">Department of Computer Science and Engineering | University of Notre Dame</a>
-			</div>
-		</div>
-		</footer>
-
+					</div>
+				</footer>
 	</body>
 </html>

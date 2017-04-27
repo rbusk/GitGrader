@@ -283,6 +283,13 @@ function ready() {
 	$("#leftMenu .collection-item").click(function(){
 		leftMenuSwitch(this.id);
 	});
+
+	// handle repo table click
+	$("#repoTable").click(function () {
+		$("#repoViewer").show();
+		$("#allRepos").hide();
+	});
+
 }
 
 // initialize
