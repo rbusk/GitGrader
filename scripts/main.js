@@ -331,11 +331,12 @@ function fillInRepos(repos) {
 	}
 }
 
-function fillInRepoViewer(id) {
-	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
+function fillInRepoViewerWithPath(path) {
+	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
 				$("#fileTree").html("");
+				$("#codeView").html("");
 				var files = data.payload.files;
 				for (var file in files) {
 					if (files[file].directory == false) {
@@ -344,7 +345,32 @@ function fillInRepoViewer(id) {
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var html = "<a class='collection-item black-text'>" + file + "</a>";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[file].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					}
+				}
+			}
+		});
+}
+
+function fillInRepoViewer(id) {
+	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
+		function(data, status) {
+			if (data.success == true) {
+				$("#fileTree").html("");
+				$("#codeView").html("");
+				var files = data.payload.files;
+				for (var file in files) {
+					if (files[file].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[file].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					} else {
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[file].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					}
