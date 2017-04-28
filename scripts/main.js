@@ -136,7 +136,7 @@ function ready() {
 
 
 	// TODO
-	get_repos_obj("Repo1");
+	get_repos_obj();
 	clickedOnFile('GitGrader/test.py');
 	
 
@@ -312,6 +312,21 @@ function fillInClasses() {
 		var className = classes[0][i].COURSE_NAME;
 		var html = "<li><a href='#!'>" + className + "</a></li>"; 
 		$("#classDropdown").append(html);
+	}
+}
+
+function fillInRepos(repos) {
+	$("#repoTable tbody").html("");
+	$("#unlinkedRepoTable tbody").html("");
+	for (var i=0; i<repos.length; i++) {
+		if (repos[i].ASSIGNMENT_NAME != undefined) {
+			var html = '<tr><td class=repo id=' + repos[i].REPO_ID + '>' + repos[i].REPO_NAME + '</td><td>' + repos[i].COURSE_NAME + '</td><td>' + repos[i].ASSIGNMENT_NAME+ '</td></tr>';
+			$("#repoTable tbody").append(html);
+		} else {
+			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td><td><a class="waves-effect waves-light btn" href="#modal2">';
+			html = html + '<i class="material-icons right">call_merge</i>Link to Assignment</a></td></tr>';
+			$("#unlinkedRepoTable tbody").append(html);
+		}
 	}
 }
 
@@ -534,12 +549,14 @@ function assignmentSelected() {
 
 // get file tree and stuff for repo
 function get_repos_obj(repo) {
-	$.post("GitGrader/php_scripts/get_repos.php", {repo_name: repo},
-			function(data, status){
-			repos = [data['payload']];
-			console.log("repos obj:", repos);
-			didChooseRepo("Repo1");
-	});
+	$.post("GitGrader/php_scripts/get_repos.php", {},
+		function(data, status){
+			if (data.success == true) {
+				repos = data.payload;
+				console.log("repos obj:", repos);
+				fillInRepos(repos);
+			}
+		});
 }
 
 // did choose a repo

@@ -4,7 +4,7 @@
 	include 'json_functions.php';
 
 	$query1 = 
-		"select R.repo_id, R.repo_name, R.repo_path, R.description, s.crn, s.assignment_name	
+		"select R.repo_id, R.repo_name, R.repo_path, R.description, S.course_name, S.assignment_name	
 			from 
 			( 
 				select r.repo_name, r.repo_path, r.description, r.repo_id 
@@ -12,8 +12,12 @@
 				where r.repo_id = c.repo_id and c.username = :username
 			) R
 			left join 
-			submission s
-			on R.repo_id = s.repo_id";
+			(
+				select c.course_name, s.repo_id, s.assignment_name
+				from submission s, course c
+				where s.crn = c.crn
+			) S
+			on R.repo_id = S.repo_id";
 
 	include 'db_login.php';
 	$stmt = oci_parse($conn, $query1);
