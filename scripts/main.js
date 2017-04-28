@@ -338,15 +338,15 @@ function fillInRepoViewerWithPath(path) {
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
-				for (var file in files) {
-					if (files[file].directory == false) {
-						var onclick_text = "onclick='clickedOnFile(\"" + files[file].path + "\")'";
-						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+				for (var $i=0; $i<files.length; $i++) {
+					if (files[$i].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[file].path + "\")'";
-						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					}
@@ -362,15 +362,15 @@ function fillInRepoViewer(id) {
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
-				for (var file in files) {
-					if (files[file].directory == false) {
-						var onclick_text = "onclick='clickedOnFile(\"" + files[file].path + "\")'";
-						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+				for (var $i=0; $i<files.length; $i++) {
+					if (files[$i].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[file].path + "\")'";
-						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					}
