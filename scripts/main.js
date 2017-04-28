@@ -291,9 +291,10 @@ function ready() {
 	});
 
 	// handle repo table click
-	$("#repoTable").click(function () {
+	$("#repoTable").click(function (data) {
 		$("#repoViewer").show();
 		$("#allRepos").hide();
+		fillInRepoViewer(data.target.id);
 	});
 
 }
@@ -328,6 +329,28 @@ function fillInRepos(repos) {
 			$("#unlinkedRepoTable tbody").append(html);
 		}
 	}
+}
+
+function fillInRepoViewer(id) {
+	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
+		function(data, status) {
+			if (data.success == true) {
+				$("#fileTree").html("");
+				var files = data.payload.files;
+				for (var file in files) {
+					if (files[file].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[file].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					} else {
+						var html = "<a class='collection-item black-text'>" + file + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					}
+				}
+			}
+		});
 }
 
 // get grades from crn 

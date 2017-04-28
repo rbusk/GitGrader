@@ -46,7 +46,7 @@
 
 	if ($repo_path != null) {
 		header('Content-Type: application/json;charset=utf-8');
-		echo json_success(dirToArray('/home/ec2-user/apache/htdocs/' . $repo_path, $repo_path));
+		echo json_success(array('files' => dirToArray('/home/ec2-user/apache/htdocs/' . $repo_path, $repo_path)));
 	} else {
 		header('Content-Type: application/json;charset=utf-8');
 		echo json_error('Path not found.');
