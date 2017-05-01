@@ -1,5 +1,6 @@
 // global variables
 var selectedClassCRN = "";
+var selectedClassName = "";
 var selectedAssignmentID = "";
 var role = "student";
 
@@ -161,9 +162,11 @@ function ready() {
 			if (thisClass.ROLE === "instructor") {
 				$("#addAssignmentForm").show();
 				$("#addResourceForm").show();
+				$("#teacherModalDiv").show();
 			} else {
 				$("#addAssignmentForm").hide();
 				$("#addResourceForm").hide();
+				$("#teacherModalDiv").hide();
 			}
 
 			// check if is TA for this class
@@ -221,6 +224,7 @@ function ready() {
 	$("#addAssignmentForm").hide();
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 
 	// create nav bar class name options
 
@@ -294,6 +298,8 @@ function ready() {
 	$("#repoTable").click(function (data) {
 		$("#repoViewer").show();
 		$("#allRepos").hide();
+		$("#repoModalDiv").show();
+		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
 
@@ -797,32 +803,31 @@ function openClassesDiv() {
 	$("#classesButton").show();
 	$("#reposNavButton").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 }
 
 
 // methods for menu switches ////////////////////////////////
 function leftMenuSwitch(selectedItem) {
+	var thisClass = getClassFromCRN(selectedClassCRN);
+	hideAll();
+	$("#classModalDiv").show();
+	if(thisClass.ROLE === "instructor") {
+		$("#teacherModalDiv").show();
+	}
 	if (selectedItem === "grades") {
-		console.log("grades");
-		hideAll();
 		$("#gradesDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "assignments") {
-		console.log("assignments");
-		hideAll();
 		$("#assignmentsDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "repositories") {
-		hideAll();
-		console.log("repos");
 		$("#classRepos").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "resources") {
-		hideAll();
-		console.log("resources");
 		$("#resourcesDiv").show();
 		$("#classesDiv").show();
 	}
@@ -837,6 +842,9 @@ function hideAll() {
 	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
+	$("#repoModalDiv").hide();
+	$("#classModalDiv").hide();
+	$("#teacherModalDiv").hide();
 }
 
 function hideClasses() {
