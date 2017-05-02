@@ -1121,7 +1121,7 @@ function modalButtonHandlers() {
 		// send new score to database via PHP
 		var ans = "";
 		console.log(repo_id);	
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+fileName, repo_id: repo_id},
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+'/'+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
@@ -1184,7 +1184,7 @@ function modalButtonHandlers() {
 
 	});
 
-	// repo modal
+	// key modal
 	$(document).on('click', "#addKeyModalBtn", function() {
 
 		// get info from modal
@@ -1219,25 +1219,6 @@ function modalButtonHandlers() {
 					console.log("add comment failed, error:", data["error"]["message"]);
 				}
 			});
-	// repo modal
-	$(document).on('click', "#createRepoModBtn", function() {
-
-		// get info from modal
-		var repo = $("#repo_input").val();
-		var desc = $("#desc_input").val();
-		
-		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
-			function(data, status){
-				console.log(data, status);
-
-			});
-
-		// TODO update global classes object to reflect new comment?
-
-	});
-
-		// TODO update global classes object to reflect new grade?
-
-	});*/
+			*/
 
 }
