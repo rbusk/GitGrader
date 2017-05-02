@@ -19,6 +19,9 @@ var repos = [];
 var repo_paths = [];
 var repo_id = "";
 
+var classes = [];
+
+/*
 var classes = [
 	{
 		DEPT: "CSE",
@@ -119,6 +122,7 @@ var classes = [
 
 	},
 ];
+*/
 
 $( document ).ready(ready);
 
@@ -346,6 +350,15 @@ function ready() {
 		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
+
+	$("#modal2 tbody").click(function(data) {
+		var id = $(data.target).closest('tr').attr('id');
+		$.post("GitGrader/php_scripts/link_repo.php", {repo_id : id, crn: selectedClassCRN, assignment_name: selectedAssignmentID},
+			function(data, status) {
+				$("#modal2").modal('close');
+				get_repos_obj();
+			});
+	});
 }
 
 // initialize
@@ -368,14 +381,16 @@ function fillInClasses() {
 function fillInRepos(repos) {
 	$("#repoTable tbody").html("");
 	$("#unlinkedRepoTable tbody").html("");
+	$("#modal2 tbody").html("");
 	for (var i=0; i<repos.length; i++) {
 		if (repos[i].ASSIGNMENT_NAME != undefined) {
 			var html = '<tr><td class=repo id=' + repos[i].REPO_ID + '>' + repos[i].REPO_NAME + '</td><td>' + repos[i].COURSE_NAME + '</td><td>' + repos[i].ASSIGNMENT_NAME+ '</td></tr>';
 			$("#repoTable tbody").append(html);
 		} else {
-			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td><td><a class="waves-effect waves-light btn" href="#modal2">';
-			html = html + '<i class="material-icons right">call_merge</i>Link to Assignment</a></td></tr>';
+			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td></tr>';
 			$("#unlinkedRepoTable tbody").append(html);
+			var html2 = "<tr id=" + repos[i].REPO_ID + "><td>" + repos[i].REPO_NAME +  "</td><td class='waves-effect waves-light btn' href='#modal2'><i class='material-icons right'>call_merge</i>Link</a></td></tr>";
+			$("#modal2 tbody").append(html2);
 		}
 	}
 }
@@ -632,7 +647,7 @@ function getResourcesHelper(crn, i) {
 
 // fill in code viewer
 function fillCodeViewer(ext, content) {
-	console.log("content:", content, "ext:", ext);
+	//console.log("content:", content, "ext:", ext);
 	$("#codeView").html(content);
 	$("#codeView").addClass(ext);
 	
@@ -808,13 +823,13 @@ function didChooseRepo(repo_id) {
 			$("#repoName").html(currentValue.REPO_NAME);
 			description = currentValue.DESCRIPTION;
 			repoID = currentValue.REPO_ID;
-			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
+			/*if (currentValue.ASSIGNMENT_NAME)				{
 				classCRN = currentValue.CRN;
 				assignmentName = currentValue.ASSIGNMENT_NAME;
 				$("#repoClassName").html(classCRN + " : " + assignmentName);
 			} else {
 					$("#repoClassName").html("(unlinked)");
-			}
+			}*/
 		}
 	});
 	$("#repoDescription").html(description);
@@ -827,6 +842,7 @@ function didChooseRepo(repo_id) {
 	});
 
 	// TODO add click handlers to each file in collection view so the file content can be loaded into the code viewer
+
 
 }
 
@@ -865,11 +881,22 @@ function fillFileList(fileTree) {
 
 // fill in code viewer
 function clickedOnFile(filePath) {
+	// display file contents
 	var fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
+
+
+	// fill in comments for the selected file here
+	console.log('repo_paths[0]', repo_paths[repo_paths.length-1] + '/' + fileName);	
+	console.log('repo_id', repo_id);
+
+	$.post("GitGrader/php_scripts/get_comments_for_file.php", {repo_id: repo_id, file_path: repo_paths[repo_paths.length-1] + '/' + fileName},
+			function(data, status){
+				console.log('comments?', data['payload']);
+			});
 }
 
 // get contents of file from path
@@ -957,9 +984,9 @@ function getRoleFromCRN(CRN) {
 // Repos Button in Nav Bar //////////////////////////////////
 function openReposDiv() {
 	hideAll();
-	//hideClasses();
+	hideClasses();
 	$("#allRepos").show();
-	//$("#repoViewer").hide();
+	$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -1011,10 +1038,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	//$("#reposDiv").hide();
+	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	//$("#repoModalDiv").hide();
+	$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
