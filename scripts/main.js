@@ -18,6 +18,9 @@ var repos = [];
 //stack for repo paths
 var repo_paths = [];
 
+var classes = [];
+
+/*
 var classes = [
 	{
 		DEPT: "CSE",
@@ -118,6 +121,7 @@ var classes = [
 
 	},
 ];
+*/
 
 $( document ).ready(ready);
 
@@ -799,6 +803,7 @@ function didChooseRepo(repo_id) {
 
 	// TODO add click handlers to each file in collection view so the file content can be loaded into the code viewer
 
+
 }
 
 function isNormalInteger(str) {
@@ -836,11 +841,20 @@ function fillFileList(fileTree) {
 
 // fill in code viewer
 function clickedOnFile(filePath) {
+	// display file contents
 	var fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
+
+
+	// fill in comments for the selected file here
+		
+	$.post("GitGrader/php_scripts/get_comments_by_file.php", {repo_id: repo_id, file_path: repo_paths[0]},
+			function(data, status){
+				console.log('comments?', data['payload']);
+			});
 }
 
 // get contents of file from path
@@ -930,7 +944,7 @@ function openReposDiv() {
 	hideAll();
 	//hideClasses();
 	$("#allRepos").show();
-	//$("#repoViewer").hide();
+	$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -982,10 +996,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	//$("#reposDiv").hide();
+	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	//$("#repoModalDiv").hide();
+	$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
