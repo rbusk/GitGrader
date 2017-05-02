@@ -456,6 +456,7 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
+				$('#ssh_link').text("ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path);
 				$("#codeComments").html("");
 				didChooseRepo(id);
 				repo_paths = [];
