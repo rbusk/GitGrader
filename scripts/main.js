@@ -966,9 +966,9 @@ function getRoleFromCRN(CRN) {
 // Repos Button in Nav Bar //////////////////////////////////
 function openReposDiv() {
 	hideAll();
-	//hideClasses();
+	hideClasses();
 	$("#allRepos").show();
-	//$("#repoViewer").hide();
+	$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -1020,10 +1020,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	//$("#reposDiv").hide();
+	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	//$("#repoModalDiv").hide();
+	$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
