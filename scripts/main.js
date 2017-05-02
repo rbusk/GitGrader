@@ -327,6 +327,10 @@ function ready() {
 		openClassesDiv();
 	});
 
+	$("#backToReposButton").click(function() {
+		openReposDiv();
+	});
+
 	// handle left menu switches
 	$("#leftMenu .collection-item").click(function(){
 		leftMenuSwitch(this.id);
@@ -883,7 +887,7 @@ function fillFileList(fileTree) {
 function clickedOnFile(filePath) {
 	// display file contents
 	var fileName = getFileNameFromPath(filePath);
-	$("#selectedClass").text(fileName);
+	//$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
