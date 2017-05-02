@@ -17,7 +17,7 @@ var repos = [];
 
 //stack for repo paths
 var repo_paths = [];
-var repo_id;
+var repo_id = "";
 
 var classes = [];
 
@@ -424,6 +424,8 @@ function fillInRepoViewerWithPath(path, back) {
 
 function fillInRepoViewer(id) {
 
+	repo_id = id;
+
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
@@ -634,7 +636,7 @@ function getResourcesHelper(crn, i) {
 
 // fill in code viewer
 function fillCodeViewer(ext, content) {
-	console.log("content:", content, "ext:", ext);
+	//console.log("content:", content, "ext:", ext);
 	$("#codeView").html(content);
 	$("#codeView").addClass(ext);
 	
@@ -877,8 +879,10 @@ function clickedOnFile(filePath) {
 
 
 	// fill in comments for the selected file here
-		
-	$.post("GitGrader/php_scripts/get_comments_by_file.php", {repo_id: repo_id, file_path: repo_paths[0]},
+	console.log('repo_paths[0]', repo_paths[repo_paths.length-1] + '/' + fileName);	
+	console.log('repo_id', repo_id);
+
+	$.post("GitGrader/php_scripts/get_comments_for_file.php", {repo_id: repo_id, file_path: repo_paths[repo_paths.length-1] + '/' + fileName},
 			function(data, status){
 				console.log('comments?', data['payload']);
 			});
