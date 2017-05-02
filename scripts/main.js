@@ -133,6 +133,7 @@ function ready() {
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 			function(data, status){
 			classes = [data['payload']];
+			console.log("got this class data at start:", classes);
 
 
 	// TODO
@@ -193,7 +194,7 @@ function ready() {
 			selectedGradeTableOldComment = children[4].innerHTML;
 			var row_index = $(this).index();
 			selectedGradeTableRowIndex = row_index;
-			console.log("selected!",row_index);
+			//console.log("selected!",row_index);
 
 
 			// udpate info in change grade modal to match the selected row
@@ -408,6 +409,20 @@ function updateStudentsList(list) {
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item'>" + username + "</a>";
 		$("#studentsList").append(html);
 	}
+	$(document).on("click", "#studentsList a", function(e) {
+		var selectedUsername = this.innerHTML;
+		console.log(this.innerHTML);
+		getAllGradesForCRN(selectedClassCRN, selectedUsername)
+	});
+}
+
+function getAllGradesForCRN(crn, student_username) {
+	$.post("GitGrader/php_scripts/get_all_class_grades.php", {crn: crn},
+			function(data, status){
+			ans = data["payload"];
+			console.log('class grades', ans);
+			console.log(ans[student_username]);
+	});
 }
 
 function fillInGradesForClasses(student_username) {
