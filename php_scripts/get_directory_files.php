@@ -2,6 +2,20 @@
 	include 'check_logged_in.php';
 	include 'json_functions.php';
 
+	function sortFile($file1, $file2) {
+		if ($file1['directory'] == true && $file2['directory'] == false) {
+			return 1;
+		}
+		if ($file2['directory'] == true && $file1['directory'] == false) {
+			return -1;
+		}
+		if ($file1['path'] > $file2['path']) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
 	function dirToArray($full_path, $local_path) { 
 
 		$result = array(); 
@@ -21,6 +35,8 @@
 				}	
 			} 
 		} 
+
+		usort($result, "sortFile");
 
 		return $result; 
 	}

@@ -137,8 +137,6 @@ function ready() {
 
 	// TODO
 	get_repos_obj();
-	clickedOnFile('GitGrader/test.py');
-	
 
 	// fill class dropdown with class names
 	fillInClasses();
@@ -660,7 +658,6 @@ function fillFileList(fileTree) {
 
 // fill in code viewer
 function clickedOnFile(filePath) {
-	//var filePath = "GitGrader/test.py";
 	var fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
