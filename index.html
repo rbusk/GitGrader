@@ -190,6 +190,12 @@ firebase.initializeApp(config);
 									<li><a id="backToReposButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Repos</a></li>
 								</div>
 							</div>
+							<div id="repoModalDiv2">
+								<div class="right">
+									<li><a id="backToGradebookButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Gradebook</a></li>
+									<li><a id="commentNavButton2" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal">Add Comment</a></li>
+								</div>
+							</div>
 							<div class="right" id="classModalDiv">
 								<li><a id="classNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#classModal">Add Class</a></li>
 							</div>
@@ -290,9 +296,9 @@ firebase.initializeApp(config);
 					<!-- Repo Viewer -->
 					<div id="repoViewer" class="container">
 
-						<h4 id="repoName">Sudoku Lab</h4>
+						<h4 id="repoName"></h4>
 						<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
-						<p id="repoDescription" class="black-text">Description here</p>
+						<p id="repoDescription" class="black-text"></p>
 
 						<div class="col s12 m2 indigo lighten-4">
 							<div class="collection" id="fileTree">
@@ -363,7 +369,7 @@ firebase.initializeApp(config);
 					<!-- Left Side Menu (Repositories, Assignments, Resources, Grades) -->
 					<div class="col s12 m3 l2">
 						<div class="collection" id="leftMenu">
-							<a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a>
+							<!-- <a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a> -->
 							<a href="#!" class="collection-item" id="assignments"><i class="material-icons left">assignment</i>Assignments</a>
 							<a href="#!" class="collection-item" id="resources"><i class="material-icons left">library_books</i>Resources</a>
 							<a href="#!" class="collection-item" id="grades"><i class="material-icons left">assessment</i>Grades</a>
@@ -410,8 +416,8 @@ firebase.initializeApp(config);
 										<div class="container">
 											<h4 id="assignmentName"></h4>
 											<p id="dueDate"></p>
-											<a id="assignmentInstructions"></a>
-											<a href="#modal2" id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
+											<p><a id="assignmentInstructions" class="teal-text lighten-4" target="_blank"></a></p>
+											<a href="#modal2" id="linkAssignToRepo" class="waves-effect waves-light teal btn">Link to Repo</a>
 										</div>
 									</div>
 								</div>
