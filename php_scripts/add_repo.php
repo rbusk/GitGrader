@@ -16,7 +16,7 @@
 	
 	$query = 'begin grader_pack.add_repo(:username, :repo, :path, :description); end;';
 
-	$p = $local_path.'/'.$_POST["repo"].'.git';
+	$p = $local_path.'/'.$_POST["repo"];
 	$stmt = oci_parse($conn, $query);
 	oci_bind_by_name($stmt, ':username', $_SESSION['username']);
 	oci_bind_by_name($stmt, ':repo', $_POST['repo']);

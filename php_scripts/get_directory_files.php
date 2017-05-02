@@ -23,7 +23,9 @@
 			{ 
 				if (is_dir($full_path . DIRECTORY_SEPARATOR . $value)) 
 				{ 
-					$result[] = array('filename' => $value, 'directory' => true, 'path' => $local_path . DIRECTORY_SEPARATOR . $value);
+					if ($value != ".git") {
+						$result[] = array('filename' => $value, 'directory' => true, 'path' => $local_path . DIRECTORY_SEPARATOR . $value);
+					}
 				} 
 				else 
 				{ 
