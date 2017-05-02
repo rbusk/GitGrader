@@ -817,13 +817,13 @@ function didChooseRepo(repo_id) {
 			$("#repoName").html(currentValue.REPO_NAME);
 			description = currentValue.DESCRIPTION;
 			repoID = currentValue.REPO_ID;
-			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
+			/*if (currentValue.ASSIGNMENT_NAME)				{
 				classCRN = currentValue.CRN;
 				assignmentName = currentValue.ASSIGNMENT_NAME;
 				$("#repoClassName").html(classCRN + " : " + assignmentName);
 			} else {
 					$("#repoClassName").html("(unlinked)");
-			}
+			}*/
 		}
 	});
 	$("#repoDescription").html(description);
