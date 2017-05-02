@@ -2,6 +2,7 @@
 var selectedClassCRN = "";
 var selectedClassName = "";
 var selectedAssignmentID = "";
+var studentUsername = ""; // selected student, for when TA is grading
 var role = "student";
 
 // global variables for grades table, for when TA clicks on assignment
@@ -237,6 +238,10 @@ function ready() {
 	$(document).on('click', "#assignmentsListDiv a", function() {
 		selectedAssignmentID = this.id;
 		assignmentSelected();
+
+		// handle selection color
+		$("#assignmentsListDiv a").removeClass('cyan lighten-5');
+		$(this).addClass('cyan lighten-5');
 	});
 
 	// save newly changed grade 
@@ -246,7 +251,6 @@ function ready() {
 		// get info from modal
 		var newScore = $("#scoreInput").val();
 		var newComment = $("#commentInput").val();
-		var studentUsername = "mnelso12";
 		var teacherUsername = "mconnol6";
 
 		// send new score to database via PHP
@@ -303,7 +307,15 @@ function ready() {
 		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
-
+	
+	// handle repo table click
+	$("#unlinkedRepoTable").click(function (data) {
+		$("#repoViewer").show();
+		$("#allRepos").hide();
+		$("#repoModalDiv").show();
+		$("#modalBtnDiv").hide();
+		fillInRepoViewer(data.target.id);
+	});
 }
 
 // initialize
@@ -433,9 +445,14 @@ function updateStudentsList(list) {
 		$("#studentsList").append(html);
 	}
 	$(document).on("click", "#studentsList a", function(e) {
-		var selectedUsername = this.innerHTML;
+		$("#gradesTableBody").html(""); // clear old grades
+		studentUsername = this.innerHTML;
 		console.log(this.innerHTML);
-		getAllGradesForCRN(selectedClassCRN, selectedUsername)
+		getAllGradesForCRN(selectedClassCRN, studentUsername)
+
+		// handle selection color
+		$("#studentsList a").removeClass('cyan lighten-5');
+		$(this).addClass('cyan lighten-5');
 	});
 }
 
@@ -443,9 +460,93 @@ function getAllGradesForCRN(crn, student_username) {
 	$.post("GitGrader/php_scripts/get_all_class_grades.php", {crn: crn},
 			function(data, status){
 			ans = data["payload"];
-			console.log('class grades', ans);
+			console.log(ans);
 			console.log(ans[student_username]);
+			fillInGradesForSelectedStudent(ans[student_username]);
 	});
+}
+
+function fillInGradesForSelectedStudent(grades){
+	console.log("attempting to fillin grades for student", grades);
+
+	// fill in this class's ASSIGNMENTS
+	var ASSIGNMENTS = grades;
+	var sumOfWeights = 0;
+	var sumOfWeightedScores = 0;
+
+	for (var i in ASSIGNMENTS) {
+		console.log("grades", ASSIGNMENTS[i]);
+
+		// fill in ASSIGNMENTS div
+		//var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
+		//$("#assignmentsListDiv").append(html);
+
+		// fill in grades div
+		var tempScore = "";
+		var tempWeight = "";
+		var tempOutOf = "";
+		var tempComment = "";
+		var weightForClassGrade = 0;
+
+		if (!ASSIGNMENTS[i].WEIGHT) {
+			tempWeight = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempWeight = ASSIGNMENTS[i].WEIGHT;
+			weightForClassGrade = parseInt(ASSIGNMENTS[i].WEIGHT);
+		}
+
+		if (!ASSIGNMENTS[i].GRADE) {
+			tempScore = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempScore = ASSIGNMENTS[i].GRADE;
+		}
+
+		if (!ASSIGNMENTS[i].OUTOF) {
+			tempOutOf = "--";
+			weightForClassGrade = 0;
+		} else {
+			tempOutOf = ASSIGNMENTS[i].OUTOF;
+		}
+
+		if (!ASSIGNMENTS[i].GRADE_COMMENT) {
+			tempComment = "";
+			//console.log("NO COMMENT");
+		} else {
+			tempComment = ASSIGNMENTS[i].GRADE_COMMENT;
+			//console.log("COMMENT", tempComment);
+		}
+
+	
+		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+		$("#gradesTableBody").append(gradesHTML);
+		
+		// calculate class grade
+		sumOfWeights = sumOfWeights + weightForClassGrade;
+		var weightedScore = ((ASSIGNMENTS[i].GRADE)/(ASSIGNMENTS[i].OUTOF)) * weightForClassGrade;
+		if (weightedScore) {
+			sumOfWeightedScores = sumOfWeightedScores + weightedScore;
+		}
+	}
+
+	// update class grade on page
+	if (sumOfWeightedScores != 0) {
+		var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
+		var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
+		var letterGrade = "BLAH";
+		for (var letter in gradeCutOffs) {
+			if (classGrade >= gradeCutOffs[letter]) {
+				letterGrade = letter;
+				break;
+			}
+		}
+		$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
+	}
+	else {
+		$("#classGrade").text("Class Grade: N/A");	
+	}
+
 }
 
 function fillInGradesForClasses(student_username) {
