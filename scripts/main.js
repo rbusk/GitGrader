@@ -17,6 +17,7 @@ var repos = [];
 
 //stack for repo paths
 var repo_paths = [];
+var repo_id;
 
 var classes = [];
 
@@ -226,6 +227,8 @@ function ready() {
 	// materialize
 	$('.modal').modal();
 
+	modalButtonHandlers();
+
 	// no menu items selected initially, so hide right side content
 	hideAll();
 	$("#addResourceForm").hide();
@@ -281,6 +284,30 @@ function ready() {
 			});
 
 		// TODO update global classes object to reflect new grade?
+
+	});
+
+	// add instructor
+	$(document).on('click', "#addInstructorModalBtn", function() {
+
+		// get info from modal
+		var instructorInput = $("#instructorInput").val();
+
+		$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add contributor successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add contributor failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new comment?
 
 	});
 
@@ -772,7 +799,7 @@ function didChooseRepo(repo_id) {
 	var classCRN = "";
 	var assignmentName = "";
 	var description = "";
-	var repoID = "";
+	repoID = "";
 	var currentFileTree = [];
 
 	console.log("repos", repos);
@@ -1007,4 +1034,59 @@ function hideAll() {
 function hideClasses() {
 	hideAll();
 	$("#classesDiv").hide();
+}
+
+function modalButtonHandlers() {
+	
+	// add comment
+	$(document).on('click', "#addCommentModalBtn", function() {
+
+		// get info from modal
+		var newComment = $("#comment_input").val();
+
+		// send new score to database via PHP
+		var ans = "";
+		
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[0], repo_id: repo_id},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add comment successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add comment failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	/*// add contributor
+	$(document).on('click', "#addContributoModalBtn", function() {
+
+		// get info from modal
+		var contributor = $("#contributorInput").val();
+
+		$.post("GitGrader/php_scripts/add_comment.php", {contributor: contributor, repo_id: repo_id},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add  successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add comment failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new grade?
+
+	});*/
+
 }
