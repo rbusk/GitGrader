@@ -36,6 +36,8 @@
 
 		return $result; 
 	}
+	
+	$result_array = array();
 
 	if (isset($_POST['repo_id'])) {
 
@@ -52,13 +54,16 @@
 
 		oci_close($conn);
 
+		$result_array['repo_path'] = $repo_path;
+
 	} else if (isset($_POST['repo_path'])) {
 		$repo_path = $_POST['repo_path'];
 	}
 
 	if ($repo_path != null) {
 		header('Content-Type: application/json;charset=utf-8');
-		echo json_success(array('files' => dirToArray('/home/ec2-user/apache/htdocs/' . $repo_path, $repo_path)));
+		$result_array['files'] = dirToArray('/home/ec2-user/apache/htdocs/' . $repo_path, $repo_path);
+		echo json_success($result_array);
 	} else {
 		header('Content-Type: application/json;charset=utf-8');
 		echo json_error('Path not found.');

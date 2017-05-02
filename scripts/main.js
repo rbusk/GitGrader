@@ -1,5 +1,6 @@
 // global variables
 var selectedClassCRN = "";
+var selectedClassName = "";
 var selectedAssignmentID = "";
 var role = "student";
 
@@ -12,6 +13,9 @@ var selectedGradeTableRowIndex = -1;
 var studentsInCourse = [];
 
 var repos = [];
+
+//stack for repo paths
+var repo_paths = [];
 
 var classes = [
 	{
@@ -136,10 +140,7 @@ function ready() {
 			console.log("got this class data at start:", classes);
 
 
-	// TODO
 	get_repos_obj();
-	clickedOnFile('GitGrader/test.py');
-	
 
 	// fill class dropdown with class names
 	fillInClasses();
@@ -162,9 +163,11 @@ function ready() {
 			if (thisClass.ROLE === "instructor") {
 				$("#addAssignmentForm").show();
 				$("#addResourceForm").show();
+				$("#teacherModalDiv").show();
 			} else {
 				$("#addAssignmentForm").hide();
 				$("#addResourceForm").hide();
+				$("#teacherModalDiv").hide();
 			}
 
 			// check if is TA for this class
@@ -222,6 +225,7 @@ function ready() {
 	$("#addAssignmentForm").hide();
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 
 	// create nav bar class name options
 
@@ -295,6 +299,8 @@ function ready() {
 	$("#repoTable").click(function (data) {
 		$("#repoViewer").show();
 		$("#allRepos").hide();
+		$("#repoModalDiv").show();
+		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
 
@@ -332,10 +338,22 @@ function fillInRepos(repos) {
 	}
 }
 
-function fillInRepoViewerWithPath(path) {
+function goUpDirectoryRepoViewer() {
+	if (repo_paths.length > 1) {
+		repo_paths.pop();
+		fillInRepoViewerWithPath(repo_paths[repo_paths.length - 1], true);
+	}
+}
+
+function fillInRepoViewerWithPath(path, back) {
+	console.log(path);
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
+				if (!back) {
+					repo_paths.push(path);
+				}
+				console.log(repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -344,13 +362,16 @@ function fillInRepoViewerWithPath(path) {
 						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
 						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\", false)'";
 						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					}
+				}
+				if (repo_paths.length > 1) {
+					var onclick_text = "onclick='goUpDirectoryRepoViewer()'";
+					var html = "<a class='collection-item teal-text '" + onclick_text + ">..</a>";
+					$("#fileTree").prepend(html);
 				}
 			}
 		});
@@ -360,6 +381,8 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
+				repo_paths = [];
+				repo_paths.push(data.payload.repo_path);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -370,7 +393,7 @@ function fillInRepoViewer(id) {
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\", false)'";
 						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
@@ -701,7 +724,6 @@ function fillFileList(fileTree) {
 
 // fill in code viewer
 function clickedOnFile(filePath) {
-	//var filePath = "GitGrader/test.py";
 	var fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
@@ -812,32 +834,31 @@ function openClassesDiv() {
 	$("#classesButton").show();
 	$("#reposNavButton").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 }
 
 
 // methods for menu switches ////////////////////////////////
 function leftMenuSwitch(selectedItem) {
+	var thisClass = getClassFromCRN(selectedClassCRN);
+	hideAll();
+	$("#classModalDiv").show();
+	if(thisClass.ROLE === "instructor") {
+		$("#teacherModalDiv").show();
+	}
 	if (selectedItem === "grades") {
-		console.log("grades");
-		hideAll();
 		$("#gradesDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "assignments") {
-		console.log("assignments");
-		hideAll();
 		$("#assignmentsDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "repositories") {
-		hideAll();
-		console.log("repos");
 		$("#classRepos").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "resources") {
-		hideAll();
-		console.log("resources");
 		$("#resourcesDiv").show();
 		$("#classesDiv").show();
 	}
@@ -852,6 +873,9 @@ function hideAll() {
 	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
+	$("#repoModalDiv").hide();
+	$("#classModalDiv").hide();
+	$("#teacherModalDiv").hide();
 }
 
 function hideClasses() {

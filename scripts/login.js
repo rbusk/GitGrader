@@ -220,23 +220,14 @@ function loginUser() {
 function loginUserInFB(email, password) {
 	firebase.auth().signInWithEmailAndPassword(email, password)
 	.then(function(firebaseUser) {
-		// handle main content
-		$('#loginContent').hide();
-		$('#loggedInMainContent').show();
-		
-		// handle nav bar content
-		$('#loginNav').hide();
-		$('#normalNav').show();
-
 		$.post("GitGrader/php_scripts/site_login.php",
 			{
 				email: $('#login_email').val()
 			},
 			function(data, status) {
+				location.reload();
 			}
 		);
-
-		alert('logged in!');
 	})
 	.catch(function(error) {
 		var errorCode = error.code;
