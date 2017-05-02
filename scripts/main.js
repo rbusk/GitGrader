@@ -632,7 +632,11 @@ function fillInGradesForClasses() {
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
-		getGradesHelper(classCRN, i, student_username);
+		if (thisClass.ROLE == "student") {
+			getGradesHelper(classCRN, i, student_username);
+		} else {
+			getAssignmentsHelper(classCRN, i);
+		}
 	}
 }
 
@@ -647,6 +651,16 @@ function fillInResourcesForClasses() {
 // helper get grades function
 function getGradesHelper(crn, i, student_username) {
 	$.post("GitGrader/php_scripts/get_grades.php", {crn: crn},
+			function(data, status){
+			var gradesForClass = data["payload"];
+			var thisClass = classes[0][i];
+			var classCRN = thisClass.CRN;
+			thisClass.ASSIGNMENTS = gradesForClass;
+	});
+}
+
+function getAssignmentsHelper(crn, i) {
+	$.post("GitGrader/php_scripts/get_assignments.php", {crn: crn},
 			function(data, status){
 			var gradesForClass = data["payload"];
 			var thisClass = classes[0][i];
@@ -789,9 +803,13 @@ function assignmentSelected() {
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
 	$("#assignmentLink").html("");
-	$("#linkAssignToRepo").show();
-	
 	var thisClass = getClassFromCRN(selectedClassCRN);
+	if (thisClass.ROLE == "student") {
+		$("#linkAssignToRepo").show();
+	} else {
+		$("#linkAssignToRepo").hide();
+	}
+	
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
 	for (var i in ASSIGNMENTS) {
 		if (ASSIGNMENTS[i].ASSIGNMENT_NAME == selectedAssignmentID){
