@@ -347,6 +347,7 @@ function fillInClasses() {
 function fillInRepos(repos) {
 	$("#repoTable tbody").html("");
 	$("#unlinkedRepoTable tbody").html("");
+	$("#modal2 tbody").html("");
 	for (var i=0; i<repos.length; i++) {
 		if (repos[i].ASSIGNMENT_NAME != undefined) {
 			var html = '<tr><td class=repo id=' + repos[i].REPO_ID + '>' + repos[i].REPO_NAME + '</td><td>' + repos[i].COURSE_NAME + '</td><td>' + repos[i].ASSIGNMENT_NAME+ '</td></tr>';
