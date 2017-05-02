@@ -951,7 +951,7 @@ function clickedOnFile(filePath) {
 					console.log('comment:', comments[i]);	
 				
 					var commentContent = comments[i]['CONTENT'];
-					var html = "<a href='#!' class='collection-item'>" + commentContent + "</a>"; 
+					var html = "<a href='#!' class='collection-item'><span class='black-text'>" + comments[i].COMMENTER_ID + "</span><br/>" + commentContent + "</a>"; 
 					$("#codeComments").append(html);
 				}
 			});
@@ -1124,6 +1124,7 @@ function modalButtonHandlers() {
 		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+'/'+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
+				clickedOnFile(repo_paths[repo_paths.length-1]+'/'+fileName);
 
 			});
 
