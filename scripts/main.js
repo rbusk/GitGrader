@@ -1120,8 +1120,8 @@ function modalButtonHandlers() {
 
 		// send new score to database via PHP
 		var ans = "";
-		
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1]+fileName, repo_id: repo_id},
+		console.log(repo_id);	
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
