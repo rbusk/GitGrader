@@ -19,6 +19,8 @@
 
 	$target_file = $target_dir . $_POST['assignment_name'];
 
+	$message = "";
+
 	if ($ok) {
 		$message = upload_file($_FILES['file'], $target_file);
 	}

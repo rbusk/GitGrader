@@ -699,6 +699,8 @@ function fillCodeViewer(ext, content) {
 // fill in class info for given class
 function classSelected(CRN) {
 
+	$("#addAssignmentCRN").val(CRN);
+
 	console.log("SELECTED THIS CRN", CRN);
 
 	// clear old class data
@@ -1149,6 +1151,19 @@ function modalButtonHandlers() {
 		// TODO update global classes object to reflect new comment?
 
 	});
+	
+	$(document).on('click', "#addAssignmentModalBtn", function() {
+		$.ajax({
+			url: 'GitGrader/php_scripts/add_assignment.php',
+			type: 'POST',
+			data: new FormData($('#addAssignmentForm')[0]),
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+	});
+
 
 	$(document).on('click', "#addClassModalBtn", function() {
 
