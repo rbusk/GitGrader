@@ -4,16 +4,12 @@
 
 	function sortFile($file1, $file2) {
 		if ($file1['directory'] == true && $file2['directory'] == false) {
-			return 1;
+			return -1;
 		}
 		if ($file2['directory'] == true && $file1['directory'] == false) {
-			return -1;
-		}
-		if ($file1['path'] > $file2['path']) {
 			return 1;
-		} else {
-			return -1;
 		}
+		return strcmp($file1['filename'], $file2['filename']);
 	}
 
 	function dirToArray($full_path, $local_path) { 
@@ -27,11 +23,11 @@
 			{ 
 				if (is_dir($full_path . DIRECTORY_SEPARATOR . $value)) 
 				{ 
-					$result[$value] = array('directory' => true, 'path' => $local_path . DIRECTORY_SEPARATOR . $value);
+					$result[] = array('filename' => $value, 'directory' => true, 'path' => $local_path . DIRECTORY_SEPARATOR . $value);
 				} 
 				else 
 				{ 
-					$result[$value] = array('directory' => false, 'path' => $local_path . DIRECTORY_SEPARATOR . $value); 
+					$result[] = array('filename' => $value, 'directory' => false, 'path' => $local_path . DIRECTORY_SEPARATOR . $value); 
 				}	
 			} 
 		} 

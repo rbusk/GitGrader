@@ -1,5 +1,6 @@
 // global variables
 var selectedClassCRN = "";
+var selectedClassName = "";
 var selectedAssignmentID = "";
 var role = "student";
 
@@ -159,9 +160,11 @@ function ready() {
 			if (thisClass.ROLE === "instructor") {
 				$("#addAssignmentForm").show();
 				$("#addResourceForm").show();
+				$("#teacherModalDiv").show();
 			} else {
 				$("#addAssignmentForm").hide();
 				$("#addResourceForm").hide();
+				$("#teacherModalDiv").hide();
 			}
 
 			// check if is TA for this class
@@ -219,6 +222,7 @@ function ready() {
 	$("#addAssignmentForm").hide();
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 
 	// create nav bar class name options
 
@@ -292,6 +296,8 @@ function ready() {
 	$("#repoTable").click(function (data) {
 		$("#repoViewer").show();
 		$("#allRepos").hide();
+		$("#repoModalDiv").show();
+		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
 
@@ -329,20 +335,46 @@ function fillInRepos(repos) {
 	}
 }
 
+function fillInRepoViewerWithPath(path) {
+	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
+		function(data, status) {
+			if (data.success == true) {
+				$("#fileTree").html("");
+				$("#codeView").html("");
+				var files = data.payload.files;
+				for (var $i=0; $i<files.length; $i++) {
+					if (files[$i].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					} else {
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
+						$("#fileTree").append(html);
+						console.log(html);
+					}
+				}
+			}
+		});
+}
+
 function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
 				$("#fileTree").html("");
+				$("#codeView").html("");
 				var files = data.payload.files;
-				for (var file in files) {
-					if (files[file].directory == false) {
-						var onclick_text = "onclick='clickedOnFile(\"" + files[file].path + "\")'";
-						var html = "<a class='collection-item black-text '" + onclick_text + ">" + file + "</a>";
+				for (var $i=0; $i<files.length; $i++) {
+					if (files[$i].directory == false) {
+						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var html = "<a class='collection-item black-text'>" + file + "</a>";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
 					}
@@ -768,32 +800,31 @@ function openClassesDiv() {
 	$("#classesButton").show();
 	$("#reposNavButton").show();
 	$("#classesNavButton").hide();
+	$("#classModalDiv").show();
 }
 
 
 // methods for menu switches ////////////////////////////////
 function leftMenuSwitch(selectedItem) {
+	var thisClass = getClassFromCRN(selectedClassCRN);
+	hideAll();
+	$("#classModalDiv").show();
+	if(thisClass.ROLE === "instructor") {
+		$("#teacherModalDiv").show();
+	}
 	if (selectedItem === "grades") {
-		console.log("grades");
-		hideAll();
 		$("#gradesDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "assignments") {
-		console.log("assignments");
-		hideAll();
 		$("#assignmentsDiv").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "repositories") {
-		hideAll();
-		console.log("repos");
 		$("#classRepos").show();
 		$("#classesDiv").show();
 	}
 	else if (selectedItem === "resources") {
-		hideAll();
-		console.log("resources");
 		$("#resourcesDiv").show();
 		$("#classesDiv").show();
 	}
@@ -808,6 +839,9 @@ function hideAll() {
 	$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
+	$("#repoModalDiv").hide();
+	$("#classModalDiv").hide();
+	$("#teacherModalDiv").hide();
 }
 
 function hideClasses() {
