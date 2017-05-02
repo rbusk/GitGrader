@@ -286,7 +286,7 @@ firebase.initializeApp(config);
 					<div id="repoViewer" class="container">
 
 						<h4 id="repoName">Sudoku Lab</h4>
-						<p id="repoClassName">Fund Comp I : Assignment 3</p>
+						<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
 						<p id="repoDescription" class="black-text">Description here</p>
 
 						<div class="col s12 m2 indigo lighten-4">
@@ -332,7 +332,6 @@ firebase.initializeApp(config);
 								<thead>
 									<tr>
 										<th>Unlinked Repos</th>
-										<th>Link</th>
 									</tr>
 								</thead>
 
@@ -407,7 +406,7 @@ firebase.initializeApp(config);
 											<h4 id="assignmentName"></h4>
 											<p id="dueDate"></p>
 											<a id="assignmentInstructions"></a>
-											<a id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
+											<a href="#modal2" id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
 										</div>
 									</div>
 								</div>
@@ -536,38 +535,15 @@ firebase.initializeApp(config);
 			<div id="modal2" class="modal bottom-sheet">
 				<div class="modal-content">
 					<div class="row">
-						<h4>Link "Game of Life" to an Assignment</h4>
 						<table class="col s12 m8 highlight white">
 							<thead>
 								<tr>
-									<th>Class</th>
-									<th>Assignment</th>
+									<th>Repository</th>
 									<th></th>
 								</tr>
 							</thead>
 
 							<tbody>
-								<tr>
-									<td>CSE 40157.01 : Advanced Databases</td>
-									<td>Final Project</td>
-									<td>
-										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-									</td>
-								</tr>
-								<tr>
-									<td>CSE 20121.01 : Fundamentals of Computing II</td>
-									<td>Lab 5</td>
-									<td>
-										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-									</td>
-								</tr>
-								<tr>
-									<td>CSE 20121.01 : Fundamentals of Computing II</td>
-									<td>Lab 6</td>
-									<td>
-										<a class="waves-effect waves-light btn" href="#modal2"><i class="material-icons right">call_merge</i>Link</a>	
-									</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
