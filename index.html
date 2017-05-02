@@ -206,37 +206,37 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<h4>Add Comment</h4>
 					<p>Comment</p>
-					<input type="text" name="content">
+					<input type="text" name="content" id="comment_input">
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Comment</a>
+					<a href="#!" id="addCommentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Comment</a>
 				</div>
 			</div>
 			<div id="contributorModal" class="modal">
 				<div class="modal-content">
 					<h4>Add Contributor</h4>
 					<p>Contributor</p>
-					<input type="text" name="username">
+					<input type="text" name="username" id="contributorInput">
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Contributor</a>
+					<a href="#!" id="addContributoModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Contributor</a>
 				</div>
 			</div>
 			<div id="instructorModal" class="modal">
 				<div class="modal-content">
 					<h4>Add Instructor</h4>
 					<p>Instructor</p>
-					<input type="text" name="username">
+					<input type="text" name="username" id="instructorInput">
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
+					<a href="#!" id="addInstructorModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
 				</div>
 			</div>
 			<div id="addStudentModal" class="modal">
 				<div class="modal-content">
 					<h4>Add Student</h4>
 					<p>Student username</p>
-					<input type="text" name="username">
+					<input type="text" name="username" id="studentInput">
 				</div>
 				<div class="modal-footer">
 					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Student</a>
@@ -246,25 +246,25 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<h4>Add Class</h4>
 					<p>Course Name</p>
-					<input type="text" name="course_name">
+					<input type="text" name="course_name" id="crsName">
 					<p>Course Number</p>
-					<input type="text" name="course_no">
+					<input type="text" name="course_no" id="course_nm">
 					<p>Department</p>
-					<input type="text" name="dept">
+					<input type="text" name="dept" id="departmentInput">
 					<p>CRN</p>
-					<input type="text" name="crn">
+					<input type="text" name="crn" id="crnInput">
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Class</a>
+					<a href="#!" id="addClassModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Class</a>
 				</div>
 			</div>
 			<div id="sshModal" class="modal">
 				<div class="modal-content">
 					<h4>Add SSH Key</h4>
 					<p>SSH Key Name</p>
-					<input type="text" name="ssh_title">
+					<input type="text" name="ssh_title" id="title_input">
 					<p>SSH Key Value</p>
-					<input type="text" name="ssh_key">
+					<input type="text" name="ssh_key" id="ssh_key_input">
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Key</a>
@@ -274,9 +274,9 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<h4>Create Repos</h4>
 					<p>Repo Name</p>
-					<input type="text" name="repo">
+					<input type="text" name="repo" id="repo_input">
 					<p>Repo Description</p>
-					<input type="text" name="description">
+					<input type="text" name="description" id="desc_input">
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="createRepoModBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Create Repo</a>

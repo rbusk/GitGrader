@@ -288,7 +288,8 @@ function ready() {
 	});
 
 	// add instructor
-	$(document).on('click', "#addInstructorModalBtn", function() {
+	$("#addInstructorModalBtn").click( function() {
+		console.log("hi");
 
 		// get info from modal
 		var instructorInput = $("#instructorInput").val();
@@ -440,7 +441,6 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
-
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
@@ -1066,7 +1066,7 @@ function modalButtonHandlers() {
 		// send new score to database via PHP
 		var ans = "";
 		
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[0], repo_id: repo_id},
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1], repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
