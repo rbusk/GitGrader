@@ -141,15 +141,10 @@ function createUser() {
 
 	// if worked, show login div
 	if (didCreateUser) {
-		alert('successfully created user!');
 		$("#login").show();
 		$('#signUp').hide();
 		// TODO if Firebase successful, create user with PHP
 	}
-	else {
-		alert('did not successfully create user');
-	}
-
 };
 
 function loginUser() {

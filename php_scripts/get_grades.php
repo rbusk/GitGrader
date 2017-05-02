@@ -43,10 +43,10 @@
 			$query2 =
 					"select a.assignment_name, a.due_date, s.teacher_username, s.grade, s.repo_id, s.grade_comment,
 						a.outof, a.weight
-					from assignment a left join submission s
+					from assignment a left outer join
+					( select * from submission where student_username = :username ) s
 					on a.crn = s.crn and a.assignment_name = s.assignment_name
-					where a.crn = :crn
-					and (s.student_username = :username or s.student_username is null)";
+					where a.crn = :crn";
 
 			include 'db_login.php';
 			$stmt = oci_parse($conn, $query2);

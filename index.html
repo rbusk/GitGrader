@@ -322,13 +322,15 @@ firebase.initializeApp(config);
 				<div class="row" id="reposDiv">
 
 					<!-- Repo Viewer -->
-					<div id="repoViewer" class="container">
+					<div id="repoViewer">
 
-						<h4 id="repoName"></h4>
-						<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
-						<p id="repoDescription" class="black-text"></p>
-						<p id="ssh_link" class="black-text"></p>
-						<div class="col s12 m2 indigo lighten-4">
+						<div class="col m11 offset-m1">
+							<h4 id="repoName"></h4>
+							<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
+							<p id="repoDescription" class="black-text"></p>
+							<p id="ssh_link" class="black-text"></p>
+						</div>
+						<div class="col s12 m2 offset-m1 indigo lighten-4">
 							<div class="collection" id="fileTree">
 							</div>
 						</div>
@@ -338,14 +340,8 @@ firebase.initializeApp(config);
 							</code></pre>
 						</div>
 
-						<div class="col s12 m3 cyan lighten-4">
+						<div class="col s12 m2 cyan lighten-4">
 							<div class="collection" id="codeComments">
-								<a href="#" class="collection-item">
-							this is a really long comment about something in the code that really should exist but doesn't probably because the student hasn't been to class in a really long time ugh	
-								</a>
-								<a href="#" class="collection-item">comment 2</a>
-								<a href="#" class="collection-item">comment 3</a>
-								<a href="#" class="collection-item">comment 4</a>
 							</div>
 						</div>
 					</div>

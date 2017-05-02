@@ -286,9 +286,6 @@ function ready() {
 				console.log(data, status);
 
 				if (data["success"] == true) {
-					console.log("grade update successful!");		
-					alert("Grade update successful!");
-
 					// update grades table to reflect new grade
 					var num = parseInt(selectedGradeTableRowIndex) + 1;
 					updateGradesTableWithNewStuff(num, newScore, newComment);
@@ -456,7 +453,7 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
-				$('#ssh_link').text("ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path);
+				$('#ssh_link').text("ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path + ".git");
 				$("#codeComments").html("");
 				didChooseRepo(id);
 				repo_paths = [];
@@ -635,7 +632,7 @@ function fillInGradesForClasses() {
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
-		if (thisClass.ROLE == "student") {
+		if (thisClass.ROLE === "student") {
 			getGradesHelper(classCRN, i, student_username);
 		} else {
 			getAssignmentsHelper(classCRN, i);
@@ -1207,7 +1204,7 @@ function modalButtonHandlers() {
 		var title = $("#title_input").val();
 		var key = $("#ssh_key_input").val();
 		
-		$.post("GitGrader/php_scripts/add_ssj_key.php", {ssh_title: title, ssh_key: key},
+		$.post("GitGrader/php_scripts/add_ssh_key.php", {ssh_title: title, ssh_key: key},
 			function(data, status){
 				console.log(data, status);
 
