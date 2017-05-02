@@ -18,6 +18,8 @@ var repos = [];
 //stack for repo paths
 var repo_paths = [];
 var repo_id = "";
+var fileName = "";
+var comments = []; // comments on repo
 
 var classes = [];
 
@@ -129,18 +131,7 @@ $( document ).ready(ready);
 // doc ready
 function ready() {
 	console.log("doc ready from main.js");
-
-	// TODO 
-	$("#repoViewer").show();
 		
-	/*
-	 // TODO doesn't actually return a username? only says if user is logged in or not
-		$.post("GitGrader/php_scripts/get_username.php", {},
-			function(data, status){
-				ans = data["payload"];
-				alert("USERNAME", data);
-			});
-*/
 
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 			function(data, status){
@@ -313,7 +304,7 @@ function ready() {
 	});
 
 	// add instructor
-	$("#addInstructorModalBtn").click( function() {
+	$("#addInstructorBtn").click( function() {
 		console.log("hi");
 
 		// get info from modal
@@ -323,14 +314,6 @@ function ready() {
 			function(data, status){
 				console.log(data, status);
 
-				if (data["success"] == true) {
-					console.log("add contributor successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add contributor failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
@@ -522,6 +505,7 @@ function updateStudentsList(list) {
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item'>" + username + "</a>";
 		$("#studentsList").append(html);
 	}
+
 	$(document).on("click", "#studentsList a", function(e) {
 		$("#gradesTableBody").html(""); // clear old grades
 		studentUsername = this.innerHTML;
@@ -537,6 +521,7 @@ function updateStudentsList(list) {
 function getAllGradesForCRN(crn, student_username) {
 	$.post("GitGrader/php_scripts/get_all_class_grades.php", {crn: crn},
 			function(data, status){
+			$("#gradesTableBody").html(""); // clear old grades - KEEP THIS HERE!
 			ans = data["payload"];
 			console.log(ans);
 			console.log(ans[student_username]);
@@ -927,20 +912,31 @@ function fillFileList(fileTree) {
 // fill in code viewer
 function clickedOnFile(filePath) {
 	// display file contents
+<<<<<<< HEAD
+	fileName = getFileNameFromPath(filePath);
+	$("#selectedClass").text(fileName);
+=======
 	var fileName = getFileNameFromPath(filePath);
 	//$("#selectedClass").text(fileName);
+>>>>>>> 7368d0d8121b0ea5b25b9ebd1ebedcc44bf5f4bb
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
 
 
 	// fill in comments for the selected file here
-	console.log('repo_paths[0]', repo_paths[repo_paths.length-1] + '/' + fileName);	
-	console.log('repo_id', repo_id);
+	$("#codeComments").html("");
 
 	$.post("GitGrader/php_scripts/get_comments_for_file.php", {repo_id: repo_id, file_path: repo_paths[repo_paths.length-1] + '/' + fileName},
 			function(data, status){
-				console.log('comments?', data['payload']);
+				comments = data['payload'];
+				for (var i=0; i<comments.length; i++) {
+					console.log('comment:', comments[i]);	
+				
+					var commentContent = comments[i]['CONTENT'];
+					var html = "<a href='#!' class='collection-item'>" + commentContent + "</a>"; 
+					$("#codeComments").append(html);
+				}
 			});
 }
 
@@ -1108,24 +1104,85 @@ function modalButtonHandlers() {
 		// send new score to database via PHP
 		var ans = "";
 		
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1], repo_id: repo_id},
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1]+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
-				if (data["success"] == true) {
-					console.log("add comment successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add comment failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
 
 	});
 
+	$(document).on('click', "#addStudentModalBtn", function() {
+
+		// get info from modal
+		var student = $("#studentInput").val();
+
+		// send new score to database via PHP
+		var ans = "";
+		
+		$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	$(document).on('click', "#addClassModalBtn", function() {
+
+		// get info from modal
+		var name = $("#crsName").val();
+		var number = $("#course_nm").val();
+		var dept = $("#departmentInput").val();
+		var course_crn = $("#crnInput").val();
+		
+		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+	
+	// repo modal
+	$(document).on('click', "#createRepoModBtn", function() {
+
+		// get info from modal
+		var repo = $("#repo_input").val();
+		var desc = $("#desc_input").val();
+		
+		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	// repo modal
+	$(document).on('click', "#addKeyModalBtn", function() {
+
+		// get info from modal
+		var title = $("#title_input").val();
+		var key = $("#ssh_key_input").val();
+		
+		$.post("GitGrader/php_scripts/add_ssj_key.php", {ssh_title: title, ssh_key: key},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
 	/*// add contributor
 	$(document).on('click', "#addContributoModalBtn", function() {
 
@@ -1145,6 +1202,22 @@ function modalButtonHandlers() {
 					console.log("add comment failed, error:", data["error"]["message"]);
 				}
 			});
+	// repo modal
+	$(document).on('click', "#createRepoModBtn", function() {
+
+		// get info from modal
+		var repo = $("#repo_input").val();
+		var desc = $("#desc_input").val();
+		
+		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
 
 		// TODO update global classes object to reflect new grade?
 
