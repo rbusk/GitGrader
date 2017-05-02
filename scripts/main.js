@@ -196,14 +196,15 @@ function ready() {
 
 
 	// add event handlers to grades table 
-	$(document).on("click", "#gradesTableBody tr", function(e) {
+	$(document).on("click", "#gradesTableBody tr .score_cell", function(e) {
 		if (role == "instructor") {
 			// get info of the row that was clicked
-			var children = this.children;
+			var table_row = this.closest('tr');
+			var children = table_row.children;
 			selectedGradeTableAssignmentName = children[0].innerHTML;
 			selectedGradeTableOldScore = children[1].innerHTML;
 			selectedGradeTableOldComment = children[4].innerHTML;
-			var row_index = $(this).index();
+			var row_index = $(table_row).index();
 			selectedGradeTableRowIndex = row_index;
 			//console.log("selected!",row_index);
 
@@ -219,6 +220,30 @@ function ready() {
 		}
 	});
 
+	// add event handlers to grades table 
+	$(document).on("click", "#gradesTableBody tr .assignment_name_cell", function(e) {
+		if (role == "instructor") {
+			if (e.target.id != undefined && e.target.id != "") {
+				$("#reposDiv").show();
+				$("#repoViewer").show();
+				$("#classesDiv").hide();
+				$("#repoModalDiv2").show();
+				$("#classModalDiv").hide();
+				$("#teacherModalDiv").hide();
+				get_repos_obj(e.target.id);
+				fillInRepoViewer(e.target.id);
+			}
+		}
+	});
+
+	$(document).on("click", "#backToGradebookButton", function() {
+		$("#reposDiv").hide();
+		$("#repoViewer").hide();
+		$("#classesDiv").show();
+		$("#repoModalDiv2").hide();
+		$("#classModalDiv").show();
+		$("#teacherModalDiv").show();
+	});
 
 
 	// init
@@ -321,6 +346,7 @@ function ready() {
 
 	// handle repos button in nav bar
 	$("#reposNavButton").click(function() {
+		get_repos_obj();
 		openReposDiv();
 	});
 
@@ -443,7 +469,6 @@ function fillInRepoViewer(id) {
 	repo_id = id;
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
-			console.log('here');
 			if (data.success == true) {
 				didChooseRepo(id);
 				repo_paths = [];
@@ -572,8 +597,13 @@ function fillInGradesForSelectedStudent(grades){
 		}
 
 	
-		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
-		$("#gradesTableBody").append(gradesHTML);
+		if (ASSIGNMENTS[i].REPO_ID != undefined) {
+			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			$("#gradesTableBody").append(gradesHTML);
+		} else {
+			var gradesHTML = "<tr><td class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			$("#gradesTableBody").append(gradesHTML);
+		}
 		
 		// calculate class grade
 		sumOfWeights = sumOfWeights + weightForClassGrade;
@@ -799,14 +829,25 @@ function assignmentSelected() {
 
 // get file tree and stuff for repo
 function get_repos_obj(repo) {
-	$.post("GitGrader/php_scripts/get_repos.php", {},
-		function(data, status){
-			if (data.success == true) {
-				repos = data.payload;
-				console.log("repos obj:", repos);
-				fillInRepos(repos);
-			}
-		});
+	if (repo != undefined) {
+		$.post("GitGrader/php_scripts/get_repos.php", {repo_id : repo},
+			function(data, status){
+				if (data.success == true) {
+					repos = data.payload;
+					console.log("repos obj:", repos);
+					fillInRepos(repos);
+				}
+			});
+	} else {
+		$.post("GitGrader/php_scripts/get_repos.php", {},
+			function(data, status){
+				if (data.success == true) {
+					repos = data.payload;
+					console.log("repos obj:", repos);
+					fillInRepos(repos);
+				}
+			});
+	}
 }
 
 // did choose a repo
@@ -1048,6 +1089,7 @@ function hideAll() {
 	$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
+	$("#repoModalDiv2").hide();
 }
 
 function hideClasses() {
