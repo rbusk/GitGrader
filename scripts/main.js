@@ -420,6 +420,7 @@ function fillInRepoViewerWithPath(path, back) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
+				$("#codeComments").html("");
 				if (!back) {
 					repo_paths.push(path);
 				}
@@ -453,6 +454,7 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
+				$("#codeComments").html("");
 				didChooseRepo(id);
 				repo_paths = [];
 				repo_paths.push(data.payload.repo_path);
