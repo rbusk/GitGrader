@@ -3,8 +3,8 @@
 	include 'db_login.php';
 	include 'VersionControl/Git.php';
 
-	$path = '/home/ec2-user/git_repos/'.$_POST["username"].'/'.$_POST["repo"].'.git';
-	$local_path = 'git_repos/' . $_POST["username"];
+	$path = '/home/ec2-user/git_repos/'.$_SESSION["username"].'/'.$_POST["repo"].'.git';
+	$local_path = 'git_repos/' . $_SESSION["username"];
 	$full_path = '/home/ec2-user/apache/htdocs/' . $local_path;
 	mkdir($path,0755,true);
 	mkdir($full_path,0755,true);

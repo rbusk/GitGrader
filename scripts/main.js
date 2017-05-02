@@ -18,6 +18,7 @@ var repos = [];
 //stack for repo paths
 var repo_paths = [];
 var repo_id = "";
+var fileName = "";
 
 var classes = [];
 
@@ -288,7 +289,7 @@ function ready() {
 	});
 
 	// add instructor
-	$("#addInstructorModalBtn").click( function() {
+	$("#addInstructorBtn").click( function() {
 		console.log("hi");
 
 		// get info from modal
@@ -298,14 +299,6 @@ function ready() {
 			function(data, status){
 				console.log(data, status);
 
-				if (data["success"] == true) {
-					console.log("add contributor successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add contributor failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
@@ -882,7 +875,7 @@ function fillFileList(fileTree) {
 // fill in code viewer
 function clickedOnFile(filePath) {
 	// display file contents
-	var fileName = getFileNameFromPath(filePath);
+	fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
@@ -1062,24 +1055,85 @@ function modalButtonHandlers() {
 		// send new score to database via PHP
 		var ans = "";
 		
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1], repo_id: repo_id},
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1]+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
-				if (data["success"] == true) {
-					console.log("add comment successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add comment failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
 
 	});
 
+	$(document).on('click', "#addStudentModalBtn", function() {
+
+		// get info from modal
+		var student = $("#studentInput").val();
+
+		// send new score to database via PHP
+		var ans = "";
+		
+		$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	$(document).on('click', "#addClassModalBtn", function() {
+
+		// get info from modal
+		var name = $("#crsName").val();
+		var number = $("#course_nm").val();
+		var dept = $("#departmentInput").val();
+		var course_crn = $("#crnInput").val();
+		
+		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+	
+	// repo modal
+	$(document).on('click', "#createRepoModBtn", function() {
+
+		// get info from modal
+		var repo = $("#repo_input").val();
+		var desc = $("#desc_input").val();
+		
+		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	// repo modal
+	$(document).on('click', "#addKeyModalBtn", function() {
+
+		// get info from modal
+		var title = $("#title_input").val();
+		var key = $("#ssh_key_input").val();
+		
+		$.post("GitGrader/php_scripts/add_ssj_key.php", {ssh_title: title, ssh_key: key},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
 	/*// add contributor
 	$(document).on('click', "#addContributoModalBtn", function() {
 
@@ -1099,6 +1153,22 @@ function modalButtonHandlers() {
 					console.log("add comment failed, error:", data["error"]["message"]);
 				}
 			});
+	// repo modal
+	$(document).on('click', "#createRepoModBtn", function() {
+
+		// get info from modal
+		var repo = $("#repo_input").val();
+		var desc = $("#desc_input").val();
+		
+		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
 
 		// TODO update global classes object to reflect new grade?
 
