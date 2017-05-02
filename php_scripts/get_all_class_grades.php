@@ -21,9 +21,9 @@
 	foreach($students as $value) {
 		unset($grades);
 		$grades = array();
-		$query = "select assignment_name, grade, grade_comment, repo_id
-							from submission
-							where crn = :crn and student_username= :username";
+		$query = "select s.assignment_name, grade, grade_comment, repo_id, weight, outof, teacher_username, repo_id
+							from submission s, assignment a
+							where s.crn = :crn and student_username= :username and s.crn = a.crn and s.assignment_name = a.assignment_name";
 		$stmt = oci_parse($conn, $query);
 		oci_bind_by_name($stmt, ':crn', $_POST['crn']);
 		oci_bind_by_name($stmt, ':username', $value["USERNAME"]);
