@@ -303,7 +303,15 @@ function ready() {
 		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
-
+	
+	// handle repo table click
+	$("#unlinkedRepoTable").click(function (data) {
+		$("#repoViewer").show();
+		$("#allRepos").hide();
+		$("#repoModalDiv").show();
+		$("#modalBtnDiv").hide();
+		fillInRepoViewer(data.target.id);
+	});
 }
 
 // initialize
@@ -380,6 +388,7 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
+			console.log('here');
 			if (data.success == true) {
 				repo_paths = [];
 				repo_paths.push(data.payload.repo_path);
