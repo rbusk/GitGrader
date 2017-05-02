@@ -17,6 +17,7 @@ var repos = [];
 
 //stack for repo paths
 var repo_paths = [];
+var repo_id;
 
 var classes = [
 	{
@@ -125,6 +126,8 @@ $( document ).ready(ready);
 function ready() {
 	console.log("doc ready from main.js");
 
+	// TODO 
+	$("#repoViewer").show();
 		
 	/*
 	 // TODO doesn't actually return a username? only says if user is logged in or not
@@ -147,7 +150,7 @@ function ready() {
 	fillInClasses();
 	
 	// fill in grades for each of these classes
-	fillInGradesForClasses("mnelso12");
+	fillInGradesForClasses();
 
 	fillInResourcesForClasses();
 
@@ -220,6 +223,8 @@ function ready() {
 	// materialize
 	$('.modal').modal();
 
+	modalButtonHandlers();
+
 	// no menu items selected initially, so hide right side content
 	hideAll();
 	$("#addResourceForm").hide();
@@ -275,6 +280,30 @@ function ready() {
 			});
 
 		// TODO update global classes object to reflect new grade?
+
+	});
+
+	// add instructor
+	$(document).on('click', "#addInstructorModalBtn", function() {
+
+		// get info from modal
+		var instructorInput = $("#instructorInput").val();
+
+		$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add contributor successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add contributor failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new comment?
 
 	});
 
@@ -376,7 +405,7 @@ function fillInRepoViewerWithPath(path, back) {
 				if (!back) {
 					repo_paths.push(path);
 				}
-				console.log(repo_paths);
+				console.log("", repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -401,6 +430,7 @@ function fillInRepoViewerWithPath(path, back) {
 }
 
 function fillInRepoViewer(id) {
+
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
@@ -562,7 +592,16 @@ function fillInGradesForSelectedStudent(grades){
 
 }
 
-function fillInGradesForClasses(student_username) {
+function fillInGradesForClasses() {
+
+	var student_username = "";
+
+	$.post("GitGrader/php_scripts/get_username.php", {},
+		function(data, status){
+			//console.log('username?', data['payload']['username']);
+			student_username = data['payload']['username'];
+	});
+
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
@@ -767,7 +806,7 @@ function didChooseRepo(repo_id) {
 	var classCRN = "";
 	var assignmentName = "";
 	var description = "";
-	var repoID = "";
+	repoID = "";
 	var currentFileTree = [];
 
 	console.log("repos", repos);
@@ -929,7 +968,7 @@ function openReposDiv() {
 	hideAll();
 	//hideClasses();
 	$("#allRepos").show();
-	$("#repoViewer").hide();
+	//$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -981,10 +1020,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	$("#reposDiv").hide();
+	//$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	$("#repoModalDiv").hide();
+	//$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
@@ -992,4 +1031,59 @@ function hideAll() {
 function hideClasses() {
 	hideAll();
 	$("#classesDiv").hide();
+}
+
+function modalButtonHandlers() {
+	
+	// add comment
+	$(document).on('click', "#addCommentModalBtn", function() {
+
+		// get info from modal
+		var newComment = $("#comment_input").val();
+
+		// send new score to database via PHP
+		var ans = "";
+		
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[0], repo_id: repo_id},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add comment successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add comment failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	/*// add contributor
+	$(document).on('click', "#addContributoModalBtn", function() {
+
+		// get info from modal
+		var contributor = $("#contributorInput").val();
+
+		$.post("GitGrader/php_scripts/add_comment.php", {contributor: contributor, repo_id: repo_id},
+			function(data, status){
+				console.log(data, status);
+
+				if (data["success"] == true) {
+					console.log("add  successful!");		
+
+					//TODO update comment table
+				}
+				else {
+					console.log("add comment failed, error:", data["error"]["message"]);
+				}
+			});
+
+		// TODO update global classes object to reflect new grade?
+
+	});*/
+
 }
