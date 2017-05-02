@@ -190,6 +190,7 @@ firebase.initializeApp(config);
 							</div>
 							<div class="right" id="teacherModalDiv">
 								<li><a id="addInstructorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#instructorModal">Add Instructor</a></li>
+								<li><a id="addStudentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addStudentModal">Add Student</a></li>
 							</div>
 					</ul>
 						</div>
@@ -224,6 +225,16 @@ firebase.initializeApp(config);
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
+				</div>
+			</div>
+			<div id="addStudentModal" class="modal">
+				<div class="modal-content">
+					<h4>Add Student</h4>
+					<p>Student username</p>
+					<input type="text" name="username">
+				</div>
+				<div class="modal-footer">
+					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Student</a>
 				</div>
 			</div>
 			<div id="classModal" class="modal">
