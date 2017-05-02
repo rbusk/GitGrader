@@ -125,6 +125,8 @@ $( document ).ready(ready);
 function ready() {
 	console.log("doc ready from main.js");
 
+	// TODO 
+	$("#repoViewer").show();
 		
 	/*
 	 // TODO doesn't actually return a username? only says if user is logged in or not
@@ -147,7 +149,7 @@ function ready() {
 	fillInClasses();
 	
 	// fill in grades for each of these classes
-	fillInGradesForClasses("mnelso12");
+	fillInGradesForClasses();
 
 	fillInResourcesForClasses();
 
@@ -365,7 +367,7 @@ function fillInRepoViewerWithPath(path, back) {
 				if (!back) {
 					repo_paths.push(path);
 				}
-				console.log(repo_paths);
+				console.log("", repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -390,6 +392,7 @@ function fillInRepoViewerWithPath(path, back) {
 }
 
 function fillInRepoViewer(id) {
+
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
@@ -550,7 +553,16 @@ function fillInGradesForSelectedStudent(grades){
 
 }
 
-function fillInGradesForClasses(student_username) {
+function fillInGradesForClasses() {
+
+	var student_username = "";
+
+	$.post("GitGrader/php_scripts/get_username.php", {},
+		function(data, status){
+			//console.log('username?', data['payload']['username']);
+			student_username = data['payload']['username'];
+	});
+
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
@@ -920,7 +932,7 @@ function openReposDiv() {
 	hideAll();
 	//hideClasses();
 	$("#allRepos").show();
-	$("#repoViewer").hide();
+	//$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -972,10 +984,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	$("#reposDiv").hide();
+	//$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	$("#repoModalDiv").hide();
+	//$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
