@@ -126,6 +126,8 @@ $( document ).ready(ready);
 function ready() {
 	console.log("doc ready from main.js");
 
+	// TODO 
+	$("#repoViewer").show();
 		
 	/*
 	 // TODO doesn't actually return a username? only says if user is logged in or not
@@ -148,7 +150,7 @@ function ready() {
 	fillInClasses();
 	
 	// fill in grades for each of these classes
-	fillInGradesForClasses("mnelso12");
+	fillInGradesForClasses();
 
 	fillInResourcesForClasses();
 
@@ -392,7 +394,7 @@ function fillInRepoViewerWithPath(path, back) {
 				if (!back) {
 					repo_paths.push(path);
 				}
-				console.log(repo_paths);
+				console.log("", repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -417,10 +419,12 @@ function fillInRepoViewerWithPath(path, back) {
 }
 
 function fillInRepoViewer(id) {
+
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
 			if (data.success == true) {
+				didChooseRepo(id);
 				repo_paths = [];
 				repo_paths.push(data.payload.repo_path);
 				$("#fileTree").html("");
@@ -577,7 +581,16 @@ function fillInGradesForSelectedStudent(grades){
 
 }
 
-function fillInGradesForClasses(student_username) {
+function fillInGradesForClasses() {
+
+	var student_username = "";
+
+	$.post("GitGrader/php_scripts/get_username.php", {},
+		function(data, status){
+			//console.log('username?', data['payload']['username']);
+			student_username = data['payload']['username'];
+	});
+
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
@@ -776,10 +789,7 @@ function get_repos_obj(repo) {
 }
 
 // did choose a repo
-function didChooseRepo(repoName) {
-	
-	// update repo name
-	$("#repoName").html(repoName);
+function didChooseRepo(repo_id) {
 
 	// update class / assignment name
 	var classCRN = "";
@@ -790,9 +800,10 @@ function didChooseRepo(repoName) {
 
 	console.log("repos", repos);
 
-	repos[0].forEach(function(currentValue, index, arr){
-		if (repoName == currentValue.REPO_NAME) {
+	repos.forEach(function(currentValue, index, arr){
+		if (repo_id == currentValue.REPO_ID) {
 			console.log("FOUND REPO!", currentValue);
+			$("#repoName").html(currentValue.REPO_NAME);
 			description = currentValue.DESCRIPTION;
 			repoID = currentValue.REPO_ID;
 			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
@@ -804,7 +815,6 @@ function didChooseRepo(repoName) {
 			}
 		}
 	});
-	$("#repoName").html(repoName);
 	$("#repoDescription").html(description);
 
 	// fill in collection view of files in this repo
@@ -947,7 +957,7 @@ function openReposDiv() {
 	hideAll();
 	//hideClasses();
 	$("#allRepos").show();
-	$("#repoViewer").hide();
+	//$("#repoViewer").hide();
 	$("#reposDiv").show();
 	$("#modalBtnDiv").show();
 	selectedClassCRN = ""; // no class selected
@@ -999,10 +1009,10 @@ function hideAll() {
 	$("#gradesDiv").hide();
 	$("#assignmentsDiv").hide();
 	$("#resourcesDiv").hide();
-	$("#reposDiv").hide();
+	//$("#reposDiv").hide();
 	$("#modalBtnDiv").hide();
 	$("#classesDiv").hide();
-	$("#repoModalDiv").hide();
+	//$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 }
