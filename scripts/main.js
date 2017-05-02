@@ -912,13 +912,7 @@ function fillFileList(fileTree) {
 // fill in code viewer
 function clickedOnFile(filePath) {
 	// display file contents
-<<<<<<< HEAD
 	fileName = getFileNameFromPath(filePath);
-	$("#selectedClass").text(fileName);
-=======
-	var fileName = getFileNameFromPath(filePath);
-	//$("#selectedClass").text(fileName);
->>>>>>> 7368d0d8121b0ea5b25b9ebd1ebedcc44bf5f4bb
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
