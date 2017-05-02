@@ -397,6 +397,7 @@ function fillInRepoViewer(id) {
 		function(data, status) {
 			console.log('here');
 			if (data.success == true) {
+				didChooseRepo(id);
 				repo_paths = [];
 				repo_paths.push(data.payload.repo_path);
 				$("#fileTree").html("");
@@ -761,10 +762,7 @@ function get_repos_obj(repo) {
 }
 
 // did choose a repo
-function didChooseRepo(repoName) {
-	
-	// update repo name
-	$("#repoName").html(repoName);
+function didChooseRepo(repo_id) {
 
 	// update class / assignment name
 	var classCRN = "";
@@ -775,9 +773,10 @@ function didChooseRepo(repoName) {
 
 	console.log("repos", repos);
 
-	repos[0].forEach(function(currentValue, index, arr){
-		if (repoName == currentValue.REPO_NAME) {
+	repos.forEach(function(currentValue, index, arr){
+		if (repo_id == currentValue.REPO_ID) {
 			console.log("FOUND REPO!", currentValue);
+			$("#repoName").html(currentValue.REPO_NAME);
 			description = currentValue.DESCRIPTION;
 			repoID = currentValue.REPO_ID;
 			if (currentValue.CRN && currentValue.ASSIGNMENT_NAME)				{
@@ -789,7 +788,6 @@ function didChooseRepo(repoName) {
 			}
 		}
 	});
-	$("#repoName").html(repoName);
 	$("#repoDescription").html(description);
 
 	// fill in collection view of files in this repo
