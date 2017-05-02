@@ -316,6 +316,15 @@ function ready() {
 		$("#modalBtnDiv").hide();
 		fillInRepoViewer(data.target.id);
 	});
+
+	$("#modal2 tbody").click(function(data) {
+		var id = $(data.target).closest('tr').attr('id');
+		$.post("GitGrader/php_scripts/link_repo.php", {repo_id : id, crn: selectedClassCRN, assignment_name: selectedAssignmentID},
+			function(data, status) {
+				$("#modal2").modal('close');
+				get_repos_obj();
+			});
+	});
 }
 
 // initialize
@@ -343,9 +352,10 @@ function fillInRepos(repos) {
 			var html = '<tr><td class=repo id=' + repos[i].REPO_ID + '>' + repos[i].REPO_NAME + '</td><td>' + repos[i].COURSE_NAME + '</td><td>' + repos[i].ASSIGNMENT_NAME+ '</td></tr>';
 			$("#repoTable tbody").append(html);
 		} else {
-			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td><td><a class="waves-effect waves-light btn" href="#modal2">';
-			html = html + '<i class="material-icons right">call_merge</i>Link to Assignment</a></td></tr>';
+			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td></tr>';
 			$("#unlinkedRepoTable tbody").append(html);
+			var html2 = "<tr id=" + repos[i].REPO_ID + "><td>" + repos[i].REPO_NAME +  "</td><td class='waves-effect waves-light btn' href='#modal2'><i class='material-icons right'>call_merge</i>Link</a></td></tr>";
+			$("#modal2 tbody").append(html2);
 		}
 	}
 }
