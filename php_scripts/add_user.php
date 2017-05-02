@@ -15,6 +15,4 @@
 	oci_close($conn);
 
 	$_SESSION['username'] = $_POST['username'];
-
-	echo($_SESSION['username'] . " is logged in");
 ?>
