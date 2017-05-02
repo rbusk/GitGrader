@@ -424,6 +424,8 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
+	$.post("GitGrader/php_scripts/auto_pull_repo.php",{repo_id : id},
+		function(data, status) {});
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			console.log('here');
@@ -871,13 +873,7 @@ function fillFileList(fileTree) {
 // fill in code viewer
 function clickedOnFile(filePath) {
 	// display file contents
-<<<<<<< HEAD
 	fileName = getFileNameFromPath(filePath);
-	$("#selectedClass").text(fileName);
-=======
-	var fileName = getFileNameFromPath(filePath);
-	//$("#selectedClass").text(fileName);
->>>>>>> 7368d0d8121b0ea5b25b9ebd1ebedcc44bf5f4bb
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
