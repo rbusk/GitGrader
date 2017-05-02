@@ -14,6 +14,9 @@ var studentsInCourse = [];
 
 var repos = [];
 
+//stack for repo paths
+var repo_paths = [];
+
 var classes = [
 	{
 		DEPT: "CSE",
@@ -134,12 +137,10 @@ function ready() {
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 			function(data, status){
 			classes = [data['payload']];
+			console.log("got this class data at start:", classes);
 
 
-	// TODO
 	get_repos_obj();
-	clickedOnFile('GitGrader/test.py');
-	
 
 	// fill class dropdown with class names
 	fillInClasses();
@@ -196,7 +197,7 @@ function ready() {
 			selectedGradeTableOldComment = children[4].innerHTML;
 			var row_index = $(this).index();
 			selectedGradeTableRowIndex = row_index;
-			console.log("selected!",row_index);
+			//console.log("selected!",row_index);
 
 
 			// udpate info in change grade modal to match the selected row
@@ -337,10 +338,22 @@ function fillInRepos(repos) {
 	}
 }
 
-function fillInRepoViewerWithPath(path) {
+function goUpDirectoryRepoViewer() {
+	if (repo_paths.length > 1) {
+		repo_paths.pop();
+		fillInRepoViewerWithPath(repo_paths[repo_paths.length - 1], true);
+	}
+}
+
+function fillInRepoViewerWithPath(path, back) {
+	console.log(path);
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
+				if (!back) {
+					repo_paths.push(path);
+				}
+				console.log(repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -349,13 +362,16 @@ function fillInRepoViewerWithPath(path) {
 						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
 						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\", false)'";
 						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					}
+				}
+				if (repo_paths.length > 1) {
+					var onclick_text = "onclick='goUpDirectoryRepoViewer()'";
+					var html = "<a class='collection-item teal-text '" + onclick_text + ">..</a>";
+					$("#fileTree").prepend(html);
 				}
 			}
 		});
@@ -365,6 +381,8 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
+				repo_paths = [];
+				repo_paths.push(data.payload.repo_path);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -375,7 +393,7 @@ function fillInRepoViewer(id) {
 						$("#fileTree").append(html);
 						console.log(html);
 					} else {
-						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\")'";
+						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\", false)'";
 						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
 						console.log(html);
@@ -414,6 +432,20 @@ function updateStudentsList(list) {
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item'>" + username + "</a>";
 		$("#studentsList").append(html);
 	}
+	$(document).on("click", "#studentsList a", function(e) {
+		var selectedUsername = this.innerHTML;
+		console.log(this.innerHTML);
+		getAllGradesForCRN(selectedClassCRN, selectedUsername)
+	});
+}
+
+function getAllGradesForCRN(crn, student_username) {
+	$.post("GitGrader/php_scripts/get_all_class_grades.php", {crn: crn},
+			function(data, status){
+			ans = data["payload"];
+			console.log('class grades', ans);
+			console.log(ans[student_username]);
+	});
 }
 
 function fillInGradesForClasses(student_username) {
@@ -692,7 +724,6 @@ function fillFileList(fileTree) {
 
 // fill in code viewer
 function clickedOnFile(filePath) {
-	//var filePath = "GitGrader/test.py";
 	var fileName = getFileNameFromPath(filePath);
 	$("#selectedClass").text(fileName);
 	var contents = getContentsFromFilePath(filePath); 
