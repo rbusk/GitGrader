@@ -120,26 +120,26 @@ firebase.initializeApp(config);
 							<div class="center">
 								<h3>Join Git Grader!</h3>
 								<br>
-								<form class="col s12 m8 offset-m2">
+								<form class="col s12 m8 offset-m2" id="addUserForm">
 									<div class="row">
 										<div class="input-field col s12 m6">
 											<i class="material-icons prefix">account_circle</i>
-											<input id="signup_first" type="text" class="validate">
+											<input id="signup_first" name="first_name" type="text" class="validate">
 											<label for="signup_first">First Name</label>
 										</div>
 										<div class="input-field col s12 m6">
 											<i class="material-icons prefix">account_circle</i>
-											<input id="signup_last" type="text" class="validate">
+											<input id="signup_last" type="text" name="last_name" class="validate">
 											<label for="signup_last">Last Name</label>
 										</div>
 										<div class="input-field col s12 m6">
 											<i class="material-icons prefix">verified_user</i>
-											<input id="signup_username" type="email" class="validate">
+											<input id="signup_username" type="text" name="username">
 											<label for="signup_username">Username</label>
 										</div>
 										<div class="input-field col s12 m6">
 											<i class="material-icons prefix">email</i>
-											<input id="signup_email" type="email" class="validate">
+											<input id="signup_email" type="email" name="email" class="validate">
 											<label for="signup_email">Email</label>
 										</div>
 										<div class="input-field col s12 m6">
@@ -154,7 +154,7 @@ firebase.initializeApp(config);
 										</div>
 									</div>
 									<div class="modal-footer">
-										<i class="waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4" style=""><input type="submit" value="Sign Up" id="signUpButton"></i>
+										<i class="waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4" style=""><input type="button" value="Sign Up" id="signUpButton"></i>
 									</div>
 								</form>
 							</div>
@@ -190,12 +190,20 @@ firebase.initializeApp(config);
 									<li><a id="backToReposButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Repos</a></li>
 								</div>
 							</div>
+							<div id="repoModalDiv2">
+								<div class="right">
+									<li><a id="backToGradebookButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Gradebook</a></li>
+									<li><a id="commentNavButton2" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal">Add Comment</a></li>
+								</div>
+							</div>
 							<div class="right" id="classModalDiv">
 								<li><a id="classNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#classModal">Add Class</a></li>
 							</div>
 							<div class="right" id="teacherModalDiv">
 								<li><a id="addInstructorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#instructorModal">Add Instructor</a></li>
 								<li><a id="addStudentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addStudentModal">Add Student</a></li>
+								<li><a id="addAssignmentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addAssignmentModal">Add Assignment</a></li>
+								<li><a id="addResourceNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addResourceModal">Add Resource</a></li>
 							</div>
 					</ul>
 						</div>
@@ -229,7 +237,7 @@ firebase.initializeApp(config);
 					<input type="text" name="username" id="instructorInput">
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addInstructorModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
+					<a href="#!" id="addInstructorBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
 				</div>
 			</div>
 			<div id="addStudentModal" class="modal">
@@ -240,6 +248,32 @@ firebase.initializeApp(config);
 				</div>
 				<div class="modal-footer">
 					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Student</a>
+				</div>
+			</div>
+			<div id="addAssignmentModal" class="modal">
+				<div class="modal-content">
+					<form id="addAssignmentForm">
+						<h4>Add Assignment</h4>
+						<input type="text" name="assignment_name">
+						<label for="assignment_name">Assignment Name</label>
+						<input type="number" name="outof">
+						<label for="outof">Out of</label>
+						<input type="number" name="weight"/>
+						<label for="weight">Weight</label>
+						<input type="hidden" name="crn" id="addAssignmentCRN"/>
+						<div class="file-field input-field col s12 m6">
+							<div class="btn">
+								<span>File</span>
+								<input type="file" name="file">
+							</div>
+							<div class="file-path-wrapper">
+								<input class="file-path validate" type="text">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a="#!" id="addAssignmentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Assignment</a>
 				</div>
 			</div>
 			<div id="classModal" class="modal">
@@ -288,13 +322,15 @@ firebase.initializeApp(config);
 				<div class="row" id="reposDiv">
 
 					<!-- Repo Viewer -->
-					<div id="repoViewer" class="container">
+					<div id="repoViewer">
 
-						<h4 id="repoName">Sudoku Lab</h4>
-						<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
-						<p id="repoDescription" class="black-text">Description here</p>
-
-						<div class="col s12 m2 indigo lighten-4">
+						<div class="col m11 offset-m1">
+							<h4 id="repoName"></h4>
+							<!-- <p id="repoClassName">Fund Comp I : Assignment 3</p> -->
+							<p id="repoDescription" class="black-text"></p>
+							<p id="ssh_link" class="black-text"></p>
+						</div>
+						<div class="col s12 m2 offset-m1 indigo lighten-4">
 							<div class="collection" id="fileTree">
 							</div>
 						</div>
@@ -304,14 +340,17 @@ firebase.initializeApp(config);
 							</code></pre>
 						</div>
 
-						<div class="col s12 m3 cyan lighten-4">
+						<div class="col s12 m2 cyan lighten-4">
 							<div class="collection" id="codeComments">
+<<<<<<< HEAD
 								<!--
 								<a href="#" class="collection-item">
 							this is a really long comment about something in the code that really should exist but doesn't probably because the student hasn't been to class in a really long time ugh	
 								</a>
 								<a href="#" class="collection-item">comment 2</a>
 								-->
+=======
+>>>>>>> f02ec44398c01bdbfc5bb91286eedf7e5f4a8823
 							</div>
 						</div>
 					</div>
@@ -363,7 +402,7 @@ firebase.initializeApp(config);
 					<!-- Left Side Menu (Repositories, Assignments, Resources, Grades) -->
 					<div class="col s12 m3 l2">
 						<div class="collection" id="leftMenu">
-							<a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a>
+							<!-- <a href="#!" class="collection-item" id="repositories"> <i class="fa fa-code-fork fa-2x" aria-hidden="true" style="padding-right: 20px;"></i>Repositories</a> -->
 							<a href="#!" class="collection-item" id="assignments"><i class="material-icons left">assignment</i>Assignments</a>
 							<a href="#!" class="collection-item" id="resources"><i class="material-icons left">library_books</i>Resources</a>
 							<a href="#!" class="collection-item" id="grades"><i class="material-icons left">assessment</i>Grades</a>
@@ -410,13 +449,13 @@ firebase.initializeApp(config);
 										<div class="container">
 											<h4 id="assignmentName"></h4>
 											<p id="dueDate"></p>
-											<a id="assignmentInstructions"></a>
-											<a href="#modal2" id="linkAssignToRepo" class="waves-effect waves-light cyan btn">Link to Repo</a>
+											<p><a id="assignmentInstructions" class="teal-text lighten-4" target="_blank"></a></p>
+											<a href="#modal2" id="linkAssignToRepo" class="waves-effect waves-light teal btn">Link to Repo</a>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row" id="addAssignmentForm">
+							<!-- <div class="row" id="addAssignmentForm">
 								<form action="php_scripts/add_assignment.php" method="post">
 									<div class="row">
 										<div class="input-field col s12 m6">
@@ -449,7 +488,7 @@ firebase.initializeApp(config);
 										<button class="btn waves-effect waves-light" type="submit" name="action">Add Assignment</button>
 									</div>
 								</form>
-							</div>
+							</div> -->
 						</div>
 
 
@@ -460,7 +499,7 @@ firebase.initializeApp(config);
 									<div id="resourcesListDiv" class="collection"></div>
 								</div>
 							</div>
-							<div class="row" id="addResourceForm">
+							<!-- <div class="row" id="addResourceForm">
 								<form action="php_scripts/add_resource.php" method="post">
 									<div class="row">
 										<div class="input-field col s12 m6">
@@ -485,7 +524,7 @@ firebase.initializeApp(config);
 										</div>
 									</div>
 								</form>
-							</div>
+							</div>-->
 						</div>
 
 

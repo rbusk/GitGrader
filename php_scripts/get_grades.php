@@ -41,12 +41,12 @@
 		} else {
 
 			$query2 =
-					"select a.assignment_name, s.teacher_username, s.grade, s.repo_id, s.grade_comment,
+					"select a.assignment_name, a.due_date, s.teacher_username, s.grade, s.repo_id, s.grade_comment,
 						a.outof, a.weight
-					from assignment a left join submission s
+					from assignment a left outer join
+					( select * from submission where student_username = :username ) s
 					on a.crn = s.crn and a.assignment_name = s.assignment_name
-					where a.crn = :crn
-					and (s.student_username = :username or s.student_username is null)";
+					where a.crn = :crn";
 
 			include 'db_login.php';
 			$stmt = oci_parse($conn, $query2);
@@ -54,18 +54,27 @@
 			oci_bind_by_name($stmt, ':crn', $_POST['crn']);
 			oci_bind_by_name($stmt, ':username', $_SESSION['username']);
 
-			$grades = array();
+			$assignments = array();
 
 			oci_execute($stmt);
 
 			while($row = oci_fetch_array($stmt, OCI_ASSOC)) {
-				array_push($grades, $row);
+				array_push($assignments, $row);
+			}
+
+			//loop through assignments and add path
+			for($i=0; $i<count($assignments); $i++) {
+				$path = 'GitGrader/classes/' . $_POST['crn'] . '/assignments/';
+				$path .= $assignments[$i]['ASSIGNMENT_NAME'];
+				if (file_exists('../../' . $path)) {
+					$assignments[$i]['PATH'] = $path;
+				}
 			}
 
 			oci_close($conn);
 
 			header('Content-Type: application/json;charset=utf-8');
-			echo json_success($grades);
+			echo json_success($assignments);
 		}
 	}
 ?>

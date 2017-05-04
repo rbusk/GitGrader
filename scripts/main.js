@@ -18,6 +18,7 @@ var repos = [];
 //stack for repo paths
 var repo_paths = [];
 var repo_id = "";
+var fileName = "";
 var comments = []; // comments on repo
 
 var classes = [];
@@ -186,14 +187,15 @@ function ready() {
 
 
 	// add event handlers to grades table 
-	$(document).on("click", "#gradesTableBody tr", function(e) {
+	$(document).on("click", "#gradesTableBody tr .score_cell", function(e) {
 		if (role == "instructor") {
 			// get info of the row that was clicked
-			var children = this.children;
+			var table_row = this.closest('tr');
+			var children = table_row.children;
 			selectedGradeTableAssignmentName = children[0].innerHTML;
 			selectedGradeTableOldScore = children[1].innerHTML;
 			selectedGradeTableOldComment = children[4].innerHTML;
-			var row_index = $(this).index();
+			var row_index = $(table_row).index();
 			selectedGradeTableRowIndex = row_index;
 			//console.log("selected!",row_index);
 
@@ -209,6 +211,30 @@ function ready() {
 		}
 	});
 
+	// add event handlers to grades table 
+	$(document).on("click", "#gradesTableBody tr .assignment_name_cell", function(e) {
+		if (role == "instructor") {
+			if (e.target.id != undefined && e.target.id != "") {
+				$("#reposDiv").show();
+				$("#repoViewer").show();
+				$("#classesDiv").hide();
+				$("#repoModalDiv2").show();
+				$("#classModalDiv").hide();
+				$("#teacherModalDiv").hide();
+				get_repos_obj(e.target.id);
+				fillInRepoViewer(e.target.id);
+			}
+		}
+	});
+
+	$(document).on("click", "#backToGradebookButton", function() {
+		$("#reposDiv").hide();
+		$("#repoViewer").hide();
+		$("#classesDiv").show();
+		$("#repoModalDiv2").hide();
+		$("#classModalDiv").show();
+		$("#teacherModalDiv").show();
+	});
 
 
 	// init
@@ -260,9 +286,6 @@ function ready() {
 				console.log(data, status);
 
 				if (data["success"] == true) {
-					console.log("grade update successful!");		
-					alert("Grade update successful!");
-
 					// update grades table to reflect new grade
 					var num = parseInt(selectedGradeTableRowIndex) + 1;
 					updateGradesTableWithNewStuff(num, newScore, newComment);
@@ -278,7 +301,7 @@ function ready() {
 	});
 
 	// add instructor
-	$("#addInstructorModalBtn").click( function() {
+	$("#addInstructorBtn").click( function() {
 		console.log("hi");
 
 		// get info from modal
@@ -288,14 +311,6 @@ function ready() {
 			function(data, status){
 				console.log(data, status);
 
-				if (data["success"] == true) {
-					console.log("add contributor successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add contributor failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
@@ -311,6 +326,7 @@ function ready() {
 
 	// handle repos button in nav bar
 	$("#reposNavButton").click(function() {
+		get_repos_obj();
 		openReposDiv();
 	});
 
@@ -401,6 +417,7 @@ function fillInRepoViewerWithPath(path, back) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
+				$("#codeComments").html("");
 				if (!back) {
 					repo_paths.push(path);
 				}
@@ -431,10 +448,13 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
+	$.post("GitGrader/php_scripts/auto_pull_repo.php",{repo_id : id},
+		function(data, status) {});
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
-			console.log('here');
 			if (data.success == true) {
+				$('#ssh_link').text("ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path + ".git");
+				$("#codeComments").html("");
 				didChooseRepo(id);
 				repo_paths = [];
 				repo_paths.push(data.payload.repo_path);
@@ -564,8 +584,13 @@ function fillInGradesForSelectedStudent(grades){
 		}
 
 	
-		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
-		$("#gradesTableBody").append(gradesHTML);
+		if (ASSIGNMENTS[i].REPO_ID != undefined) {
+			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			$("#gradesTableBody").append(gradesHTML);
+		} else {
+			var gradesHTML = "<tr><td class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			$("#gradesTableBody").append(gradesHTML);
+		}
 		
 		// calculate class grade
 		sumOfWeights = sumOfWeights + weightForClassGrade;
@@ -607,7 +632,11 @@ function fillInGradesForClasses() {
 	for (var i=0; i<classes[0].length; i++) {
 		var thisClass = classes[0][i];
 		var classCRN = thisClass.CRN;
-		getGradesHelper(classCRN, i, student_username);
+		if (thisClass.ROLE === "student") {
+			getGradesHelper(classCRN, i, student_username);
+		} else {
+			getAssignmentsHelper(classCRN, i);
+		}
 	}
 }
 
@@ -622,6 +651,16 @@ function fillInResourcesForClasses() {
 // helper get grades function
 function getGradesHelper(crn, i, student_username) {
 	$.post("GitGrader/php_scripts/get_grades.php", {crn: crn},
+			function(data, status){
+			var gradesForClass = data["payload"];
+			var thisClass = classes[0][i];
+			var classCRN = thisClass.CRN;
+			thisClass.ASSIGNMENTS = gradesForClass;
+	});
+}
+
+function getAssignmentsHelper(crn, i) {
+	$.post("GitGrader/php_scripts/get_assignments.php", {crn: crn},
 			function(data, status){
 			var gradesForClass = data["payload"];
 			var thisClass = classes[0][i];
@@ -656,6 +695,8 @@ function fillCodeViewer(ext, content) {
 
 // fill in class info for given class
 function classSelected(CRN) {
+
+	$("#addAssignmentCRN").val(CRN);
 
 	console.log("SELECTED THIS CRN", CRN);
 
@@ -764,9 +805,13 @@ function assignmentSelected() {
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
 	$("#assignmentLink").html("");
-	$("#linkAssignToRepo").show();
-	
 	var thisClass = getClassFromCRN(selectedClassCRN);
+	if (thisClass.ROLE == "student") {
+		$("#linkAssignToRepo").show();
+	} else {
+		$("#linkAssignToRepo").hide();
+	}
+	
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
 	for (var i in ASSIGNMENTS) {
 		if (ASSIGNMENTS[i].ASSIGNMENT_NAME == selectedAssignmentID){
@@ -791,14 +836,25 @@ function assignmentSelected() {
 
 // get file tree and stuff for repo
 function get_repos_obj(repo) {
-	$.post("GitGrader/php_scripts/get_repos.php", {},
-		function(data, status){
-			if (data.success == true) {
-				repos = data.payload;
-				console.log("repos obj:", repos);
-				fillInRepos(repos);
-			}
-		});
+	if (repo != undefined) {
+		$.post("GitGrader/php_scripts/get_repos.php", {repo_id : repo},
+			function(data, status){
+				if (data.success == true) {
+					repos = data.payload;
+					console.log("repos obj:", repos);
+					fillInRepos(repos);
+				}
+			});
+	} else {
+		$.post("GitGrader/php_scripts/get_repos.php", {},
+			function(data, status){
+				if (data.success == true) {
+					repos = data.payload;
+					console.log("repos obj:", repos);
+					fillInRepos(repos);
+				}
+			});
+	}
 }
 
 // did choose a repo
@@ -878,8 +934,7 @@ function fillFileList(fileTree) {
 // fill in code viewer
 function clickedOnFile(filePath) {
 	// display file contents
-	var fileName = getFileNameFromPath(filePath);
-	//$("#selectedClass").text(fileName);
+	fileName = getFileNameFromPath(filePath);
 	var contents = getContentsFromFilePath(filePath); 
 	let ext = getExt(fileName);
 	fillCodeViewer(ext, contents);
@@ -895,7 +950,7 @@ function clickedOnFile(filePath) {
 					console.log('comment:', comments[i]);	
 				
 					var commentContent = comments[i]['CONTENT'];
-					var html = "<a href='#!' class='collection-item'>" + commentContent + "</a>"; 
+					var html = "<a href='#!' class='collection-item'><span class='black-text'>" + comments[i].COMMENTER_ID + "</span><br/>" + commentContent + "</a>"; 
 					$("#codeComments").append(html);
 				}
 			});
@@ -1046,6 +1101,7 @@ function hideAll() {
 	$("#repoModalDiv").hide();
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
+	$("#repoModalDiv2").hide();
 }
 
 function hideClasses() {
@@ -1063,25 +1119,100 @@ function modalButtonHandlers() {
 
 		// send new score to database via PHP
 		var ans = "";
-		
-		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length()-1], repo_id: repo_id},
+		console.log(repo_id);	
+		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+'/'+fileName, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
+				clickedOnFile(repo_paths[repo_paths.length-1]+'/'+fileName);
 
-				if (data["success"] == true) {
-					console.log("add comment successful!");		
-
-					//TODO update comment table
-				}
-				else {
-					console.log("add comment failed, error:", data["error"]["message"]);
-				}
 			});
 
 		// TODO update global classes object to reflect new comment?
 
 	});
 
+	$(document).on('click', "#addStudentModalBtn", function() {
+
+		// get info from modal
+		var student = $("#studentInput").val();
+
+		// send new score to database via PHP
+		var ans = "";
+		
+		$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+	
+	$(document).on('click', "#addAssignmentModalBtn", function() {
+		$.ajax({
+			url: 'GitGrader/php_scripts/add_assignment.php',
+			type: 'POST',
+			data: new FormData($('#addAssignmentForm')[0]),
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+	});
+
+
+	$(document).on('click', "#addClassModalBtn", function() {
+
+		// get info from modal
+		var name = $("#crsName").val();
+		var number = $("#course_nm").val();
+		var dept = $("#departmentInput").val();
+		var course_crn = $("#crnInput").val();
+		
+		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+	
+	// repo modal
+	$(document).on('click', "#createRepoModBtn", function() {
+
+		// get info from modal
+		var repo = $("#repo_input").val();
+		var desc = $("#desc_input").val();
+		
+		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
+
+	// key modal
+	$(document).on('click', "#addKeyModalBtn", function() {
+
+		// get info from modal
+		var title = $("#title_input").val();
+		var key = $("#ssh_key_input").val();
+		
+		$.post("GitGrader/php_scripts/add_ssh_key.php", {ssh_title: title, ssh_key: key},
+			function(data, status){
+				console.log(data, status);
+
+			});
+
+		// TODO update global classes object to reflect new comment?
+
+	});
 	/*// add contributor
 	$(document).on('click', "#addContributoModalBtn", function() {
 
@@ -1101,9 +1232,6 @@ function modalButtonHandlers() {
 					console.log("add comment failed, error:", data["error"]["message"]);
 				}
 			});
-
-		// TODO update global classes object to reflect new grade?
-
-	});*/
+			*/
 
 }
