@@ -254,11 +254,11 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<form id="addAssignmentForm">
 						<h4>Add Assignment</h4>
-						<input type="text" name="assignment_name">
+						<input id="assignmentFormName" type="text" name="assignment_name">
 						<label for="assignment_name">Assignment Name</label>
-						<input type="number" name="outof">
+						<input id="assignmentFormOutOf" type="number" name="outof">
 						<label for="outof">Out of</label>
-						<input type="number" name="weight"/>
+						<input id="assignmentFormWeight" type="number" name="weight"/>
 						<label for="weight">Weight</label>
 						<input type="hidden" name="crn" id="addAssignmentCRN"/>
 						<div class="file-field input-field col s12 m6">
@@ -306,7 +306,7 @@ firebase.initializeApp(config);
 			</div>
 			<div id="repoModal" class="modal">
 				<div class="modal-content">
-					<h4>Create Repos</h4>
+					<h4>Create Repo</h4>
 					<p>Repo Name</p>
 					<input type="text" name="repo" id="repo_input">
 					<p>Repo Description</p>
@@ -597,6 +597,16 @@ firebase.initializeApp(config);
 				</div>
 			</div>
 
+			<!-- Error Handling Modal Structure -->
+			<div id="errorModal" class="modal">
+				<div class="modal-content">
+					<h4>Oops!</h4>
+					<p id="errorMessage">Error message here</p>
+				</div>
+				<div class="modal-footer">
+					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Okay</a>
+				</div>
+			</div>
 
 			<!-- Add/Change Grade Modal -->
 
