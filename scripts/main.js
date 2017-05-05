@@ -705,6 +705,7 @@ function classSelected(CRN) {
 	$("#gradesTableBody").html("");
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
+	$("#assignmentInstructions").html("");
 	$("#resourcesListDiv").html("");
 	$("#studentsList").html("");
 	$("#linkAssignToRepo").hide();
@@ -804,6 +805,7 @@ function assignmentSelected() {
 	// clear old assignemnt name and due date
 	$("#assignmentName").html("");
 	$("#dueDate").html("");
+	$("#assignmentInstructions").html("");
 	$("#assignmentLink").html("");
 	var thisClass = getClassFromCRN(selectedClassCRN);
 	if (thisClass.ROLE == "student") {
@@ -824,6 +826,9 @@ function assignmentSelected() {
 			if (path != undefined) {
 				$("#assignmentInstructions").html("View instructions");
 				$("#assignmentInstructions").attr("href", path);
+				$("#assignmentInstructions").show();
+			} else {
+				$("#assignmentInstructions").hide();
 			}
 			$("#assignmentName").append(name);
 			return;
