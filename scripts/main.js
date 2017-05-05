@@ -261,6 +261,8 @@ function ready() {
 
 	// selected assignment 
 	$(document).on('click', "#assignmentsListDiv a", function() {
+		console.log("CLICKED assignment");
+
 		selectedAssignmentID = this.id;
 		assignmentSelected();
 
@@ -276,7 +278,14 @@ function ready() {
 		// get info from modal
 		var newScore = $("#scoreInput").val();
 		var newComment = $("#commentInput").val();
-		var teacherUsername = "mconnol6";
+		var teacherUsername = "mconnol6"; // TODO un-hard-code this
+
+		// check for negative grades
+		if (newScore < 0) {
+			$("#errorMessage").html("Cannot enter a negative score.");
+			$('#errorModal').modal('open');
+			return;
+		}
 
 		// send new score to database via PHP
 		var ans = "";
@@ -807,6 +816,7 @@ function assignmentSelected() {
 	$("#dueDate").html("");
 	$("#assignmentInstructions").html("");
 	$("#assignmentLink").html("");
+
 	var thisClass = getClassFromCRN(selectedClassCRN);
 	if (thisClass.ROLE == "student") {
 		$("#linkAssignToRepo").show();
@@ -815,6 +825,7 @@ function assignmentSelected() {
 	}
 	
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
+	console.log("assignments of selected class crn", ASSIGNMENTS);
 	for (var i in ASSIGNMENTS) {
 		if (ASSIGNMENTS[i].ASSIGNMENT_NAME == selectedAssignmentID){
 			var dueDate = ASSIGNMENTS[i].DUE_DATE;
@@ -1155,25 +1166,56 @@ function modalButtonHandlers() {
 	});
 	
 	$(document).on('click', "#addAssignmentModalBtn", function() {
-		$.ajax({
-			url: 'GitGrader/php_scripts/add_assignment.php',
-			type: 'POST',
-			data: new FormData($('#addAssignmentForm')[0]),
-			cache: false,
-			contentType: false,
-			processData: false
-		});
+		// add new assignment to database
+		let name = $("#assignmentFormName").val();
+		let outOf = $("#assignmentFormOutOf").val();
+		let weight = $("#assignmentFormWeight").val();
+		let crn = $("#addAssignmentCRN").val();
+
+		// check if form inputs are valid
+		if (!name) {
+			$("#errorMessage").html("You must enter an assignment name.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!weight) {
+			$("#errorMessage").html("You must enter an assignment weight.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!crn) {
+			$("#errorMessage").html("Could not find CRN for new assignment.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!outOf) {
+			$("#errorMessage").html("You must enter an assignment 'out of'.");
+			$('#errorModal').modal('open');
+			return;
+		}
+
+
+		$.post("GitGrader/php_scripts/add_assignment.php", {crn: crn, assignment_name: name, weight: weight, outof: outOf, due_date: ""},
+			function(data, status){
+				console.log("status:", status);
+				if (status == "success") {
+					successfulAddAssignment();
+				}
+				else {
+					$("#errorMessage").html("New assignment add unsuccessful");
+					$('#errorModal').modal('open');
+				}
+			});
 
 	});
-
 
 	$(document).on('click', "#addClassModalBtn", function() {
 
 		// get info from modal
-		var name = $("#crsName").val();
+		var name = $("#crsname").val();
 		var number = $("#course_nm").val();
-		var dept = $("#departmentInput").val();
-		var course_crn = $("#crnInput").val();
+		var dept = $("#departmentinput").val();
+		var course_crn = $("#crninput").val();
 		
 		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
 			function(data, status){
@@ -1239,4 +1281,33 @@ function modalButtonHandlers() {
 			});
 			*/
 
+}
+
+
+function successfulAddAssignment() {
+
+	// add new assignment to DOM
+	let name = $("#assignmentFormName").val();
+	let outOf = $("#assignmentFormOutOf").val();
+	let weight = $("#assignmentFormWeight").val();
+	let crn = $("#addAssignmentCRN").val();
+
+	var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + name + "'>" + name + "</a>"; 
+	$("#assignmentsListDiv").append(html);
+
+
+	// add new assignment to global classes JSON object
+	for (var i=0; i<classes[0].length; i++) {
+		if (classes[0][i].CRN == crn) {
+
+			let thisAssignment = {
+				ASSIGNMENT_NAME: name,
+				WEIGHT: weight, 
+				OUTOF: outOf,
+				CRN: crn
+			};
+			classes[0][i].ASSIGNMENTS.push(thisAssignment);
+			break;
+		}	
+	}
 }

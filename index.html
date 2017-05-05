@@ -103,7 +103,7 @@ firebase.initializeApp(config);
 										</div>
 									</div>
 									<div class="modal-footer">
-										<input type="button" value="Login" id="loginButton" class=" waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4">
+										<input type="button" value="Login" id="loginButton" class=" waves-effect waves-teal btn waves-input-wrapper white blue-grey-text text-darken-4">
 									</div>
 								</form>
 							</div>
@@ -154,7 +154,7 @@ firebase.initializeApp(config);
 										</div>
 									</div>
 									<div class="modal-footer">
-										<i class="waves-effect waves-purple btn waves-input-wrapper white blue-grey-text text-darken-4" style=""><input type="button" value="Sign Up" id="signUpButton"></i>
+										<i class="waves-effect waves-teal btn waves-input-wrapper white blue-grey-text text-darken-4" style=""><input type="button" value="Sign Up" id="signUpButton"></i>
 									</div>
 								</form>
 							</div>
@@ -254,11 +254,11 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<form id="addAssignmentForm">
 						<h4>Add Assignment</h4>
-						<input type="text" name="assignment_name">
+						<input id="assignmentFormName" type="text" name="assignment_name">
 						<label for="assignment_name">Assignment Name</label>
-						<input type="number" name="outof">
+						<input id="assignmentFormOutOf" type="number" name="outof">
 						<label for="outof">Out of</label>
-						<input type="number" name="weight"/>
+						<input id="assignmentFormWeight" type="number" name="weight"/>
 						<label for="weight">Weight</label>
 						<input type="hidden" name="crn" id="addAssignmentCRN"/>
 						<div class="file-field input-field col s12 m6">
@@ -306,7 +306,7 @@ firebase.initializeApp(config);
 			</div>
 			<div id="repoModal" class="modal">
 				<div class="modal-content">
-					<h4>Create Repos</h4>
+					<h4>Create Repo</h4>
 					<p>Repo Name</p>
 					<input type="text" name="repo" id="repo_input">
 					<p>Repo Description</p>
@@ -342,6 +342,15 @@ firebase.initializeApp(config);
 
 						<div class="col s12 m2 cyan lighten-4">
 							<div class="collection" id="codeComments">
+<<<<<<< HEAD
+								<!--
+								<a href="#" class="collection-item">
+							this is a really long comment about something in the code that really should exist but doesn't probably because the student hasn't been to class in a really long time ugh	
+								</a>
+								<a href="#" class="collection-item">comment 2</a>
+								-->
+=======
+>>>>>>> f02ec44398c01bdbfc5bb91286eedf7e5f4a8823
 							</div>
 						</div>
 					</div>
@@ -588,6 +597,16 @@ firebase.initializeApp(config);
 				</div>
 			</div>
 
+			<!-- Error Handling Modal Structure -->
+			<div id="errorModal" class="modal">
+				<div class="modal-content">
+					<h4>Oops!</h4>
+					<p id="errorMessage">Error message here</p>
+				</div>
+				<div class="modal-footer">
+					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Okay</a>
+				</div>
+			</div>
 
 			<!-- Add/Change Grade Modal -->
 
