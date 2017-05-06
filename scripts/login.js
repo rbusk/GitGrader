@@ -103,23 +103,56 @@ function notRealEmail(email) {
 }
 
 function createUser() {
-	// check if passwords match
-	if (!doPasswordsMatch()) {
-		alert("Passwords do not match!");
-		return;
-	}
-
-	// are passwords long enough
-	if (!isPasswordLongEnough()) {
-		alert('password must be at least 6 characters long');
-		return;
-	}
-
 	var first = $("#signup_first").val();
 	var last = $("#signup_last").val();
 	var username = $("#signup_username").val();
 	var email = $("#signup_email").val();
 	var password = $("#signup_password").val();
+
+	if (!first) {
+		$("#errorMessage").html("Please enter a first name.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	if (!last) {
+		$("#errorMessage").html("Please enter a last name.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	if (!username) {
+		$("#errorMessage").html("Please enter a username.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	if (!email) {
+		$("#errorMessage").html("Please enter an email.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	if (!password) {
+		$("#errorMessage").html("Please enter a password.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	// check if passwords match
+	if (!doPasswordsMatch()) {
+		$("#errorMessage").html("Passwords do not match!");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	// are passwords long enough
+	if (!isPasswordLongEnough()) {
+		$("#errorMessage").html('password must be at least 6 characters long');
+		$("#errorModal").modal('open');
+		return;
+	}
+
 
 	// make sure email is good
 	if (notRealEmail(email)) {
@@ -152,6 +185,18 @@ function loginUser() {
 
 	var email = $("#login_email").val();
 	var password = $("#login_password").val();
+	
+	if (!email) {
+		$("#errorMessage").html("Please enter an email.");
+		$("#errorModal").modal('open');
+		return;
+	}
+
+	if (!password) {
+		$("#errorMessage").html("Please enter a password.");
+		$("#errorModal").modal('open');
+		return;
+	}
 
 	// attempt Firebase login 
 	loginUserInFB(email, password);

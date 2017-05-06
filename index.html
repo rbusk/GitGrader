@@ -71,6 +71,17 @@ firebase.initializeApp(config);
 				</ul>
 			</div>
 		</nav>
+		<!-- Error Handling Modal Structure -->
+		<div id="errorModal" class="modal">
+			<div class="modal-content">
+				<h4>Oops!</h4>
+				<p id="errorMessage">Error message here</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Okay</a>
+			</div>
+		</div>
+
 
 		<!-- Main Login Content -->
 		<div id="loginContent">
@@ -249,12 +260,18 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<form id="addAssignmentForm">
 						<h4>Add Assignment</h4>
-						<input id="assignmentFormName" type="text" name="assignment_name" size="100" maxlength="100" class="validate">
-						<label for="assignment_name">Assignment Name</label>
-						<input id="assignmentFormOutOf" type="number" name="outof" class="validate">
-						<label for="outof">Out of</label>
-						<input id="assignmentFormWeight" type="number" name="weight" class="validate">
-						<label for="weight">Weight</label>
+						<div class="input-field">
+							<input id="assignmentFormName" type="text" name="assignment_name" size="100" maxlength="100" class="validate">
+							<label for="assignment_name">Assignment Name</label>
+						</div>
+						<div class="input-field">
+							<input id="assignmentFormOutOf" type="number" name="outof" class="validate">
+							<label for="outof">Out of</label>
+						</div>
+						<div class="input-field">
+							<input id="assignmentFormWeight" type="number" name="weight" class="validate">
+							<label for="weight">Weight</label>
+						</div>
 						<input type="hidden" name="crn" id="addAssignmentCRN"/>
 						<div class="file-field input-field col s12 m6">
 							<div class="btn">
@@ -498,17 +515,6 @@ firebase.initializeApp(config);
 				</div>
 				<div class="modal-footer">
 					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
-				</div>
-			</div>
-
-			<!-- Error Handling Modal Structure -->
-			<div id="errorModal" class="modal">
-				<div class="modal-content">
-					<h4>Oops!</h4>
-					<p id="errorMessage">Error message here</p>
-				</div>
-				<div class="modal-footer">
-					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Okay</a>
 				</div>
 			</div>
 

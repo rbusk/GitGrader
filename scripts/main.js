@@ -1217,6 +1217,27 @@ function modalButtonHandlers() {
 		var dept = $("#departmentinput").val();
 		var course_crn = $("#crninput").val();
 		
+		if (!name) {
+			$("#errorMessage").html("You must enter a name for the course.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!number) {
+			$("#errorMessage").html("You must enter a course number.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!dept) {
+			$("#errorMessage").html("You must enter a department.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!course_crn) {
+			$("#errorMessage").html("You must enter a CRN.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		
 		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
 			function(data, status){
 				console.log(data, status);
