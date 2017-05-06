@@ -38,6 +38,7 @@ firebase.initializeApp(config);
 
 		<!-- Font Awesome -->
 		<script src="https://use.fontawesome.com/6973ef5c02.js"></script>
+		B
 
 		<!-- Scripts -->
 		<script src="GitGrader/scripts/main.js"></script>
@@ -229,7 +230,7 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<h4>Add Instructor</h4>
 					<p>Instructor</p>
-					<input type="text" name="username" id="instructorInput">
+					<input type="text" name="username" id="instructorInput" class="autocomplete">
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="addInstructorBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
@@ -239,7 +240,7 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<h4>Add Student</h4>
 					<p>Student username</p>
-					<input type="text" name="username" id="studentInput">
+					<input type="text" name="username" id="studentInput" class="autocomplete">
 				</div>
 				<div class="modal-footer">
 					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Student</a>
@@ -255,6 +256,8 @@ firebase.initializeApp(config);
 						<label for="outof">Out of</label>
 						<input id="assignmentFormWeight" type="number" name="weight" class="validate">
 						<label for="weight">Weight</label>
+						<label for="date_picker">Date</label>
+						<input type="date" class="datepicker">
 						<input type="hidden" name="crn" id="addAssignmentCRN"/>
 						<div class="file-field input-field col s12 m6">
 							<div class="btn">
