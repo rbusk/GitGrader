@@ -156,6 +156,8 @@ function ready() {
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
 	$("#classModalDiv").show();
+	$("#addResourceBtn").hide();
+	$("#addAssignmentBtn").hide();
 
 	// create nav bar class name options
 
@@ -219,10 +221,15 @@ function ready() {
 		// get info from modal
 		var instructorInput = $("#instructorInput").val();
 
+		if (!instructorInput) {
+			$("#errorMessage").html("You must enter the username of an instructor.");
+			$("#errorModal").modal('open');
+			return;
+		}
+
 		$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
 			function(data, status){
 				console.log(data, status);
-
 			});
 
 		// TODO update global classes object to reflect new comment?
@@ -640,16 +647,8 @@ function classSelected(CRN) {
 
 	var thisClass = getClassFromCRN(CRN);
 
-	//fill in this class's REOSURCES
-	var RESOURCES = thisClass.RESOURCES;
-
-	for (var i in RESOURCES) {
-		var html = "<a href='" + RESOURCES[i].PATH+ "' download class='cyan-text text-darken-2 assignment collection-item'>" + RESOURCES[i].RESOURCE_NAME; 
-		var html = html + "<i class='fa fa-download fa-2x right' aria-hidden='true'></i></a>";
-		$("#resourcesListDiv").append(html);
-	}
-
 	fillInAssignments(thisClass);
+	fillInResources(thisClass);
 
 	// update class grade on page
 	if (sumOfWeightedScores != 0) {
@@ -669,6 +668,19 @@ function classSelected(CRN) {
 	}
 
 }
+
+function fillInResources(thisClass) {
+	//fill in this class's REOSURCES
+	var RESOURCES = thisClass.RESOURCES;
+
+	$("#resourcesListDiv").html("");
+
+	for (var i in RESOURCES) {
+		var html = "<a href='" + RESOURCES[i].PATH+ "' target='_blank' class='cyan-text text-darken-2 assignment collection-item'>" + RESOURCES[i].RESOURCE_NAME + "</a>"; 
+		$("#resourcesListDiv").append(html);
+	}
+}
+
 
 function fillInAssignments(thisClass) {
 	// fill in this class's ASSIGNMENTS
@@ -1083,6 +1095,12 @@ function modalButtonHandlers() {
 
 		// send new score to database via PHP
 		var ans = "";
+		
+		if (!student) {
+			$("#errorMessage").html("You must enter the username of a student.");
+			$("#errorModal").modal('open');
+			return;
+		}
 
 		$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
 			function(data, status){
@@ -1101,6 +1119,30 @@ function modalButtonHandlers() {
 			$('#errorModal').modal('open');
 			return;
 		}
+
+		if(document.getElementById("resourceFileInput").files.length == 0){
+		    $("#errorMessage").html("Please select a file to upload.");
+			$("#errorModal").modal('open');
+			return;
+		}
+		
+		$.ajax({
+			url: 'GitGrader/php_scripts/add_resource.php',
+			type: 'POST',
+			data: new FormData($('#addResourceForm')[0]),
+			cache: false,
+			contentType: false,
+			processData: false
+		}).done( function(data, status) {
+			console.log(data);
+			if (status == "success") {
+				successfulAddResource();
+			}
+			else {
+				$("#errorMessage").html("New resource add unsuccessful");
+				$('#errorModal').modal('open');
+			}
+		});
 	});
 
 	$(document).on('click', "#addAssignmentModalBtn", function() {
@@ -1259,6 +1301,20 @@ function modalButtonHandlers() {
 
 }
 
+function successfulAddResource() {
+	for (var i=0; i<classes[0].length; i++) {
+		if (selectedClassCRN == classes[0][i].CRN) {
+			$.post("GitGrader/php_scripts/get_resources.php", {crn: selectedClassCRN},
+				function(data, status){
+					var resourcesForClass = data["payload"];
+					var thisClass = getClassFromCRN(selectedClassCRN);
+					var classCRN = thisClass.CRN;
+					thisClass.RESOURCES = resourcesForClass;
+					fillInResources(thisClass);
+			});
+		}
+	}
+}
 
 function successfulAddAssignment() {
 	for (var i=0; i<classes[0].length; i++) {

@@ -303,14 +303,14 @@ firebase.initializeApp(config);
 					<form id="addResourceForm">
 						<h4>Add Resource</h4>
 						<div class="input-field">
-							<label for="resource_name">Resource Name</label>
-							<input id="resource_name" type="text" name="resource_name" size="100" maxlength="100" class="validate">
+							<label for="resourceFormName">Resource Name</label>
+							<input id="resourceFormName" type="text" name="resource_name" size="100" maxlength="100" class="validate">
 						</div>
 						<input type="hidden" name="crn" id="addResourceCRN"/>
 						<div class="file-field input-field col s12 m6">
 							<div class="btn">
 								<span>File</span>
-								<input type="file" name="file">
+								<input type="file" name="file" id="resourceFileInput">
 							</div>
 							<div class="file-path-wrapper">
 								<input class="file-path validate" type="text">
