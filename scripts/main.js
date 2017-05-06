@@ -12,6 +12,8 @@ var selectedGradeTableRowIndex = -1;
 
 // global variables for gradebook, lists of students in course
 var studentsInCourse = [];
+var sumOfWeightedScores = 0;
+var sumOfWeights = 0;
 
 var repos = [];
 
@@ -23,108 +25,6 @@ var comments = []; // comments on repo
 
 var classes = [];
 
-/*
-var classes = [
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Advanced Databases",
-		CRN: "12983",
-		COURSE_NO: "40157-01",
-		ASSIGNMENTS: [
-			{
-				name: "HW1",
-				weight: 10, 
-				userScore: 76,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-12-17"
-			},
-			{
-				name: "HW2",
-				weight: 10, 
-				userScore: 85,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-11-17"
-			},
-			{
-				name: "HW3",
-				weight: 10, 
-				userScore: 97,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "3-10-17"
-			}
-		]
-	},
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Fund Comp II",
-		CRN: "10239",
-		COURSE_NO: "20101-02",
-		ASSIGNMENTS: [
-			{
-				name: "Lab 1",
-				weight: 10, 
-				userScore: 82,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-30-17"
-			},
-			{
-				name: "Lab 2",
-				weight: 10, 
-				userScore: 82,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-03-17"
-			},
-			{
-				name: "Lab 3",
-				weight: 10, 
-				userScore: 83,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "2-10-17"
-			}
-		]
-
-	},
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Basic Unix",
-		CRN: "12387",
-		COURSE_NO: "20189-01",
-		ASSIGNMENTS: [
-			{
-				name: "Project 1",
-				weight: 10, 
-				userScore: 95,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-28-17"
-			},
-			{
-				name: "Project 2",
-				weight: 10, 
-				userScore: 67,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-3-17"
-			},
-			{
-				name: "Project 3",
-				weight: 10, 
-				userScore: 78,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "2-8-17"
-			}
-		]
-
-	},
-];
-*/
 
 $( document ).ready(ready);
 
@@ -188,6 +88,7 @@ function ready() {
 
 	// add event handlers to grades table 
 	$(document).on("click", "#gradesTableBody tr .score_cell", function(e) {
+
 		if (role == "instructor") {
 			// get info of the row that was clicked
 			var table_row = this.closest('tr');
@@ -197,7 +98,6 @@ function ready() {
 			selectedGradeTableOldComment = children[4].innerHTML;
 			var row_index = $(table_row).index();
 			selectedGradeTableRowIndex = row_index;
-			//console.log("selected!",row_index);
 
 
 			// udpate info in change grade modal to match the selected row
@@ -261,7 +161,6 @@ function ready() {
 
 	// selected assignment 
 	$(document).on('click', "#assignmentsListDiv a", function() {
-		console.log("CLICKED assignment");
 
 		selectedAssignmentID = this.id;
 		assignmentSelected();
@@ -273,7 +172,6 @@ function ready() {
 
 	// save newly changed grade 
 	$(document).on('click', "#changeGradeEnter", function() {
-		console.log("save new grade");
 
 		// get info from modal
 		var newScore = $("#scoreInput").val();
@@ -298,6 +196,7 @@ function ready() {
 					// update grades table to reflect new grade
 					var num = parseInt(selectedGradeTableRowIndex) + 1;
 					updateGradesTableWithNewStuff(num, newScore, newComment);
+					updateClassGrade(newScore, outof, weight);
 				}
 				else {
 					alert("Grade update failed with error:!", data["error"]["message"]);
@@ -412,6 +311,10 @@ function fillInRepos(repos) {
 			$("#modal2 tbody").append(html2);
 		}
 	}
+}
+
+function updateClassGrade(newScore, newOutOf, newWeight) {
+
 }
 
 function goUpDirectoryRepoViewer() {
@@ -544,8 +447,8 @@ function fillInGradesForSelectedStudent(grades){
 
 	// fill in this class's ASSIGNMENTS
 	var ASSIGNMENTS = grades;
-	var sumOfWeights = 0;
-	var sumOfWeightedScores = 0;
+	sumOfWeights = 0;
+	sumOfWeightedScores = 0;
 
 	for (var i in ASSIGNMENTS) {
 		console.log("grades", ASSIGNMENTS[i]);
