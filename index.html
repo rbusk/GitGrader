@@ -51,16 +51,11 @@ firebase.initializeApp(config);
 
 		<!-- Dropdown Structure -->
 		<ul id="classDropdown" class="dropdown-content">
-			<!--
-	   <li><a href="#!">Basic Unix</a></li>
-	   <li><a href="#!">Fundamentals of Computing II</a></li>
-	   <li><a href="#!">Advanced Databases</a></li>
-			-->
 		</ul>
 		<!-- Navigation Bar -->
 		<nav>
 			<div class="nav-wrapper blue-grey darken-4">
-				<a href="#" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
+				<a href="/" class="brand-logo"><i class="fa fa-code-fork" aria-hidden="true" style="padding-left: 20px;"></i> Git Grader</a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
 					<div id="loginNav">
 						<li><a href="#" class="signUpNav"><i class="material-icons left">library_add</i>Sign Up</a></li>
@@ -254,11 +249,11 @@ firebase.initializeApp(config);
 				<div class="modal-content">
 					<form id="addAssignmentForm">
 						<h4>Add Assignment</h4>
-						<input id="assignmentFormName" type="text" name="assignment_name">
+						<input id="assignmentFormName" type="text" name="assignment_name" size="100" maxlength="100" class="validate">
 						<label for="assignment_name">Assignment Name</label>
-						<input id="assignmentFormOutOf" type="number" name="outof">
+						<input id="assignmentFormOutOf" type="number" name="outof" class="validate">
 						<label for="outof">Out of</label>
-						<input id="assignmentFormWeight" type="number" name="weight"/>
+						<input id="assignmentFormWeight" type="number" name="weight" class="validate">
 						<label for="weight">Weight</label>
 						<input type="hidden" name="crn" id="addAssignmentCRN"/>
 						<div class="file-field input-field col s12 m6">
@@ -279,14 +274,14 @@ firebase.initializeApp(config);
 			<div id="classModal" class="modal">
 				<div class="modal-content">
 					<h4>Add Class</h4>
-					<p>Course Name</p>
-					<input type="text" name="course_name" id="crsName">
-					<p>Course Number</p>
-					<input type="text" name="course_no" id="course_nm">
-					<p>Department</p>
-					<input type="text" name="dept" id="departmentInput">
-					<p>CRN</p>
-					<input type="text" name="crn" id="crnInput">
+					<input type="text" name="course_name" id="crsName" class="validate" size="100" maxlength="100">
+					<label for="crsName">Course Name</label>
+					<input type="number" name="course_no" id="course_nm" size="10" maxlength="10" class="validate">
+					<label for="departmentInput">Course Number</label>
+					<input type="text" name="dept" id="departmentInput" class="validate" size="5" maxlength="5">
+					<label for="departmentInput">Department</label>
+					<input type="number" name="crn" id="crnInput" size="10" maxlength="10">
+					<label for="crnInput">CRN</label>
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="addClassModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Class</a>
@@ -295,10 +290,10 @@ firebase.initializeApp(config);
 			<div id="sshModal" class="modal">
 				<div class="modal-content">
 					<h4>Add SSH Key</h4>
-					<p>SSH Key Name</p>
-					<input type="text" name="ssh_title" id="title_input">
-					<p>SSH Key Value</p>
-					<input type="text" name="ssh_key" id="ssh_key_input">
+					<input type="text" name="ssh_title" id="title_input" size="30" maxlength="30" class="validate">
+					<label for="ssh_title">SSH Key Name</label>
+					<input type="text" name="ssh_key" id="ssh_key_input" size="500" maxlength="500" class="validate">
+					<label for="ssh_key">SSH Key Value</label>
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Key</a>
@@ -307,10 +302,10 @@ firebase.initializeApp(config);
 			<div id="repoModal" class="modal">
 				<div class="modal-content">
 					<h4>Create Repo</h4>
-					<p>Repo Name</p>
-					<input type="text" name="repo" id="repo_input">
-					<p>Repo Description</p>
-					<input type="text" name="description" id="desc_input">
+					<input type="text" name="repo" id="repo_input" class="validate" size="50" maxlength="50">
+					<label for="repo_input">Repo Name</label>
+					<input type="text" name="description" id="desc_input" class="validate" size="300" maxlength="300">
+					<label for="desc_input">Repo Description</label>
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="createRepoModBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Create Repo</a>
@@ -532,7 +527,7 @@ firebase.initializeApp(config);
 									<label for="score">Score</label>
 								</div>
 								<div class="input-field col s12">
-									<input placeholder="Good work!" id="commentInput" type="text" class="validate">
+									<input placeholder="Good work!" id="commentInput" type="text" class="validate" size="300" maxlength="300"/>
 									<label for="commentInput">Comments</label>
 								</div>
 							</div>
