@@ -12,6 +12,8 @@ var selectedGradeTableRowIndex = -1;
 
 // global variables for gradebook, lists of students in course
 var studentsInCourse = [];
+var sumOfWeightedScores = 0;
+var sumOfWeights = 0;
 
 var repos = [];
 
@@ -23,108 +25,6 @@ var comments = []; // comments on repo
 
 var classes = [];
 
-/*
-var classes = [
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Advanced Databases",
-		CRN: "12983",
-		COURSE_NO: "40157-01",
-		ASSIGNMENTS: [
-			{
-				name: "HW1",
-				weight: 10, 
-				userScore: 76,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-12-17"
-			},
-			{
-				name: "HW2",
-				weight: 10, 
-				userScore: 85,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-11-17"
-			},
-			{
-				name: "HW3",
-				weight: 10, 
-				userScore: 97,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "3-10-17"
-			}
-		]
-	},
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Fund Comp II",
-		CRN: "10239",
-		COURSE_NO: "20101-02",
-		ASSIGNMENTS: [
-			{
-				name: "Lab 1",
-				weight: 10, 
-				userScore: 82,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-30-17"
-			},
-			{
-				name: "Lab 2",
-				weight: 10, 
-				userScore: 82,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-03-17"
-			},
-			{
-				name: "Lab 3",
-				weight: 10, 
-				userScore: 83,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "2-10-17"
-			}
-		]
-
-	},
-	{
-		DEPT: "CSE",
-		COURSE_NAME: "Basic Unix",
-		CRN: "12387",
-		COURSE_NO: "20189-01",
-		ASSIGNMENTS: [
-			{
-				name: "Project 1",
-				weight: 10, 
-				userScore: 95,
-				outOf: 100,
-				AID: "129038",
-				dueDate: "1-28-17"
-			},
-			{
-				name: "Project 2",
-				weight: 10, 
-				userScore: 67,
-				outOf: 100,
-				AID: "112318",
-				dueDate: "2-3-17"
-			},
-			{
-				name: "Project 3",
-				weight: 10, 
-				userScore: 78,
-				outOf: 100,
-				AID: "12123038",
-				dueDate: "2-8-17"
-			}
-		]
-
-	},
-];
-*/
 
 $( document ).ready(ready);
 
@@ -188,6 +88,7 @@ function ready() {
 
 	// add event handlers to grades table 
 	$(document).on("click", "#gradesTableBody tr .score_cell", function(e) {
+
 		if (role == "instructor") {
 			// get info of the row that was clicked
 			var table_row = this.closest('tr');
@@ -197,7 +98,6 @@ function ready() {
 			selectedGradeTableOldComment = children[4].innerHTML;
 			var row_index = $(table_row).index();
 			selectedGradeTableRowIndex = row_index;
-			//console.log("selected!",row_index);
 
 
 			// udpate info in change grade modal to match the selected row
@@ -261,7 +161,6 @@ function ready() {
 
 	// selected assignment 
 	$(document).on('click', "#assignmentsListDiv a", function() {
-		console.log("CLICKED assignment");
 
 		selectedAssignmentID = this.id;
 		assignmentSelected();
@@ -273,7 +172,6 @@ function ready() {
 
 	// save newly changed grade 
 	$(document).on('click', "#changeGradeEnter", function() {
-		console.log("save new grade");
 
 		// get info from modal
 		var newScore = $("#scoreInput").val();
@@ -298,6 +196,7 @@ function ready() {
 					// update grades table to reflect new grade
 					var num = parseInt(selectedGradeTableRowIndex) + 1;
 					updateGradesTableWithNewStuff(num, newScore, newComment);
+					updateClassGrade(newScore, outof, weight);
 				}
 				else {
 					alert("Grade update failed with error:!", data["error"]["message"]);
@@ -414,6 +313,10 @@ function fillInRepos(repos) {
 	}
 }
 
+function updateClassGrade(newScore, newOutOf, newWeight) {
+
+}
+
 function goUpDirectoryRepoViewer() {
 	if (repo_paths.length > 1) {
 		repo_paths.pop();
@@ -457,6 +360,7 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
+	console.log(repo_id);
 	$.post("GitGrader/php_scripts/auto_pull_repo.php",{repo_id : id},
 		function(data, status) {});
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
@@ -520,7 +424,6 @@ function updateStudentsList(list) {
 	$(document).on("click", "#studentsList a", function(e) {
 		$("#gradesTableBody").html(""); // clear old grades
 		studentUsername = this.innerHTML;
-		console.log(this.innerHTML);
 		getAllGradesForCRN(selectedClassCRN, studentUsername)
 
 		// handle selection color
@@ -541,12 +444,12 @@ function getAllGradesForCRN(crn, student_username) {
 }
 
 function fillInGradesForSelectedStudent(grades){
-	console.log("attempting to fillin grades for student", grades);
+	console.log("attempting to fill in grades for student", grades);
 
 	// fill in this class's ASSIGNMENTS
 	var ASSIGNMENTS = grades;
-	var sumOfWeights = 0;
-	var sumOfWeightedScores = 0;
+	sumOfWeights = 0;
+	sumOfWeightedScores = 0;
 
 	for (var i in ASSIGNMENTS) {
 		console.log("grades", ASSIGNMENTS[i]);
@@ -586,18 +489,16 @@ function fillInGradesForSelectedStudent(grades){
 
 		if (!ASSIGNMENTS[i].GRADE_COMMENT) {
 			tempComment = "";
-			//console.log("NO COMMENT");
 		} else {
 			tempComment = ASSIGNMENTS[i].GRADE_COMMENT;
-			//console.log("COMMENT", tempComment);
 		}
 
 	
 		if (ASSIGNMENTS[i].REPO_ID != undefined) {
-			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 			$("#gradesTableBody").append(gradesHTML);
 		} else {
-			var gradesHTML = "<tr><td class=assignment_name_cell>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class=score_cell>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			var gradesHTML = "<tr><td class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 			$("#gradesTableBody").append(gradesHTML);
 		}
 		
@@ -780,7 +681,12 @@ function classSelected(CRN) {
 		}
 
 		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
-		$("#gradesTableBody").append(gradesHTML);
+
+		// only add grades to DOM if is own student's grades, if TA then don't show grades until selected a student
+		var thisClass = getClassFromCRN(selectedClassCRN);
+		if (thisClass.ROLE == "student") {
+			$("#gradesTableBody").append(gradesHTML);
+		}
 
 		// calculate class grade
 		sumOfWeights = sumOfWeights + weightForClassGrade;
