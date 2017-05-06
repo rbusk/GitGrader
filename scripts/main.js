@@ -630,10 +630,33 @@ function classSelected(CRN) {
 		$("#resourcesListDiv").append(html);
 	}
 
+	fillInAssignments(thisClass);
+
+	// update class grade on page
+	if (sumOfWeightedScores != 0) {
+		var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
+		var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
+		var letterGrade = "BLAH";
+		for (var letter in gradeCutOffs) {
+			if (classGrade >= gradeCutOffs[letter]) {
+				letterGrade = letter;
+				break;
+			}
+		}
+		$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
+	}
+	else {
+		$("#classGrade").text("Class Grade: N/A");	
+	}
+
+}
+
+function fillInAssignments(thisClass) {
 	// fill in this class's ASSIGNMENTS
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
 	var sumOfWeights = 0;
 	var sumOfWeightedScores = 0;
+	$("#assignmentsListDiv").html("");
 
 	for (var i in ASSIGNMENTS) {
 		console.log("assignments", ASSIGNMENTS[i]);
@@ -694,24 +717,6 @@ function classSelected(CRN) {
 			sumOfWeightedScores = sumOfWeightedScores + weightedScore;
 		}
 	}
-
-	// update class grade on page
-	if (sumOfWeightedScores != 0) {
-		var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
-		var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
-		var letterGrade = "BLAH";
-		for (var letter in gradeCutOffs) {
-			if (classGrade >= gradeCutOffs[letter]) {
-				letterGrade = letter;
-				break;
-			}
-		}
-		$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
-	}
-	else {
-		$("#classGrade").text("Class Grade: N/A");	
-	}
-
 }
 
 // change right div specific to each different assignment
@@ -1115,9 +1120,14 @@ function modalButtonHandlers() {
 			cache: false,
 			contentType: false,
 			processData: false
-		}, function(data, status) {
-			console.log(data);
-			successfulAddAssignment();
+		}).done( function(data, status) {
+			if (status == "success") {
+				successfulAddAssignment();
+			}
+			else {
+				$("#errorMessage").html("New assignment add unsuccessful");
+				$('#errorModal').modal('open');
+			}
 		});
 
 		/*
@@ -1232,29 +1242,16 @@ function modalButtonHandlers() {
 
 
 function successfulAddAssignment() {
-
-	// add new assignment to DOM
-	let name = $("#assignmentFormName").val();
-	let outOf = $("#assignmentFormOutOf").val();
-	let weight = $("#assignmentFormWeight").val();
-	let crn = $("#addAssignmentCRN").val();
-
-	var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + name + "'>" + name + "</a>"; 
-	$("#assignmentsListDiv").append(html);
-
-
-	// add new assignment to global classes JSON object
 	for (var i=0; i<classes[0].length; i++) {
-		if (classes[0][i].CRN == crn) {
-
-			let thisAssignment = {
-				ASSIGNMENT_NAME: name,
-				WEIGHT: weight, 
-				OUTOF: outOf,
-				CRN: crn
-			};
-			classes[0][i].ASSIGNMENTS.push(thisAssignment);
-			break;
-		}	
+		if (selectedClassCRN == classes[0][i].CRN) {
+			$.post("GitGrader/php_scripts/get_assignments.php", {crn: selectedClassCRN},
+				function(data, status){
+					var gradesForClass = data["payload"];
+					var thisClass = getClassFromCRN(selectedClassCRN);
+					var classCRN = thisClass.CRN;
+					thisClass.ASSIGNMENTS = gradesForClass;
+					fillInAssignments(thisClass);
+			});
+		}
 	}
 }
