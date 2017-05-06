@@ -208,8 +208,6 @@ firebase.initializeApp(config);
 							<div class="right" id="teacherModalDiv">
 								<li><a id="addInstructorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#instructorModal">Add Instructor</a></li>
 								<li><a id="addStudentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addStudentModal">Add Student</a></li>
-								<li><a id="addAssignmentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addAssignmentModal">Add Assignment</a></li>
-								<li><a id="addResourceNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addResourceModal">Add Resource</a></li>
 							</div>
 					</ul>
 						</div>
@@ -451,6 +449,9 @@ firebase.initializeApp(config);
 						<!-- Assignments Menu (list of assignments) -->
 						<div id="assignmentsDiv">
 							<div class="row">
+								<a id="addAssignmentBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addAssignmentModal">Add Assignment</a>
+							</div>
+							<div class="row">
 								<div class="col s12 m3 l2 cyan lighten-4">
 									<div id="assignmentsListDiv" class="collection"></div>
 								</div>
@@ -472,6 +473,9 @@ firebase.initializeApp(config);
 
 						<!-- Resources -->
 						<div id="resourcesDiv">
+							<div class="row">
+								<a id="addResourceBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addResourceModal">Add Resource</a>
+							</div>
 							<div class="row">
 								<div class="col s12 m4 cyan lighten-4">
 									<div id="resourcesListDiv" class="collection"></div>

@@ -60,12 +60,12 @@ function ready() {
 			classSelected(selectedCourseCRN); // fill out rest of class info in divs
 			selectedClassCRN = selectedCourseCRN;
 			if (thisClass.ROLE === "instructor") {
-				$("#addAssignmentForm").show();
-				$("#addResourceForm").show();
+				$("#addAssignmentBtn").show();
+				$("#addResourceBtn").show();
 				$("#teacherModalDiv").show();
 			} else {
-				$("#addAssignmentForm").hide();
-				$("#addResourceForm").hide();
+				$("#addAssignmentBtn").hide();
+				$("#addResourceBtn").hide();
 				$("#teacherModalDiv").hide();
 			}
 
