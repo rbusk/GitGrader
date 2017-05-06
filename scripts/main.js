@@ -63,12 +63,12 @@ function ready() {
 				classSelected(selectedCourseCRN); // fill out rest of class info in divs
 				selectedClassCRN = selectedCourseCRN;
 				if (thisClass.ROLE === "instructor") {
-					$("#addAssignmentForm").show();
-					$("#addResourceForm").show();
+					$("#addAssignmentBtn").show();
+					$("#addResourceBtn").show();
 					$("#teacherModalDiv").show();
 				} else {
-					$("#addAssignmentForm").hide();
-					$("#addResourceForm").hide();
+					$("#addAssignmentBtn").hide();
+					$("#addResourceBtn").hide();
 					$("#teacherModalDiv").hide();
 				}
 
@@ -153,8 +153,6 @@ function ready() {
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
-	$("#addResourceForm").hide();
-	$("#addAssignmentForm").hide();
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
 	$("#classModalDiv").show();
@@ -626,6 +624,7 @@ function fillCodeViewer(ext, content) {
 function classSelected(CRN) {
 
 	$("#addAssignmentCRN").val(CRN);
+	$("#addResourceCRN").val(CRN);
 
 	console.log("SELECTED THIS CRN", CRN);
 
@@ -1090,6 +1089,15 @@ function modalButtonHandlers() {
 
 	});
 
+	$(document).on('click', "#addResourceModalBtn", function() {
+		let name = $("#resourceFormName").val();
+		if (!name) {
+			$("#errorMessage").html("You must enter a resource name.");
+			$('#errorModal').modal('open');
+			return;
+		}
+	});
+
 	$(document).on('click', "#addAssignmentModalBtn", function() {
 		// add new assignment to database
 		let name = $("#assignmentFormName").val();
@@ -1119,7 +1127,19 @@ function modalButtonHandlers() {
 			return;
 		}
 
+		$.ajax({
+			url: 'GitGrader/php_scripts/add_assignment.php',
+			type: 'POST',
+			data: new FormData($('#addAssignmentForm')[0]),
+			cache: false,
+			contentType: false,
+			processData: false
+		}, function(data, status) {
+			console.log(data);
+			successfulAddAssignment();
+		});
 
+		/*
 		$.post("GitGrader/php_scripts/add_assignment.php", {crn: crn, assignment_name: name, weight: weight, outof: outOf, due_date: ""},
 			function(data, status){
 				console.log("status:", status);
@@ -1130,7 +1150,7 @@ function modalButtonHandlers() {
 					$("#errorMessage").html("New assignment add unsuccessful");
 					$('#errorModal').modal('open');
 				}
-			});
+			});*/
 
 	});
 
@@ -1141,6 +1161,27 @@ function modalButtonHandlers() {
 		var number = $("#course_nm").val();
 		var dept = $("#departmentinput").val();
 		var course_crn = $("#crninput").val();
+
+		if (!name) {
+			$("#errorMessage").html("You must enter a name for the course.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!number) {
+			$("#errorMessage").html("You must enter a course number.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!dept) {
+			$("#errorMessage").html("You must enter a department.");
+			$('#errorModal').modal('open');
+			return;
+		}
+		if (!course_crn) {
+			$("#errorMessage").html("You must enter a CRN.");
+			$('#errorModal').modal('open');
+			return;
+		}
 
 		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
 			function(data, status){
