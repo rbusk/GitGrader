@@ -147,8 +147,6 @@ function ready() {
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
-	$("#addResourceForm").hide();
-	$("#addAssignmentForm").hide();
 	$("#classesDiv").show();
 	$("#classesNavButton").hide();
 	$("#classModalDiv").show();
@@ -607,6 +605,7 @@ function fillCodeViewer(ext, content) {
 function classSelected(CRN) {
 
 	$("#addAssignmentCRN").val(CRN);
+	$("#addResourceCRN").val(CRN);
 
 	console.log("SELECTED THIS CRN", CRN);
 
@@ -1070,6 +1069,15 @@ function modalButtonHandlers() {
 		// TODO update global classes object to reflect new comment?
 
 	});
+
+	$(document).on('click', "#addResourceModalBtn", function() {
+		let name = $("#resourceFormName").val();
+		if (!name) {
+			$("#errorMessage").html("You must enter a resource name.");
+			$('#errorModal').modal('open');
+			return;
+		}
+	});
 	
 	$(document).on('click', "#addAssignmentModalBtn", function() {
 		// add new assignment to database
@@ -1100,7 +1108,19 @@ function modalButtonHandlers() {
 			return;
 		}
 
+		$.ajax({
+			url: 'GitGrader/php_scripts/add_assignment.php',
+			type: 'POST',
+			data: new FormData($('#addAssignmentForm')[0]),
+			cache: false,
+			contentType: false,
+			processData: false
+		}, function(data, status) {
+			console.log(data);
+			successfulAddAssignment();
+		});
 
+		/*
 		$.post("GitGrader/php_scripts/add_assignment.php", {crn: crn, assignment_name: name, weight: weight, outof: outOf, due_date: ""},
 			function(data, status){
 				console.log("status:", status);
@@ -1111,7 +1131,7 @@ function modalButtonHandlers() {
 					$("#errorMessage").html("New assignment add unsuccessful");
 					$('#errorModal').modal('open');
 				}
-			});
+			});*/
 
 	});
 

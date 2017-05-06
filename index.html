@@ -294,6 +294,30 @@ firebase.initializeApp(config);
 					<a="#!" id="addAssignmentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Assignment</a>
 				</div>
 			</div>
+			<div id="addResourceModal" class="modal">
+				<div class="modal-content">
+					<form id="addResourceForm">
+						<h4>Add Resource</h4>
+						<div class="input-field">
+							<label for="resource_name">Resource Name</label>
+							<input id="resource_name" type="text" name="resource_name" size="100" maxlength="100" class="validate">
+						</div>
+						<input type="hidden" name="crn" id="addResourceCRN"/>
+						<div class="file-field input-field col s12 m6">
+							<div class="btn">
+								<span>File</span>
+								<input type="file" name="file">
+							</div>
+							<div class="file-path-wrapper">
+								<input class="file-path validate" type="text">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a="#!" id="addResourceModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Resource</a>
+				</div>
+			</div>
 			<div id="classModal" class="modal">
 				<div class="modal-content">
 					<h4>Add Class</h4>
