@@ -457,6 +457,7 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
+	console.log(repo_id);
 	$.post("GitGrader/php_scripts/auto_pull_repo.php",{repo_id : id},
 		function(data, status) {});
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},

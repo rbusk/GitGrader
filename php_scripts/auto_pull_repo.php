@@ -8,18 +8,19 @@
 
 	oci_execute($stmt);
 	$repo_path = oci_fetch_array($stmt, OCI_ASSOC);
+	var_dump($repo_path);
+	$repo_path = $repo_path['REPO_PATH'];
+	echo $repo_path;
 
 	$cwd = getcwd();
 
-	echo $cwd;
 
 	$beginning = '/home/ec2-user/apache/htdocs/';
-	$path = '/home/ec2-user/apache/htdocs/git_repos/rbusk/hello';
-	//$path = $beginning.$repo_path;
+	//$path = '/home/ec2-user/apache/htdocs/git_repos/rbusk/hello';
+	$path = $beginning.$repo_path;
 	echo $path;
 	chdir($path);
-	exec('git pull',$output);
-	echo $output;
+	exec('git pull');
 	chdir($cwd);
 
 
