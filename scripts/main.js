@@ -54,6 +54,8 @@ function ready() {
 
 			// add event handlers to classes dropdown in nav bar
 			$("#classDropdown li a").click(function(){
+				$("#welcomeDiv").hide();
+				$("#classesDiv").show();
 				var selectedCourseName = this.text;
 				var thisClass = getClassFromName(selectedCourseName);
 				var selectedCourseCRN = thisClass.CRN;
@@ -161,7 +163,8 @@ function ready() {
 
 	// no menu items selected initially, so hide right side content
 	hideAll();
-	$("#classesDiv").show();
+	$("#welcomeDiv").show();
+	//$("#classesDiv").show();
 	$("#classesNavButton").hide();
 	$("#classModalDiv").show();
 	$("#addResourceBtn").hide();
@@ -1121,7 +1124,8 @@ function openReposDiv() {
 
 function openClassesDiv() {
 	hideAll();
-	$("#classesDiv").show();
+	//$("#classesDiv").show();
+	$("#welcomeDiv").show();
 	$("#classesButton").show();
 	$("#reposNavButton").show();
 	$("#classesNavButton").hide();
@@ -1168,6 +1172,7 @@ function hideAll() {
 	$("#classModalDiv").hide();
 	$("#teacherModalDiv").hide();
 	$("#repoModalDiv2").hide();
+	$("#welcomeDiv").hide();
 }
 
 function hideClasses() {
