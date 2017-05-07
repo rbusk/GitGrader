@@ -240,13 +240,21 @@ function ready() {
 			return;
 		}
 
-		$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
-			function(data, status){
-				console.log(data, status);
+		$.post("GitGrader/php_scripts/user_in_course.php", 
+			{ username: instructorInput, crn: selectedClassCRN },
+			function(data, status) {
+				if (data.success == true) {
+					if (data.payload == true) {
+						$("#errorMessage").html("User already teaches or takes this course.");
+						$("#errorModal").modal('open');
+					} else {
+						$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
+							function(data, status){
+								console.log(data, status);
+							});
+					}
+				}
 			});
-
-		// TODO update global classes object to reflect new comment?
-
 	});
 
 	function updateGradesTableWithNewStuff(rowIndex, score, comment) {
@@ -1196,15 +1204,22 @@ function modalButtonHandlers() {
 			$("#errorModal").modal('open');
 			return;
 		}
-
-		$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
-			function(data, status){
-				console.log(data, status);
-
+		
+		$.post("GitGrader/php_scripts/user_in_course.php", 
+			{ username: student, crn: selectedClassCRN },
+			function(data, status) {
+				if (data.success == true) {
+					if (data.payload == true) {
+						$("#errorMessage").html("User already teaches or takes this course.");
+						$("#errorModal").modal('open');
+					} else {
+						$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
+							function(data, status){
+								console.log(data, status);
+							});
+					}
+				}
 			});
-
-		// TODO update global classes object to reflect new comment?
-
 	});
 
 	$(document).on('click', "#addResourceModalBtn", function() {
