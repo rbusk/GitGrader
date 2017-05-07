@@ -1209,10 +1209,10 @@ function modalButtonHandlers() {
 	$(document).on('click', "#addClassModalBtn", function() {
 
 		// get info from modal
-		var name = $("#crsname").val();
+		var name = $("#crsName").val();
 		var number = $("#course_nm").val();
-		var dept = $("#departmentinput").val();
-		var course_crn = $("#crninput").val();
+		var dept = $("#departmentInput").val();
+		var course_crn = $("#crnInput").val();
 
 		if (!name) {
 			$("#errorMessage").html("You must enter a name for the course.");
