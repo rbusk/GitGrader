@@ -1420,6 +1420,7 @@ function modalButtonHandlers() {
 		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
 			function(data, status){
 				console.log(data, status);
+				get_repos_obj();
 
 			});
 
