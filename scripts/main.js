@@ -62,6 +62,7 @@ function ready() {
 				$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
 				classSelected(selectedCourseCRN); // fill out rest of class info in divs
 				selectedClassCRN = selectedCourseCRN;
+
 				if (thisClass.ROLE === "instructor") {
 					$("#addAssignmentBtn").show();
 					$("#addResourceBtn").show();
@@ -85,8 +86,15 @@ function ready() {
 					role = "student";
 					$("#studentsListDiv").hide();
 				}
+
+				// update grades for this newly selected class
+				var list = getGradeInfo();
+				var sumOfWeights = list[0];
+				var sumOfWeightedScores = list[1];
+				updateClassGrade(sumOfWeights, sumOfWeightedScores);
 			});
 		});
+
 	$('.datepicker').pickadate({
 		selectMonths: true, // Creates a dropdown to control month
 		container: 'body'
@@ -204,7 +212,7 @@ function ready() {
 					updateGradesTableWithNewStuff(num, newScore, newComment);
 
 					// from assignment name, get outOf and weight
-					var list = getGradeInfoFromAssignmentName();
+					var list = getGradeInfo();
 					var sumOfWeights = list[0];
 					var sumOfWeightedScores = list[1];
 					updateClassGrade(sumOfWeights, sumOfWeightedScores);
@@ -334,7 +342,7 @@ function fillInRepos(repos) {
 	}
 }
 
-function getGradeInfoFromAssignmentName() {
+function getGradeInfo() {
 
 	var gradesInfo = $("#gradesTableBody").html();
 	var count = 0;
@@ -350,22 +358,22 @@ function getGradeInfoFromAssignmentName() {
 	$('#gradesTableBody > tr > td').each(function() {
 
 		if ( $(this).hasClass('assignment_name_cell') == true ) {
-			//console.log('assignment name');
+			console.log('assignment name');
 		}
 		else if ( $(this).hasClass('score_cell') == true ) {
 			thisScore = parseInt($(this).html());	
-			//console.log('score', thisScore);
+			console.log('score', thisScore);
 		}
 		else if ( $(this).hasClass('out_of_cell') == true ) {
 			thisOutOf = parseInt($(this).html());	
-			//console.log('out of', thisOutOf);
+			console.log('out of', thisOutOf);
 		}
 		else if ( $(this).hasClass('weight_cell') == true ) {
 			thisWeight = parseInt($(this).html());	
-			//console.log('weight', thisWeight);
+			console.log('weight', thisWeight);
 		}
 		else {
-			//console.log('comment', $(this).html());
+			console.log('comment', $(this).html());
 		}
 
 
@@ -820,7 +828,7 @@ function fillInAssignments(thisClass) {
 			console.log("COMMENT", tempComment);
 		}
 
-		var gradesHTML = "<tr><td>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+		var gradesHTML = "<tr><td class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td class='out_of_cell'>" + tempOutOf + "</td><td class='weight_cell'>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 
 		// only add grades to DOM if is own student's grades, if TA then don't show grades until selected a student
 		var thisClass = getClassFromCRN(selectedClassCRN);
