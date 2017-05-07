@@ -477,7 +477,7 @@ function fillInRepoViewer(id) {
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
 		function(data, status) {
 			if (data.success == true) {
-				$('#ssh_link').text("ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path + ".git");
+				$('#ssh_link').text("git clone ec2-user@34.208.159.24:/home/ec2-user/"+data.payload.repo_path + ".git");
 				$("#codeComments").html("");
 				didChooseRepo(id);
 				repo_paths = [];
@@ -1338,6 +1338,12 @@ function modalButtonHandlers() {
 		// get info from modal
 		var repo = $("#repo_input").val();
 		var desc = $("#desc_input").val();
+		
+		if (!repo) {
+			$("#errorMessage").html("You must enter a name for the repo.");
+			$("#errorModal").modal('open');
+			return;
+		}
 
 		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
 			function(data, status){
@@ -1355,6 +1361,18 @@ function modalButtonHandlers() {
 		// get info from modal
 		var title = $("#title_input").val();
 		var key = $("#ssh_key_input").val();
+
+		if (!title) {
+			$("#errorMessage").html("You must enter a name for the SSH key.");
+			$("#errorModal").modal('open');
+			return;
+		}
+
+		if (!key) {
+			$("#errorMessage").html("You must enter an SSH key.");
+			$("#errorModal").modal('open');
+			return;
+		}
 
 		$.post("GitGrader/php_scripts/add_ssh_key.php", {ssh_title: title, ssh_key: key},
 			function(data, status){
