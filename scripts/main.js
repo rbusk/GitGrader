@@ -1242,6 +1242,17 @@ function modalButtonHandlers() {
 			return;
 		}
 		
+		var thisClass = getClassFromCRN(selectedClassCRN);
+
+		for (var i=0; i<thisClass.RESOURCES.length; i++) {
+			if (thisClass.RESOURCES[i].RESOURCE_NAME === name) {
+				$("#errorMessage").html("A resource already exists with this name.");
+				$("#errorModal").modal('open');
+				return;
+			}
+		}
+
+		
 		$.ajax({
 			url: 'GitGrader/php_scripts/add_resource.php',
 			type: 'POST',
@@ -1290,6 +1301,17 @@ function modalButtonHandlers() {
 			return;
 		}
 
+		//check if an assignment already exists with this name
+		var thisClass = getClassFromCRN(crn);
+
+		for (var i=0; i<thisClass.ASSIGNMENTS.length; i++) {
+			if (thisClass.ASSIGNMENTS[i].ASSIGNMENT_NAME === name) {
+				$("#errorMessage").html("An assignment already exists with this name.");
+				$("#errorModal").modal('open');
+				return;
+			}
+		}
+
 		$.ajax({
 			url: 'GitGrader/php_scripts/add_assignment.php',
 			type: 'POST',
@@ -1306,20 +1328,6 @@ function modalButtonHandlers() {
 				$('#errorModal').modal('open');
 			}
 		});
-
-		/*
-		$.post("GitGrader/php_scripts/add_assignment.php", {crn: crn, assignment_name: name, weight: weight, outof: outOf, due_date: ""},
-			function(data, status){
-				console.log("status:", status);
-				if (status == "success") {
-					successfulAddAssignment();
-				}
-				else {
-					$("#errorMessage").html("New assignment add unsuccessful");
-					$('#errorModal').modal('open');
-				}
-			});*/
-
 	});
 
 	$(document).on('click', "#addClassModalBtn", function() {
