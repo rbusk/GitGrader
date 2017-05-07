@@ -196,7 +196,12 @@ function ready() {
 					// update grades table to reflect new grade
 					var num = parseInt(selectedGradeTableRowIndex) + 1;
 					updateGradesTableWithNewStuff(num, newScore, newComment);
-					updateClassGrade(newScore, outof, weight);
+
+					// from assignment name, get outOf and weight
+					var list = getGradeInfoFromAssignmentName();
+					var sumOfWeights = list[0];
+					var sumOfWeightedScores = list[1];
+					updateClassGrade(sumOfWeights, sumOfWeightedScores);
 				}
 				else {
 					alert("Grade update failed with error:!", data["error"]["message"]);
@@ -226,6 +231,11 @@ function ready() {
 	});
 
 	function updateGradesTableWithNewStuff(rowIndex, score, comment) {
+		// if blank score, add '--' to score cell instead
+		if (score == "") {
+			score = "--";
+		}
+
 		var scoreStr = '#gradesTableBody tr:nth-child(' + rowIndex + ') td:nth-child(2)';
 		var commentStr = '#gradesTableBody tr:nth-child(' + rowIndex + ') td:nth-child(5)';
 		$(scoreStr).html(score);
@@ -313,8 +323,82 @@ function fillInRepos(repos) {
 	}
 }
 
-function updateClassGrade(newScore, newOutOf, newWeight) {
+function getGradeInfoFromAssignmentName() {
 
+	var gradesInfo = $("#gradesTableBody").html();
+	var count = 0;
+	var rowIndex = 0;
+	var sumOfWeights = 0.0;
+	var sumOfWeightedScores = 0.0;
+
+	var thisScore = 0.0;
+	var thisOutOf = 0.0;
+	var thisWeight = 0.0;
+	var thisWeightedScore = 0.0;
+
+	$('#gradesTableBody > tr > td').each(function() {
+
+		if ( $(this).hasClass('assignment_name_cell') == true ) {
+			//console.log('assignment name');
+		}
+		else if ( $(this).hasClass('score_cell') == true ) {
+			thisScore = parseInt($(this).html());	
+			//console.log('score', thisScore);
+		}
+		else if ( $(this).hasClass('out_of_cell') == true ) {
+			thisOutOf = parseInt($(this).html());	
+			//console.log('out of', thisOutOf);
+		}
+		else if ( $(this).hasClass('weight_cell') == true ) {
+			thisWeight = parseInt($(this).html());	
+			//console.log('weight', thisWeight);
+		}
+		else {
+			//console.log('comment', $(this).html());
+		}
+
+
+		// new row
+		if (count%5 == 4) {
+
+			if (!isNaN(thisScore)) {
+				sumOfWeights = sumOfWeights + thisWeight;
+				thisWeightedScore = (thisScore/thisOutOf) * thisWeight;
+				sumOfWeightedScores = sumOfWeightedScores + thisWeightedScore;
+				thisScore = 0.0;
+				thisOutOf = 0.0;
+				thisWeight = 0.0;
+				thisWeightedScore = 0.0;
+			}
+			else {
+				//console.log('no score, ignoring this row');
+			}
+		}
+
+		count = count + 1;
+	});
+
+	return [sumOfWeights, sumOfWeightedScores];
+}
+
+function updateClassGrade(sumOfWeights, sumOfWeightedScores) {
+
+	// update class grade on page
+	if (sumOfWeightedScores != 0) {
+		var classGrade = (sumOfWeightedScores/sumOfWeights) * 100; 
+		var gradeCutOffs = {'A': 93, 'A-': 90, 'B+': 87, 'B': 83, 'B-': 80, 'C+': 77, 'C': 73, 'C-': 70, 'D': 60, 'F': 0};
+		var letterGrade = "";
+		for (var letter in gradeCutOffs) {
+			if (classGrade >= gradeCutOffs[letter]) {
+				letterGrade = letter;
+				break;
+			}
+		}
+		$("#classGrade").text("Class Grade: " + classGrade.toFixed(1) + "% (" + letterGrade + ")");	
+	}
+	else {
+		$("#classGrade").text("Class Grade: N/A");	
+	}
 }
 
 function goUpDirectoryRepoViewer() {
@@ -495,10 +579,10 @@ function fillInGradesForSelectedStudent(grades){
 
 	
 		if (ASSIGNMENTS[i].REPO_ID != undefined) {
-			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			var gradesHTML = "<tr><td id =" + ASSIGNMENTS[i].REPO_ID + " class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td class='out_of_cell'>" + tempOutOf + "</td><td class='weight_cell'>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 			$("#gradesTableBody").append(gradesHTML);
 		} else {
-			var gradesHTML = "<tr><td class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td>" + tempOutOf + "</td><td>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
+			var gradesHTML = "<tr><td class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td class='out_of_cell'>" + tempOutOf + "</td><td class='weight_cell'>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
 			$("#gradesTableBody").append(gradesHTML);
 		}
 		
