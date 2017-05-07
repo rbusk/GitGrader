@@ -337,6 +337,9 @@ function fillInRepos(repos) {
 	$("#repoTable tbody").html("");
 	$("#unlinkedRepoTable tbody").html("");
 	$("#modal2 tbody").html("");
+
+	var repo_ids = [];
+
 	for (var i=0; i<repos.length; i++) {
 		if (repos[i].ASSIGNMENT_NAME != undefined) {
 			var html = '<tr><td class=repo id=' + repos[i].REPO_ID + '>' + repos[i].REPO_NAME + '</td><td>' + repos[i].COURSE_NAME + '</td><td>' + repos[i].ASSIGNMENT_NAME+ '</td></tr>';
@@ -344,7 +347,10 @@ function fillInRepos(repos) {
 		} else {
 			var html = '<tr><td class=repo id=' + repos[i].REPO_ID+ '>' + repos[i].REPO_NAME + '</td></tr>';
 			$("#unlinkedRepoTable tbody").append(html);
-			var html2 = "<tr id=" + repos[i].REPO_ID + "><td>" + repos[i].REPO_NAME +  "</td><td class='waves-effect waves-light btn' href='#modal2'><i class='material-icons right'>call_merge</i>Link</a></td></tr>";
+		}
+		var html2 = "<tr id=" + repos[i].REPO_ID + "><td>" + repos[i].REPO_NAME +  "</td><td class='waves-effect waves-light btn' href='#modal2'><i class='material-icons right'>call_merge</i>Link</a></td></tr>";
+		if (!(repo_ids.includes(repos[i].REPO_ID))) {
+			repo_ids.push(repos[i].REPO_ID);
 			$("#modal2 tbody").append(html2);
 		}
 	}
@@ -897,7 +903,7 @@ function assignmentSelected() {
 // get file tree and stuff for repo
 function get_repos_obj(repo) {
 	if (repo != undefined) {
-		$.post("GitGrader/php_scripts/get_repos.php", {repo_id : repo},
+		$.post("GitGrader/php_scripts/get_submissions.php", {repo_id : repo},
 			function(data, status){
 				if (data.success == true) {
 					repos = data.payload;
@@ -906,7 +912,7 @@ function get_repos_obj(repo) {
 				}
 			});
 	} else {
-		$.post("GitGrader/php_scripts/get_repos.php", {},
+		$.post("GitGrader/php_scripts/get_submissions.php", {},
 			function(data, status){
 				if (data.success == true) {
 					repos = data.payload;
