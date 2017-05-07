@@ -1352,6 +1352,23 @@ function modalButtonHandlers() {
 			return;
 		}
 
+		//check if repo with this name already exists
+		for (var i=0; i<repos.length; i++) {
+			if (repos[i].REPO_NAME === repo) {
+				$("#errorMessage").html("You already contribute to a repo with this name.");
+				$("#errorModal").modal('open');
+				return;
+			}
+		}
+
+		//check regular expression for name of repo
+		var myRe = /^[a-zA-Z0-9][a-zA-Z0-9_\-\.]*$/;
+		if (!myRe.test(repo)) {
+			$("#errorMessage").html('The name of the repo may only contain alphanumeric characters as well as "-", ".", and "_" . The first character must be alphanumeric.');
+			$("#errorModal").modal('open');
+			return;
+		}
+
 		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
 			function(data, status){
 				console.log(data, status);
