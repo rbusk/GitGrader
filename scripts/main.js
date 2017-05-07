@@ -1322,14 +1322,21 @@ function modalButtonHandlers() {
 			return;
 		}
 
-		$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
-			function(data, status){
-				console.log(data, status);
+		$.post("GitGrader/php_scripts/crn_exists.php", {crn: course_crn},
+			function(data, status) {
+				if (data.success == true) {
+					if (data.payload == true) {
+						$("#errorMessage").html("A course with the CRN already exists.");
+						$("#errorModal").modal("open");
+					} else {
+						$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
+							function(data, status){
+								console.log(data, status);
 
+							});
+					}
+				}
 			});
-
-		// TODO update global classes object to reflect new comment?
-
 	});
 
 	// repo modal
