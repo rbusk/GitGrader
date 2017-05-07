@@ -4,6 +4,9 @@
 	include 'json_functions.php';
 	include 'database_functions.php';
 
+
+	$stmt = oci_parse($conn, 'set nls_date_format = "dd month, yyyy"');
+	oci_execute($stmt);
 	$ok = true;
 
 	if (!isset($_POST['crn'])) {
@@ -27,6 +30,10 @@
 
 	if ($message == "success")  {
 		$due_date = null;
+
+		if (isset($_POST['due_date'])) {
+			$due_date = $_POST['due_date'];
+		}
 		$query = "begin grader_pack.add_assignment(:crn, :assignment_name, :due_date, :outof, :weight); end;";
 
 		$stmt = oci_parse($conn, $query);
