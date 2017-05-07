@@ -334,7 +334,6 @@ function fillInRepos(repos) {
 	}
 }
 
-<<<<<<< HEAD
 function getGradeInfoFromAssignmentName() {
 
 	var gradesInfo = $("#gradesTableBody").html();
@@ -386,7 +385,13 @@ function getGradeInfoFromAssignmentName() {
 				//console.log('no score, ignoring this row');
 			}
 		}
-=======
+
+		count = count + 1;
+	});
+
+	return [sumOfWeights, sumOfWeightedScores];
+}
+
 function get_users() {
 	$.post("GitGrader/php_scripts/get_users.php", {},
 		function(data, status){
@@ -400,16 +405,10 @@ function get_users() {
 			}
 		});
 }
-function updateClassGrade(newScore, newOutOf, newWeight) {
->>>>>>> e6e18c19d7591db6caf65f6f1953f7774c347c8e
-
-		count = count + 1;
-	});
-
-	return [sumOfWeights, sumOfWeightedScores];
-}
 
 function updateClassGrade(sumOfWeights, sumOfWeightedScores) {
+
+	console.log('sum of weights:', sumOfWeights, 'sum of weighted scores:', sumOfWeightedScores);
 
 	// update class grade on page
 	if (sumOfWeightedScores != 0) {
