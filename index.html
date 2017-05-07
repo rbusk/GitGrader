@@ -184,13 +184,13 @@ firebase.initializeApp(config);
 								<li><h5 href="#" id="selectedClass" class="col s12 white-text">no class selected</h5></li>
 							</div>
 							<div class="right" id="modalBtnDiv">
-								<li><a id="sshNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#sshModal">Add SSH</a></li>
-								<li><a id="repoNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#repoModal">Add Repo</a></li>
+								<li><a id="sshNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#sshModal"><i class="material-icons left">add</i>SSH</a></li>
+								<li><a id="repoNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#repoModal"><i class="material-icons left">add</i>Repo</a></li>
 							</div>
 							<div id="repoModalDiv">
 								<div class="right">
-									<li><a id="commentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal">Add Comment</a></li>
-									<li><a id="contributorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#contributorModal">Add Contributor</a></li>
+									<li><a id="commentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal"><i class="material-icons left">add</i>Comment</a></li>
+									<li><a id="contributorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#contributorModal"><i class="material-icons left">add</i>Contributor</a></li>
 								</div>
 								<div class="left">
 									<li><a id="backToReposButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Repos</a></li>
@@ -199,15 +199,15 @@ firebase.initializeApp(config);
 							<div id="repoModalDiv2">
 								<div class="right">
 									<li><a id="backToGradebookButton" class="waves-effect waves-light btn blue-grey darken-4">Back to Gradebook</a></li>
-									<li><a id="commentNavButton2" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal">Add Comment</a></li>
+									<li><a id="commentNavButton2" class="waves-effect waves-light btn blue-grey darken-4" href="#commentModal"><i class="material-icons left">add</i>Comment</a></li>
 								</div>
 							</div>
 							<div class="right" id="classModalDiv">
-								<li><a id="classNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#classModal">Add Class</a></li>
+								<li><a id="classNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#classModal"><i class="material-icons left">add</i>Class</a></li>
 							</div>
 							<div class="right" id="teacherModalDiv">
-								<li><a id="addInstructorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#instructorModal">Add Instructor</a></li>
-								<li><a id="addStudentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addStudentModal">Add Student</a></li>
+								<li><a id="addInstructorNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#instructorModal"><i class="material-icons left">add</i>Instructor</a></li>
+								<li><a id="addStudentNavButton" class="waves-effect waves-light btn blue-grey darken-4" href="#addStudentModal"><i class="material-icons left">add</i>Student</a></li>
 							</div>
 					</ul>
 						</div>
@@ -216,56 +216,56 @@ firebase.initializeApp(config);
 			<!-- Modals -->
 			<div id="commentModal" class="modal">
 				<div class="modal-content">
-					<h4>Add Comment</h4>
+					<h4><i class="material-icons left">add</i>Comment</h4>
 					<div class="input-field">
 						<label for="comment_input">Comment</label>
 						<input type="text" name="content" id="comment_input" class="validate">
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addCommentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Comment</a>
+					<a href="#!" id="addCommentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Comment</a>
 				</div>
 			</div>
 			<div id="contributorModal" class="modal">
 				<div class="modal-content">
-					<h4>Add Contributor</h4>
+					<h4><i class="material-icons left">add</i>Contributor</h4>
 					<div class="input-field">
 						<label for="contributorInput">Contributor</label>
 						<input type="text" name="username" id="contributorInput" class="validate autocomplete">
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addContributoModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Contributor</a>
+					<a href="#!" id="addContributoModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Contributor</a>
 				</div>
 			</div>
 			<div id="instructorModal" class="modal">
 				<div class="modal-content">
-					<h4>Add Instructor</h4>
+					<h4><i class="material-icons left">add</i>Instructor</h4>
 					<div class="input-field">
 						<label for="instructorInput">Instructor</label>
 						<input type="text" name="username" id="instructorInput" class="autocomplete">
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addInstructorBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Instructor</a>
+					<a href="#!" id="addInstructorBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Instructor</a>
 				</div>
 			</div>
 			<div id="addStudentModal" class="modal">
 				<div class="modal-content">
-					<h4>Add Student</h4>
+					<h4><i class="material-icons left">add</i>Student</h4>
 					<div class="input-field">
 						<label for="studentInput">Student Username</label>
 						<input type="text" name="username" id="studentInput" class="autocomplete">
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Student</a>
+					<a="#!" id="addStudentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Student</a>
 				</div>
 			</div>
 			<div id="addAssignmentModal" class="modal">
 				<div class="modal-content">
 					<form id="addAssignmentForm">
-						<h4>Add Assignment</h4>
+						<h4><i class="material-icons left">add</i>Assignment</h4>
 						<div class="input-field">
 							<input id="assignmentFormName" type="text" name="assignment_name" size="100" maxlength="100" class="validate">
 							<label for="assignment_name">Assignment Name</label>
@@ -295,13 +295,13 @@ firebase.initializeApp(config);
 					</form>
 				</div>
 				<div class="modal-footer">
-					<a="#!" id="addAssignmentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Assignment</a>
+					<a="#!" id="addAssignmentModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Assignment</a>
 				</div>
 			</div>
 			<div id="addResourceModal" class="modal">
 				<div class="modal-content">
 					<form id="addResourceForm">
-						<h4>Add Resource</h4>
+						<h4><i class="material-icons left">add</i>Resource</h4>
 						<div class="input-field">
 							<label for="resourceFormName">Resource Name</label>
 							<input id="resourceFormName" type="text" name="resource_name" size="100" maxlength="100" class="validate">
@@ -319,12 +319,12 @@ firebase.initializeApp(config);
 					</form>
 				</div>
 				<div class="modal-footer">
-					<a="#!" id="addResourceModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Resource</a>
+					<a="#!" id="addResourceModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Resource</a>
 				</div>
 			</div>
 			<div id="classModal" class="modal">
 				<div class="modal-content">
-					<h4>Add Class</h4>
+					<h4><i class="material-icons left">add</i>Class</h4>
 					<div class="input-field">
 						<label for="crsName">Course Name</label>
 						<input type="text" name="course_name" id="crsName" class="validate" size="100" maxlength="100">
@@ -343,12 +343,12 @@ firebase.initializeApp(config);
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addClassModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Class</a>
+					<a href="#!" id="addClassModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Class</a>
 				</div>
 			</div>
 			<div id="sshModal" class="modal">
 				<div class="modal-content">
-					<h4>Add SSH Key</h4>
+					<h4><i class="material-icons left">add</i>SSH Key</h4>
 					<div class="input-field">
 						<label for="ssh_title">SSH Key Name</label>
 						<input type="text" name="ssh_title" id="title_input" size="30" maxlength="30" class="validate">
@@ -359,7 +359,7 @@ firebase.initializeApp(config);
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat">Add Key</a>
+					<a href="#!" id="addKeyModalBtn" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons left">add</i>Key</a>
 				</div>
 			</div>
 			<div id="repoModal" class="modal">
@@ -477,7 +477,7 @@ firebase.initializeApp(config);
 						<!-- Assignments Menu (list of assignments) -->
 						<div id="assignmentsDiv">
 							<div class="row">
-								<a id="addAssignmentBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addAssignmentModal">Add Assignment</a>
+								<a id="addAssignmentBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addAssignmentModal"><i class="material-icons left">add</i>Assignment</a>
 							</div>
 							<div class="row">
 								<div class="col s12 m3 l2 cyan lighten-4">
@@ -502,7 +502,7 @@ firebase.initializeApp(config);
 						<!-- Resources -->
 						<div id="resourcesDiv">
 							<div class="row">
-								<a id="addResourceBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addResourceModal">Add Resource</a>
+								<a id="addResourceBtn" class="waves-effect waves-light btn blue-grey darken-4" href="#addResourceModal"><i class="material-icons left">add</i>Resource</a>
 							</div>
 							<div class="row">
 								<div class="col s12 m4 cyan lighten-4">
