@@ -1301,6 +1301,12 @@ function modalButtonHandlers() {
 			return;
 		}
 
+		if(document.getElementById("assignmentFileInput").files.length == 0){
+		    $("#errorMessage").html("Please select a file to upload.");
+			$("#errorModal").modal('open');
+			return;
+		}
+
 		//check if an assignment already exists with this name
 		var thisClass = getClassFromCRN(crn);
 
