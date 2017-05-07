@@ -1278,13 +1278,13 @@ function modalButtonHandlers() {
 		// TODO update global classes object to reflect new comment?
 
 	});
-	/*// add contributor
+	// add contributor
 	$(document).on('click', "#addContributoModalBtn", function() {
 
 		// get info from modal
 		var contributor = $("#contributorInput").val();
 
-		$.post("GitGrader/php_scripts/add_comment.php", {contributor: contributor, repo_id: repo_id},
+		$.post("GitGrader/php_scripts/add_contributor.php", {username: contributor, repo_id: repo_id},
 			function(data, status){
 				console.log(data, status);
 
@@ -1297,8 +1297,8 @@ function modalButtonHandlers() {
 					console.log("add comment failed, error:", data["error"]["message"]);
 				}
 			});
-			*/
-
+			
+	});
 }
 
 function successfulAddResource() {
