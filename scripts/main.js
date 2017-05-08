@@ -31,16 +31,11 @@ $( document ).ready(ready);
 
 // doc ready
 function ready() {
-	console.log("doc ready from main.js");
-
 
 	get_users();
-	console.log(users['ryan']);
 	$.post("GitGrader/php_scripts/get_courses.php", {},
 		function(data, status){
 			classes = [data['payload']];
-			console.log("got this class data at start:", classes);
-
 
 			get_repos_obj();
 
@@ -207,7 +202,6 @@ function ready() {
 
 		$.post("GitGrader/php_scripts/add_grade.php", {student_username: studentUsername, crn: selectedClassCRN, assignment_name: selectedGradeTableAssignmentName, grade: newScore, grade_comment: newComment},
 			function(data, status){
-				console.log(data, status);
 
 				if (data["success"] == true) {
 					// update grades table to reflect new grade
@@ -222,7 +216,6 @@ function ready() {
 				}
 				else {
 					alert("Grade update failed with error:!", data["error"]["message"]);
-					console.log("grade update failed, error:", data["error"]["message"]);
 				}
 			});
 
@@ -232,7 +225,6 @@ function ready() {
 
 	// add instructor
 	$("#addInstructorBtn").click( function() {
-		console.log("hi");
 
 		// get info from modal
 		var instructorInput = $("#instructorInput").val();
@@ -253,7 +245,6 @@ function ready() {
 					} else {
 						$.post("GitGrader/php_scripts/add_teaches_course.php", {username: instructorInput, crn: selectedClassCRN},
 							function(data, status){
-								console.log(data, status);
 							});
 					}
 				}
@@ -321,7 +312,6 @@ function ready() {
 
 // initialize
 function initialize() {
-	console.log("initializing from main.js");
 
 	// only appear when assignment is selected
 	$("#linkAssignToRepo").hide();
@@ -375,22 +365,17 @@ function getGradeInfo() {
 	$('#gradesTableBody > tr > td').each(function() {
 
 		if ( $(this).hasClass('assignment_name_cell') == true ) {
-			console.log('assignment name');
 		}
 		else if ( $(this).hasClass('score_cell') == true ) {
 			thisScore = parseInt($(this).html());	
-			console.log('score', thisScore);
 		}
 		else if ( $(this).hasClass('out_of_cell') == true ) {
 			thisOutOf = parseInt($(this).html());	
-			console.log('out of', thisOutOf);
 		}
 		else if ( $(this).hasClass('weight_cell') == true ) {
 			thisWeight = parseInt($(this).html());	
-			console.log('weight', thisWeight);
 		}
 		else {
-			console.log('comment', $(this).html());
 		}
 
 
@@ -406,9 +391,6 @@ function getGradeInfo() {
 				thisWeight = 0.0;
 				thisWeightedScore = 0.0;
 			}
-			else {
-				//console.log('no score, ignoring this row');
-			}
 		}
 
 		count = count + 1;
@@ -422,7 +404,6 @@ function get_users() {
 		function(data, status){
 			if (data.success == true) {
 				users = data['payload'];
-				console.log(users);
 				$('input.autocomplete').autocomplete({
 					data: users,
 					onAutocomplete: function(val) {}
@@ -433,7 +414,6 @@ function get_users() {
 
 function updateClassGrade(sumOfWeights, sumOfWeightedScores) {
 
-	console.log('sum of weights:', sumOfWeights, 'sum of weighted scores:', sumOfWeightedScores);
 
 	// update class grade on page
 	if (sumOfWeightedScores != 0) {
@@ -461,7 +441,6 @@ function goUpDirectoryRepoViewer() {
 }
 
 function fillInRepoViewerWithPath(path, back) {
-	console.log(path);
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_path : path},
 		function(data, status) {
 			if (data.success == true) {
@@ -469,7 +448,6 @@ function fillInRepoViewerWithPath(path, back) {
 				if (!back) {
 					repo_paths.push(path);
 				}
-				console.log("", repo_paths);
 				$("#fileTree").html("");
 				$("#codeView").html("");
 				var files = data.payload.files;
@@ -496,7 +474,6 @@ function fillInRepoViewerWithPath(path, back) {
 function fillInRepoViewer(id) {
 
 	repo_id = id;
-	console.log(repo_id);
 	$.post("GitGrader/php_scripts/auto_pull_repo.php",{repo_id : id},
 		function(data, status) {});
 	$.post("GitGrader/php_scripts/get_directory_files.php", {repo_id : id},
@@ -515,12 +492,10 @@ function fillInRepoViewer(id) {
 						var onclick_text = "onclick='clickedOnFile(\"" + files[$i].path + "\")'";
 						var html = "<a class='collection-item black-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					} else {
 						var onclick_text = "onclick='fillInRepoViewerWithPath(\"" + files[$i].path + "\", false)'";
 						var html = "<a class='collection-item teal-text '" + onclick_text + ">" + files[$i].filename + "</a>";
 						$("#fileTree").append(html);
-						console.log(html);
 					}
 				}
 			}
@@ -573,14 +548,11 @@ function getAllGradesForCRN(crn, student_username) {
 		function(data, status){
 			$("#gradesTableBody").html(""); // clear old grades - KEEP THIS HERE!
 			ans = data["payload"];
-			console.log(ans);
-			console.log(ans[student_username]);
 			fillInGradesForSelectedStudent(ans[student_username]);
 		});
 }
 
 function fillInGradesForSelectedStudent(grades){
-	console.log("attempting to fill in grades for student", grades);
 
 	// fill in this class's ASSIGNMENTS
 	var ASSIGNMENTS = grades;
@@ -588,7 +560,6 @@ function fillInGradesForSelectedStudent(grades){
 	sumOfWeightedScores = 0;
 
 	for (var i in ASSIGNMENTS) {
-		console.log("grades", ASSIGNMENTS[i]);
 
 		// fill in ASSIGNMENTS div
 		//var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
@@ -671,7 +642,6 @@ function fillInGradesForClasses() {
 
 	$.post("GitGrader/php_scripts/get_username.php", {},
 		function(data, status){
-			//console.log('username?', data['payload']['username']);
 			student_username = data['payload']['username'];
 		});
 
@@ -728,7 +698,6 @@ function getResourcesHelper(crn, i) {
 
 // fill in code viewer
 function fillCodeViewer(ext, content) {
-	//console.log("content:", content, "ext:", ext);
 	$("#codeView").html(content);
 	$("#codeView").addClass(ext);
 
@@ -745,7 +714,6 @@ function classSelected(CRN) {
 	$("#addAssignmentCRN").val(CRN);
 	$("#addResourceCRN").val(CRN);
 
-	console.log("SELECTED THIS CRN", CRN);
 
 	// clear old class data
 	$("#assignmentsListDiv").html("");
@@ -802,7 +770,6 @@ function fillInAssignments(thisClass) {
 	$("#assignmentsListDiv").html("");
 
 	for (var i in ASSIGNMENTS) {
-		console.log("assignments", ASSIGNMENTS[i]);
 
 		// fill in ASSIGNMENTS div
 		var html = "<a href='#!' class='cyan-text text-darken-2 assignment collection-item' + id='" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</a>"; 
@@ -839,10 +806,8 @@ function fillInAssignments(thisClass) {
 
 		if (!ASSIGNMENTS[i].GRADE_COMMENT) {
 			tempComment = "";
-			console.log("NO COMMENT");
 		} else {
 			tempComment = ASSIGNMENTS[i].GRADE_COMMENT;
-			console.log("COMMENT", tempComment);
 		}
 
 		var gradesHTML = "<tr><td class='assignment_name_cell'>" + ASSIGNMENTS[i].ASSIGNMENT_NAME + "</td><td class='score_cell'>" + tempScore + "</td><td class='out_of_cell'>" + tempOutOf + "</td><td class='weight_cell'>" + tempWeight + "</td><td>" + tempComment + "</td></tr>";
@@ -878,7 +843,6 @@ function assignmentSelected() {
 	}
 
 	var ASSIGNMENTS = thisClass.ASSIGNMENTS;
-	console.log("assignments of selected class crn", ASSIGNMENTS);
 	for (var i in ASSIGNMENTS) {
 		if (ASSIGNMENTS[i].ASSIGNMENT_NAME == selectedAssignmentID){
 			var dueDate = ASSIGNMENTS[i].DUE_DATE;
@@ -910,7 +874,6 @@ function get_repos_obj(repo) {
 			function(data, status){
 				if (data.success == true) {
 					repos = data.payload;
-					console.log("repos obj:", repos);
 					fillInRepos(repos);
 				}
 			});
@@ -919,7 +882,6 @@ function get_repos_obj(repo) {
 			function(data, status){
 				if (data.success == true) {
 					repos = data.payload;
-					console.log("repos obj:", repos);
 					fillInRepos(repos);
 				}
 			});
@@ -936,11 +898,9 @@ function didChooseRepo(repo_id) {
 	repoID = "";
 	var currentFileTree = [];
 
-	console.log("repos", repos);
 
 	repos.forEach(function(currentValue, index, arr){
 		if (repo_id == currentValue.REPO_ID) {
-			console.log("FOUND REPO!", currentValue);
 			$("#repoName").html(currentValue.REPO_NAME);
 			description = currentValue.DESCRIPTION;
 			repoID = currentValue.REPO_ID;
@@ -1016,7 +976,6 @@ function clickedOnFile(filePath) {
 		function(data, status){
 			comments = data['payload'];
 			for (var i=0; i<comments.length; i++) {
-				console.log('comment:', comments[i]);	
 
 				var commentContent = comments[i]['CONTENT'];
 				var html = "<a href='#!' class='collection-item'><span class='black-text'>" + comments[i].COMMENTER_ID + "</span><br/>" + commentContent + "</a>"; 
@@ -1190,10 +1149,8 @@ function modalButtonHandlers() {
 
 		// send new score to database via PHP
 		var ans = "";
-		console.log(repo_id);	
 		$.post("GitGrader/php_scripts/add_comment.php", {content: newComment, file_path: repo_paths[repo_paths.length-1]+'/'+fileName, repo_id: repo_id},
 			function(data, status){
-				console.log(data, status);
 				clickedOnFile(repo_paths[repo_paths.length-1]+'/'+fileName);
 
 			});
@@ -1226,7 +1183,6 @@ function modalButtonHandlers() {
 					} else {
 						$.post("GitGrader/php_scripts/add_takes_course.php", {username: student, crn: selectedClassCRN},
 							function(data, status){
-								console.log(data, status);
 							});
 					}
 				}
@@ -1266,7 +1222,6 @@ function modalButtonHandlers() {
 			contentType: false,
 			processData: false
 		}).done( function(data, status) {
-			console.log(data);
 			if (status == "success") {
 				successfulAddResource();
 			}
@@ -1379,7 +1334,6 @@ function modalButtonHandlers() {
 					} else {
 						$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
 							function(data, status){
-								console.log(data, status);
 								location.reload();
 
 							});
@@ -1420,7 +1374,6 @@ function modalButtonHandlers() {
 
 		$.post("GitGrader/php_scripts/add_repo.php", {repo: repo, description: desc},
 			function(data, status){
-				console.log(data, status);
 				get_repos_obj();
 
 			});
@@ -1450,8 +1403,6 @@ function modalButtonHandlers() {
 
 		$.post("GitGrader/php_scripts/add_ssh_key.php", {ssh_title: title, ssh_key: key},
 			function(data, status){
-				console.log(data, status);
-
 			});
 
 		// TODO update global classes object to reflect new comment?
@@ -1465,16 +1416,6 @@ function modalButtonHandlers() {
 
 		$.post("GitGrader/php_scripts/add_contributor.php", {username: contributor, repo_id: repo_id},
 			function(data, status){
-				console.log(data, status);
-
-				if (data["success"] == true) {
-					console.log("add  successful!");		
-
-//TODO update comment table
-				}
-				else {
-					console.log("add comment failed, error:", data["error"]["message"]);
-				}
 			});
 			
 	});

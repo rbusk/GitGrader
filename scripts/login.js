@@ -3,7 +3,6 @@ $.post("GitGrader/php_scripts/is_logged_in.php",
 		email: $('#login_email').val()
 	},
 	function(data, status) {
-		console.log(data);
 		if (data['payload']['logged_in'] == false) {
 			$( document ).ready(ready);
 		} else {
@@ -21,7 +20,6 @@ $.post("GitGrader/php_scripts/is_logged_in.php",
 
 function ready() {
 	
-	console.log("ready!");
 	// materialize
 	$('.modal').modal();
 
@@ -29,33 +27,27 @@ function ready() {
 
 	// handle nav bar stuff
 	$(".signUpNav").click(function(){
-		console.log('pressed sign up in nav bar');
 		$("#signUp").show();
 		$('#login').hide();
 	});
 	$(".loginNav").click(function(){
-		console.log('pressed login in nav bar');
 		$("#login").show();
 		$('#signUp').hide();
 	});
 	$(".logoutNav").click(function(){
-		console.log('pressed logout in nav bar');
 		logoutUser();
 	});
 
 	//button click handlers
 	$("#signUpButton").click(function(){
-		console.log('pressed sign up button');
 		createUser();
 	});
 	$("#loginButton").click(function(){
-		console.log('pressed login button');
 		loginUser();	
 	});
 }
 
 function init() {
-	console.log("initializing");
 
 	// start with sign up div
 	$('#login').hide();
@@ -181,7 +173,6 @@ function createUser() {
 };
 
 function loginUser() {
-	console.log("logging in user");
 
 	var email = $("#login_email").val();
 	var password = $("#login_password").val();
@@ -294,7 +285,6 @@ function createUserInFB(email, password) {
 }
 
 function logoutUser() {
-	console.log("logging out user");
 
 	firebase.auth().signOut().then(function() {
 		alert('logged out');
