@@ -57,8 +57,8 @@ function ready() {
 				var selectedCourseDepartment = thisClass.DEPT;
 				var selectedCourseNumber = thisClass.COURSE_NO;
 				$("#selectedClass").text(selectedCourseDepartment + " " + selectedCourseNumber + " : " + selectedCourseName);
-				classSelected(selectedCourseCRN); // fill out rest of class info in divs
 				selectedClassCRN = selectedCourseCRN;
+				classSelected(selectedCourseCRN); // fill out rest of class info in divs
 
 				if (thisClass.ROLE === "instructor") {
 					$("#addAssignmentBtn").show();
