@@ -1380,6 +1380,7 @@ function modalButtonHandlers() {
 						$.post("GitGrader/php_scripts/add_course.php", {crn: course_crn, course_no: number, dept: dept, course_name: name},
 							function(data, status){
 								console.log(data, status);
+								location.reload();
 
 							});
 					}
